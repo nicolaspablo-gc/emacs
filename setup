@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+target=$(dirname "$(realpath "$0")")
+emacsd=~/.config/emacs
+mkdir -p "$emacsd"
+ln -sf "$target"/{init.el,early-init.el} "$emacsd"
