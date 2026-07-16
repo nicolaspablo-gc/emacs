@@ -32,6 +32,11 @@
   (setq theme-reload-themes '(ui-simple))
   (theme-reload-mode))
 
+(use-package global-map-mode
+  :config
+  (global-map-mode-define my-global-map :inherit t :lighter " *")
+  (my-global-map-mode))
+
 (use-package breadcrumb
   :ensure t
   :defer t
@@ -212,48 +217,48 @@
   :custom-face
   (default ((t :family "Iosevka Fixed" :width expanded))))
 
-(use-package modal
-  :config
-  (require 'modal-variant)
-  (require 'mwim)
-  (require 'convenience)
-  (defun modal-change-cursor-type ()
-    "Make more visually apparent the changes in modal modes."
-    (setq cursor-type
-	  (cond (modal-global-mode 'box) (modal-mode 'bar) (t 'hbar))))
-  (add-hook 'modal-mode-hook #'modal-change-cursor-type)
-  (add-hook 'modal-global-mode-hook #'modal-change-cursor-type)
-  (keymap-set modal-mode-map "." #'set-mark-command)
-  (keymap-set modal-mode-map "e" #'mwim-end)
-  (keymap-set modal-mode-map "a" #'mwim-beginning)
-  (keymap-set modal-mode-map "k" #'kill-sexp)
-  (keymap-set modal-mode-map "r" #'isearch-backward)
-  (keymap-set modal-mode-map "s" #'isearch-forward)
-  (keymap-set modal-mode-map "d" #'delete-forward-char)
-  (keymap-set modal-mode-map "n" #'next-line)
-  (keymap-set modal-mode-map "p" #'previous-line)
-  (keymap-set modal-mode-map "f" #'forward-char)
-  (keymap-set modal-mode-map "b" #'backward-char)
-  (keymap-set modal-mode-map "," #'duplicate-dwim)
-  (keymap-set modal-mode-map "z" #'repeat)
-  (keymap-set modal-mode-map "/" #'undo)
-  (keymap-set modal-mode-map "SPC" #'execute-extended-command)
-  (keymap-set modal-mode-map "RET" #'modal-variant-mode) ;; deactivate modal mode
-  (keymap-set modal-mode-map "<Hangul>" #'modal-global-mode)
-  (keymap-set modal-global-mode-map "<Hangul>" (lambda () (interactive) (modal-variant-mode -1) (modal-global-mode -1)))
-  (keymap-set modal-global-mode-map "RET" (lambda () (interactive) (modal-global-mode -1) (modal-variant-mode 1)))
-  (keymap-set modal-global-mode-map "d" #'dired-side-window-dwim)
-  (keymap-set modal-global-mode-map "n" #'tab-line-switch-to-next-tab)
-  (keymap-set modal-global-mode-map "b" #'switch-to-buffer)
-  (keymap-set modal-global-mode-map "f" #'find-file)
-  (keymap-set modal-global-mode-map "k" #'kill-current-buffer)
-  (keymap-set modal-global-mode-map "p" #'tab-line-switch-to-prev-tab)
-  (keymap-set modal-global-mode-map "e" #'tab-bar-switch-to-next-tab)
-  (keymap-set modal-global-mode-map "a" #'tab-bar-switch-to-prev-tab)
-  (keymap-set modal-global-mode-map "o" #'other-window)
-  (keymap-set modal-global-mode-map "q" #'bury-buffer)
-  (keymap-set modal-global-mode-map "s" #'save-buffer)
-  (keymap-set modal-global-mode-map "0" #'delete-window))
+;; (use-package modal
+;;   :config
+;;   (require 'modal-variant)
+;;   (require 'mwim)
+;;   (require 'convenience)
+;;   (defun modal-change-cursor-type ()
+;;     "Make more visually apparent the changes in modal modes."
+;;     (setq cursor-type
+;; 	  (cond (modal-global-mode 'box) (modal-mode 'bar) (t 'hbar))))
+;;   (add-hook 'modal-mode-hook #'modal-change-cursor-type)
+;;   (add-hook 'modal-global-mode-hook #'modal-change-cursor-type)
+;;   (keymap-set modal-mode-map "." #'set-mark-command)
+;;   (keymap-set modal-mode-map "e" #'mwim-end)
+;;   (keymap-set modal-mode-map "a" #'mwim-beginning)
+;;   (keymap-set modal-mode-map "k" #'kill-sexp)
+;;   (keymap-set modal-mode-map "r" #'isearch-backward)
+;;   (keymap-set modal-mode-map "s" #'isearch-forward)
+;;   (keymap-set modal-mode-map "d" #'delete-forward-char)
+;;   (keymap-set modal-mode-map "n" #'next-line)
+;;   (keymap-set modal-mode-map "p" #'previous-line)
+;;   (keymap-set modal-mode-map "f" #'forward-char)
+;;   (keymap-set modal-mode-map "b" #'backward-char)
+;;   (keymap-set modal-mode-map "," #'duplicate-dwim)
+;;   (keymap-set modal-mode-map "z" #'repeat)
+;;   (keymap-set modal-mode-map "/" #'undo)
+;;   (keymap-set modal-mode-map "SPC" #'execute-extended-command)
+;;   (keymap-set modal-mode-map "RET" #'modal-variant-mode) ;; deactivate modal mode
+;;   (keymap-set modal-mode-map "<Hangul>" #'modal-global-mode)
+;;   (keymap-set modal-global-mode-map "<Hangul>" (lambda () (interactive) (modal-variant-mode -1) (modal-global-mode -1)))
+;;   (keymap-set modal-global-mode-map "RET" (lambda () (interactive) (modal-global-mode -1) (modal-variant-mode 1)))
+;;   (keymap-set modal-global-mode-map "d" #'dired-side-window-dwim)
+;;   (keymap-set modal-global-mode-map "n" #'tab-line-switch-to-next-tab)
+;;   (keymap-set modal-global-mode-map "b" #'switch-to-buffer)
+;;   (keymap-set modal-global-mode-map "f" #'find-file)
+;;   (keymap-set modal-global-mode-map "k" #'kill-current-buffer)
+;;   (keymap-set modal-global-mode-map "p" #'tab-line-switch-to-prev-tab)
+;;   (keymap-set modal-global-mode-map "e" #'tab-bar-switch-to-next-tab)
+;;   (keymap-set modal-global-mode-map "a" #'tab-bar-switch-to-prev-tab)
+;;   (keymap-set modal-global-mode-map "o" #'other-window)
+;;   (keymap-set modal-global-mode-map "q" #'bury-buffer)
+;;   (keymap-set modal-global-mode-map "s" #'save-buffer)
+;;   (keymap-set modal-global-mode-map "0" #'delete-window))
 
 (use-package nerd-icons-dired
   :ensure t
@@ -451,12 +456,6 @@ Implementation taken from the mode activation function."
   (setq vc-follow-symlinks t))
 
 (use-package emacs
-  :bind
-  (;; I have in keyd set caps lock to hangul, to have a new "free" key to bind.
-   ;; I set to Hangul because is key thats mostly not bound elsewhere (f13-24 are
-   ;; bound in gnome/wayland to media keys)
-   ("<Hangul>" . modal-variant-mode)
-   ("M-SPC" . modal-global-mode))
   :config
   (setq tab-always-indent 'complete
 	completion-styles '(initials partial-completion basic partial-completion emacs22 orderless)

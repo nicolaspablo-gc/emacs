@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+FONT_DIR="$HOME/.local/share/fonts"
+
+# Create a fresh temp directory and clean it up on exit
+tmpdir=$(mktemp -d)
+trap 'rm -rf "$tmpdir"' EXIT
+
+mkdir -p "$FONT_DIR"
+
+# Download Iosevka-<version> (no other iosevka packages)
+curl -s 'https://api.github.com/repos/be5invis/Iosevka/releases/latest' \
+  | jq -r '.assets[] | .browser_download_url' \
+  | grep 'PkgTTC-Iosevka-' \
+  | xargs -n 1 curl -L --fail --silent --show-error --output-dir "$tmpdir" -O
+
+# Download Iosevka Nerd Fonts
+curl -L --fail --silent --show-error --output-dir "$tmpdir" -O \
+     https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/Iosevka.zip
+
+# Extract into the font directory
+for f in "$tmpdir"/*.zip; do
+  unzip -o "$f" -d "$FONT_DIR"
+done
+
+# Rebuild the font cache
+fc-cache -rv
