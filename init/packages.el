@@ -46,16 +46,19 @@
 
 (use-package nerd-icons
   :defer t
-  :ensure t)
+  :ensure t
+  :config
+  (setq nerd-icons-scale-factor 0.85))
 
 (use-package nerd-icons-tab-line
-  :custom-face
-  (nerd-icons-tab-line-icon-face ((t :height 0.9)))
+  ;; :custom-face
+  ;; (nerd-icons-tab-line-icon-face ((t :height 0.9)))
   :config
   (nerd-icons-tab-line-mode 1))
 
 (use-package tab-line
   :config
+  (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
   (global-tab-line-mode))
 
 (use-package files
@@ -205,6 +208,10 @@
     (((min-colors   8))
      :foreground "blue"))))
 
+(use-package faces
+  :custom-face
+  (default ((t :family "Iosevka Fixed" :width expanded))))
+
 (use-package modal
   :config
   (require 'modal-variant)
@@ -253,13 +260,13 @@
   :after dired
   :hook (dired-mode-hook . nerd-icons-dired-mode)
   :config
-  (defun my/nerd-icons-dired--resfresh-advice (&rest args)
+  (defun my-nerd-icons-dired--resfresh-advice (&rest args)
     (when nerd-icons-dired-mode (nerd-icons-dired--refresh)))
-  (advice-add #'dired-revert :after #'my/nerd-icons-dired--resfresh-advice))
+  (advice-add #'dired-revert :after #'my-nerd-icons-dired--resfresh-advice))
 
 (use-package dired-subtree
   :ensure t
-  :after (dired nerd-icons-dired)
+  :after (dired nerd-icons-dired dired-x)
   :bind (:map dired-mode-map
 	  ("SPC" . dired-subtree-toggle))
   :config
@@ -272,7 +279,8 @@
     "Face for prefixing dired subtree lines.")
   (setq dired-subtree-use-backgrounds nil
 	dired-subtree-line-prefix (format "  %s" (propertize " " 'face 'my-dired-subtree-line-prefix-face)))
-  (advice-add #'dired-subtree-toggle :after #'my/nerd-icons-dired--resfresh-advice))
+  (advice-add #'dired-subtree-toggle :after #'my-nerd-icons-dired--resfresh-advice)
+  (advice-add #'dired-subtree-toggle :after #'my-dired-omit-mode-refresh))
 
 (use-package dired
   :config
@@ -282,7 +290,16 @@
   :after dired
   :hook (dired-mode . dired-omit-mode)
   :bind (:map dired-mode-map ("," . dired-omit-mode))
-  :config  
+  :config
+  (defun my-dired-omit-mode-refresh (&rest _)
+    "Refresh `dired-omit-mode'.
+Implementation taken from the mode activation function."
+    (when dired-omit-mode
+      (let ((dired-omit-size-limit  nil)
+            (file-count 0))
+        (setq file-count (dired-omit-expunge))
+        (when dired-omit-lines
+          (dired-omit-expunge dired-omit-lines 'LINEP file-count)))))
   (setq dired-omit-files "\\`[.].*\\'"))
 
 (use-package elec-pair
@@ -293,6 +310,19 @@
   :ensure t)
 
 (use-package convenience)
+
+(use-package info
+  :defer t
+  :config
+  (define-keymap :keymap Info-mode-map
+    ")" #'Info-forward-node
+    "(" #'Info-backward-node))
+
+(use-package info-rename-buffer
+  :after info
+  :ensure t
+  :config
+  (info-rename-buffer-mode))
 
 (use-package window
   :config
@@ -351,6 +381,15 @@
   :config
   (nerd-icons-completion-mode))
 
+(use-package vterm
+  :ensure t
+  :defer t
+  :config
+  (defun my-vterm-rename (ps1-string)
+    "Rename current buffer by ps1 string sent through vterm."
+    (rename-buffer (format "*vterm:%s*" ps1-string) :unique))
+  (add-to-list 'vterm-eval-cmds (list "my-vterm-rename" #'my-vterm-rename)))
+
 (use-package vertico
   :ensure t
   :after (marginalia nerd-icons-completion)
@@ -358,13 +397,13 @@
   ;; Workarounds for using vertico-flat with nerd-icons-completion.
   ;; We need to deactivate marginalia for vertico flat, but elsewhere
   ;; marginalia is wanted.
-  (defun my/vertico-maybe-enable-marginalia ()
+  (defun my-vertico-maybe-enable-marginalia ()
     (marginalia-mode
      (cond ((and vertico-mode
 		 (not vertico-flat-mode))
 	    1)
 	   (t -1))))
-  (add-hook 'vertico-mode-hook #'my/vertico-maybe-enable-marginalia)
+  (add-hook 'vertico-mode-hook #'my-vertico-maybe-enable-marginalia)
   (setq
    vertico-flat-annotate nil ;; dont annotate by default
    vertico-resize t
@@ -406,6 +445,11 @@
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
+(use-package vc-hooks
+  :defer t
+  :config
+  (setq vc-follow-symlinks t))
+
 (use-package emacs
   :bind
   (;; I have in keyd set caps lock to hangul, to have a new "free" key to bind.
@@ -419,9 +463,15 @@
 	delete-pair-blink-delay 0
 	create-lockfiles nil
 	ring-bell-function #'ignore
-	enable-recursive-minibuffers t)
+	enable-recursive-minibuffers t
+        inhibit-startup-screen t
+        initial-buffer-choice #'vterm)
   (setq-default cursor-type 'hbar
 		indent-tabs-mode nil))
+
+(use-package saveplace
+  :config
+  (save-place-mode))
 
 (provide 'packages)
 ;;; packages.el ends here

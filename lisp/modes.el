@@ -1,9 +1,9 @@
-;;; editing.el --- Editing commands.                 -*- lexical-binding: t; -*-
+;;; modes.el --- My emacs modes.                     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolás Pablo González Carrasco
 
 ;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords:
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,29 +20,13 @@
 
 ;;; Commentary:
 
-;;
+;; 
 
 ;;; Code:
 
 (require 'exclusive-modes)
 (require 'simple)
 (require 'helpers)
-(require 'isearch)
-
-;;;; Isearch
-
-(defun editing-isearch-change-direction ()
-  (interactive)
-  (call-interactively
-   (if isearch-forward #'isearch-repeat-backward #'isearch-repeat-forward)))
-
-(defun editing-isearch-repeat-direction ()
-  (interactive)
-  (call-interactively
-   (if isearch-forward #'isearch-repeat-forward #'isearch-repeat-backward)))
-
-
-;;;; Modes
 
 (defvar editing-insert-mode-map
   (let ((map (make-sparse-keymap)))
@@ -113,5 +97,5 @@
 
 (exclusive-modes-define editing editing-sexp-mode editing-insert-mode editing-mark-mode)
 
-(provide 'editing)
-;;; editing.el ends here
+(provide 'modes)
+;;; modes.el ends here
