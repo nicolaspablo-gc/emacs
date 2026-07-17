@@ -1,5 +1,6 @@
 # Compiled
 *.elc
+my-lisp-loaddefs.el
 
 # Packaging
 .cask/

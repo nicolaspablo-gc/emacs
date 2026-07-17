@@ -79,6 +79,7 @@ FORMATTER."
                             :ignore-missing
                             :split))))
 
+;;;###autoload
 (define-minor-mode nerd-icons-tab-line-mode
   "Add `nerd-icons' to `tab-line'."
   :lighter nil

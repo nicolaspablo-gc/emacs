@@ -37,7 +37,7 @@
 
 (require 'cl-macs)
 
-(cl-defmacro global-map-mode-define (map-name &key inherit lighter)
+(cl-defmacro global-map-mode-define (map-name doc &key inherit lighter)
   "Define MAP-NAME-mode that sets MAP-NAME as the current global map.
 
 When MAP-NAME-mode is enabled, `use-global-map' is called with MAP-NAME,
@@ -55,10 +55,11 @@ For example, the invocation
 
 Creates the global minor mode \\=`my-global-map-mode', that when
 activated sets \\=`my-global-map' as the current global map."
+  (declare (doc-string 2) (indent defun))
   (let ((mode (intern (format "%s-mode" (symbol-name map-name)))))
     `(progn
        (defvar-keymap ,map-name
-         :doc ,(format "Global map set by `%s'." mode)
+         :doc ,(format "%s\nThis is a global map and is set by `%s'." doc mode)
          ,@(when inherit
              `(:parent global-map)))
        (define-minor-mode ,mode

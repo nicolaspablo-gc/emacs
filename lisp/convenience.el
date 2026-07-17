@@ -28,10 +28,12 @@
 (require 'frame)
 (require 'dired)
 
+;;;###autoload
 (defun set-frame-alpha-background (alpha &optional frame)
   (interactive "nAlpha Background: ")
   (set-frame-parameter frame 'alpha-background alpha))
 
+;;;###autoload
 (defun other-side-window-prefix (side &optional slot dedicated)
  "Display following command buffer in a side window.\n
 SIDE is either \\+`top', \\+`bottom', \\+`left' or \\+`right'.\n
@@ -61,6 +63,7 @@ Interactively, with two prefix arguments mark the window as dedicated."
   "[other-side-window]")
  (message "Display next command buffer in a %s side window..." side))
 
+;;;###autoload
 (defun dired-side-window-dwim ()
   "Display dired in a side window.
 Defaults to project root, else the current directory."

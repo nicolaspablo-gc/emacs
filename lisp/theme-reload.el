@@ -50,6 +50,7 @@ Note that these are reloaded only if enabled.")
        (when (custom-theme-enabled-p reload-theme)
 	(load-theme reload-theme 'no-confirm)))))
 
+;;;###autoload
 (define-minor-mode theme-reload-mode
   "Reload `theme-reload-themes' whenever any theme is loaded."
   :lighter nil
