@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-dired-x.el --- My `dired-x' extensions.     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,15 @@
 
 ;;; Code:
 
+(defun my-x-dired-x-omit-mode-refresh (&rest _)
+    "Refresh `dired-omit-mode'.
+Implementation taken from the mode activation function."
+    (when dired-omit-mode
+      (let ((dired-omit-size-limit  nil)
+            (file-count 0))
+        (setq file-count (dired-omit-expunge))
+        (when dired-omit-lines
+          (dired-omit-expunge dired-omit-lines 'LINEP file-count)))))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-dired-x)
+;;; my-x-dired-x.el ends here

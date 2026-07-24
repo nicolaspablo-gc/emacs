@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-dired-subtree.el --- My `dired-subtree' extensions.  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,14 @@
 
 ;;; Code:
 
+(require 'ui-simple-theme)
 
+(defface my-x-dired-subtree-line-prefix-face
+  `((((type graphic) (background light)) :background ,ui-simple-light-border-bg)
+    (((type graphic) (background dark)) :background ,ui-simple-dark-border-bg)
+    (((type tty) (background dark)) :background "blue")
+    (t :background "brightwhite"))
+  "Face for prefixing dired subtree lines.")
 
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-dired-subtree)
+;;; my-x-dired-subtree.el ends here

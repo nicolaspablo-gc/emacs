@@ -27,7 +27,7 @@
 ;; This is helpful when you want to have a custom global map without
 ;; touching the already existing global map.  Being a minor mode, it
 ;; becomes a toggle (on/off) which makes it easy to go back to
-;; normal state.
+;; the default state.
 
 ;; Use this specifically for when you need to set the current global
 ;; map.  For "global" bindings, consider if you'd be better served by
@@ -65,6 +65,7 @@ activated sets \\=`my-global-map' as the current global map."
        (define-minor-mode ,mode
          ,(format "Use `%s' as the current global map." map-name)
          :lighter ,lighter
+         :global t
          (use-global-map (if ,mode ,map-name global-map))))))
 
 (provide 'global-map-mode)

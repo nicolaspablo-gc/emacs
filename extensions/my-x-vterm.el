@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-vterm.el --- My `vterm' extensions.         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,10 @@
 
 ;;; Code:
 
+(defun my-x-vterm-rename (ps1-string)
+  "Rename current buffer by ps1 string sent through vterm."
+  (when (eq major-mode #'vterm-mode)
+    (rename-buffer (format "*vterm:%s*" ps1-string) :unique)))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-vterm)
+;;; my-x-vterm.el ends here

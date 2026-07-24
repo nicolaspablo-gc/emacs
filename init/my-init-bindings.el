@@ -1,4 +1,4 @@
-;;; my-bindings.el --- My elisp bindings.           -*- lexical-binding: t; -*-
+;;; my-init-bindings.el --- My init bindings.           -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -20,32 +20,41 @@
 
 ;;; Commentary:
 
-;; One file for all bindings.  As this grows decomposition might
-;; become necessary, but I don't want to decompose prematurely.
+;; One file for all bindings.
 
 ;;; Code:
 
+(require 'my-init-helpers)
+(require 'my-faces)
+
 ;;;; Variables
 
-(setq auto-dark-themes '((modus-vivendi-tinted ui-simple) (modus-operandi ui-simple)))
-(setq breadcrumb-imenu-max-length 1.0
-      breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask 
-(setq custom-file (locate-user-emacs-file "custom.el")
-      custom-safe-themes t)
+
+
+;; Do this before anything that could write to custom file.
+(setq custom-file my-custom-file) 
+
+(setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
+(setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask 
+(setq breadcrumb-imenu-max-length 1.0)
+(setq completion-styles '(initials partial-completion basic partial-completion emacs22 orderless))
+(setq create-lockfiles nil)
+(setq custom-file (locate-user-emacs-file "custom.el"))
+(setq custom-safe-themes t)
+(setq delete-pair-blink-delay 0)
+(setq enable-recursive-minibuffers t)
+(setq inhibit-startup-screen t)
+(setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
 (setq make-backup-files nil)
 (setq nerd-icons-scale-factor 0.85)
+(setq ring-bell-function #'ignore)
+(setq tab-always-indent 'complete)
+;; (setq tab-line-tabs-function #'tab-line-tabs-fixed-window-buffers)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
-(setq vc-follow-symlinks t)
 (setq theme-reload-themes '(ui-simple))
-(setq tab-always-indent 'complete
-      completion-styles '(initials partial-completion basic partial-completion emacs22 orderless)
-      delete-pair-blink-delay 0
-      create-lockfiles nil
-      ring-bell-function #'ignore
-      enable-recursive-minibuffers t
-      inhibit-startup-screen t
-      initial-buffer-choice #'vterm)
+(setq vc-follow-symlinks t)
+
 (setq-default indent-tabs-mode nil)
 
 ;; Dired
@@ -142,6 +151,112 @@
     ")" #'Info-forward-node
     "(" #'Info-backward-node))
 
+(with-eval-after-load 'isearch
+  (define-keymap :keymap isearch-mode-map
+    "TAB" #'my-x-isearch-repeat-direction
+    "<Hangul>" #'my-x-isearch-change-direction))
+
+(with-eval-after-load 'vertico
+  (define-keymap :keymap vertico-map
+    "M-SPC" #'vertico-quick-jump))
+
+(with-eval-after-load 'dired
+  (define-keymap :keymap dired-mode-map
+    "<remap> <find-file>" #'my-x-dired-find-file))
+
+(require 'modal)
+(require 'modal-variant)
+
+;; In and out of modal mode
+(keymap-set global-map "<Hangul>" #'modal-mode)
+(keymap-set modal-mode-map "RET" #'modal-mode)
+
+;; In and out of modal global mode.
+(keymap-set modal-mode-map "<Hangul>" #'modal-global-mode)
+(keymap-set modal-global-mode-map "<Hangul>" #'modal-global-mode)
+(keymap-set modal-global-mode-map "RET" (command (modal-global-mode -1) (modal-mode -1)))
+
+(define-keymap :keymap modal-mode-map
+  "'" #'pop-to-mark-command
+  "," #'duplicate-dwim
+  "." #'set-mark-command
+  "/" #'undo
+  "?" #'vundo
+  ":" #'comment-dwim
+  "<" #'beginning-of-buffer
+  ">" #'end-of-buffer
+  "\"" #'my-x-simple-unpop-to-mark-command
+  "\\" #'cycle-spacing
+  "a" #'mwim-beginning
+  "b" #'backward-char
+  "c" #'undefined
+  "d" #'delete-char
+  "e" #'mwim-end
+  "f" #'forward-char
+  "g" #'my-x-simple-keyboard-quit-dwim
+  "h" help-map
+  "i" #'undefined
+  "j" #'my-x-simple-forward-delete-indentation
+  "k" #'kill-sexp
+  "l" #'kill-line
+  "m" #'undefined
+  "n" #'next-line
+  "o" #'newline
+  "p" #'previous-line
+  "q" search-map
+  "r" #'isearch-backward
+  "s" #'isearch-forward
+  "t" #'undefined
+  "u" #'universal-argument
+  "v" #'undefined
+  "x" #'exchange-point-and-mark
+  "y" #'my-x-simple-yank-dwim
+  "z" #'repeat
+  "|" #'shell-command-on-region
+  "SPC" #'execute-extended-command)
+
+(define-keymap :keymap modal-global-mode-map
+  "," #'tab-bar-history-back
+  "-" #'text-scale-adjust
+  "." #'tab-bar-history-forward
+  "0" #'delete-window
+  "1" #'delete-other-windows
+  "2" #'split-window-below
+  "3" #'split-window-right
+  "4" ctl-x-4-map
+  "5" ctl-x-5-map
+  "6" #'enlarge-window
+  "=" #'text-scale-adjust
+  "(" #'shrink-window-horizontally
+  ")" #'enlarge-window-horizontally
+  "a" #'tab-bar-switch-to-prev-tab
+  "b" #'switch-to-buffer
+  "c" #'undefined
+  "d" #'dired-jump
+  "e" #'tab-bar-switch-to-next-tab
+  "f" #'find-file
+  "g" #'my-x-simple-keyboard-quit-dwim
+  "h" help-map
+  "i" #'my-x-window-other-backward-window
+  "j" #'undefined
+  "k" #'kill-current-buffer
+  "l" #'my-x-tab-line-switch-to-buffer-tab
+  "m" #'link-hint-open-link
+  "n" #'tab-line-switch-to-next-tab
+  "o" #'other-window
+  "p" #'tab-line-switch-to-prev-tab
+  "q" #'my-x-window-quit-window-dwim
+  "r" #'revert-buffer-quick
+  "R" #'recentf
+  "s" #'save-buffer
+  "SPC" #'execute-extended-command
+  "t" tab-prefix-map
+  "u" #'universal-argument
+  "v" #'undefined
+  "w" #'undefined
+  "x" #'undefined
+  "z" #'repeat)
+
 ;;;; Hooks
 
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
@@ -150,6 +265,8 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
 (add-hook 'vertico-mode-hook #'my-vertico-maybe-enable-marginalia)
+(add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
+(add-hook 'telega-chat-mode-hook #'abbrev-mode)
 
 ;;;; Lists
 
@@ -157,19 +274,18 @@
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (with-eval-after-load 'vterm
-  (add-to-list 'vterm-eval-cmds (list "my-vterm-rename" #'my-vterm-rename)))
+  (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename)))
 
 ;;;; Advices
 
-(advice-add #'dired-revert :after #'my-nerd-icons-dired--resfresh-advice)
-(advice-add #'dired-subtree-toggle :after #'my-nerd-icons-dired--resfresh-advice)
-(advice-add #'dired-subtree-toggle :after #'my-dired-omit-mode-refresh)
+(advice-add #'dired-revert :after #'my-x-nerd-icons-dired--resfresh-advice)
+(advice-add #'dired-subtree-toggle :after #'my-x-nerd-icons-dired--resfresh-advice)
+(advice-add #'dired-subtree-toggle :after #'my-x-dired-x-omit-mode-refresh)
 
 ;;;; Faces
 
-(custom-theme-set-faces
- 'user
-
+(custom-theme-set-faces 'user
+                        
  '(default ((t :family "Iosevka Fixed" :width expanded)))
  
  ;; Avy prompt
@@ -301,10 +417,17 @@
     (((min-colors 256) (background light))
      :foreground "#d249cc")
     (((min-colors   8))
-     :foreground "blue"))))
+     :foreground "blue")))
 
-(provide 'my-bindings)
-;;; my-bindings.el ends here
+ ;; Vertico
+
+ '(vertico-quick1 ((t :inherit my-select-char-face :background unspecified)))
+ '(vertico-quick2 ((t :inherit my-select-char-face :background unspecified)))
+
+ )
+
+(provide 'my-init-bindings)
+;;; my-init-bindings.el ends here
 
 ;; Local Variables:
 ;; outline-regexp: " '(\\|;;;;* [^ \t\n]\\|(\\|\\(^;;;###\\(\\([-[:alnum:]]+?\\)-\\)?\\(autoload\\)\\)"

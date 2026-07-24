@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-frame.el --- My `frame' extensions.         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,9 @@
 
 ;;; Code:
 
+(defun my-x-frame-set-frame-alpha-background (alpha)
+  (interactive "nAlpha Background: ")
+  (set-frame-parameter frame 'alpha-background alpha))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-frame)
+;;; my-x-frame.el ends here

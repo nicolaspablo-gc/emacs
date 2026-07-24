@@ -12,11 +12,17 @@
 (defconst my-lisp-directory (expand-file-name "lisp" my-emacs-directory)
   "Directory containing my personal libraries.")
 
-(defconst my-init-directory (expand-file-name "init" my-emacs-directory)
-  "Directory containing my personal initialization files.")
-
-(defconst my-lisp-loaddefs-file (expand-file-name "my-lisp-loaddefs.el" my-lisp-directory)
+(defconst my-lisp-loaddefs (expand-file-name "my-lisp-loaddefs.el" my-lisp-directory)
   "File for automatically generated autoloads of my personal libraries.")
+
+(defconst my-extensions-directory (expand-file-name "extensions" my-emacs-directory)
+  "Directory containing my personal extensions of libraries.")
+
+(defconst my-definitions-directory (expand-file-name "defs" my-emacs-directory)
+  "Directory containing my personal definitions.")
+
+(defconst my-init-directory (expand-file-name "init" my-emacs-directory)
+  "Directory containing my init files.")
 
 (defconst my-custom-file (make-temp-file "my-custom-" nil ".el")
   "My file where `custom' saves config.
@@ -24,15 +30,19 @@ I try to not depend on `custom'.  A temporary file ensures that
 accidental writing to `custom' (by triggering commands that save the
 custom's state) can't be loaded on next sesion.")
 
+(add-to-list 'load-path my-emacs-directory)
 (add-to-list 'load-path my-lisp-directory)
-(add-to-list 'custom-theme-load-path my-lisp-directory)
-(loaddefs-generate my-lisp-directory my-lisp-loaddefs-file)
-(load my-lisp-loaddefs-file nil t)
-
+(add-to-list 'load-path my-definitions-directory)
 (add-to-list 'load-path my-init-directory)
+(add-to-list 'custom-theme-load-path my-lisp-directory)
+(add-to-list 'load-path my-extensions-directory)
 
-;; Do this before anything that could write to custom file.
-(setq custom-file my-custom-file) 
+;; There used to be more dirs where I generated loaddefs.  Now theres
+;; only one, but I keep the alist idioms in case I need to add more
+;; dirs.
+(dolist (dir.file (list (cons my-lisp-directory my-lisp-loaddefs)))
+  (loaddefs-generate (car dir.file) (cdr dir.file))
+  (load (cdr dir.file) nil t))
 
 ;; Bootstrap packages
 
@@ -56,19 +66,34 @@ custom's state) can't be loaded on next sesion.")
   (package-refresh-contents)
   (package-install-selected-packages :noconfirm))
 
-;;;; Strata
+;;;; Strata (layers).
 
-(require 'my-defs)
-(require 'my-bindings)
+;; First definitions and extensions, then bindings, finall setup state
+;; in next section.
 
-;;;; Ignition
+;; Extensions and init files first (they are definitions), bindings
+;; second, finally initialize state (next section).
 
-;; load themes
+;; definitions, dinamically require all `my-' files in `my-definitions-directory'.
+(dolist (file (directory-files my-definitions-directory nil "my-definitions.*\\.el\\'"))
+  (require (intern (file-name-sans-extension file))))
+
+;; extensions, dinamically require all `my-x' files in `my-extensions-directory'.
+(dolist (file (directory-files my-extensions-directory nil "my-x.*\\.el\\'"))
+  (require (intern (file-name-sans-extension file))))
+
+;; init files, dinamically require all `my-init' files in `my-extensions-directory'.
+(dolist (file (directory-files my-init-directory nil "my-init.*\\.el\\'"))
+  (require (intern (file-name-sans-extension file))))
+
+;;;; Ignition.  Setup State.
+
+;; Load themes.
 
 (auto-dark-mode)
 (load-theme 'ui-simple :no-confirm)
 
-;; Start server
+;; Start server.
 
 (require 'server)
 (unless (server-running-p)
@@ -78,8 +103,9 @@ custom's state) can't be loaded on next sesion.")
 
 (electric-pair-mode)
 (global-tab-line-mode)
+(tab-bar-history-mode)
 (info-rename-buffer-mode)
-(my-global-map-mode)
+;;(my-global-map-mode)
 (nerd-icons-completion-mode)
 (nerd-icons-tab-line-mode)
 (save-place-mode)
@@ -88,3 +114,9 @@ custom's state) can't be loaded on next sesion.")
 (vertico-flat-mode)
 (vertico-mode)
 (vertico-multiform-mode)
+(remove-hook 'minibuffer-setup-hook #'my-insert-mode)
+
+;; Load local file if exists
+
+(when (locate-library "local.el")
+  (require 'local))

@@ -78,6 +78,9 @@ This macro creates the following symbols:
 - \\=`PACKAGE--exclusive-modes', a variable which is registry of
   exclusive mode symbols.
 
+- \\=`PACKAGE--exclusive-modes-off' a function for deactivating all
+  `PACKAGE--exclusive-modes'.
+
 - \\=`PACKAGE--exclusive-mode-add' a function for adding a mode to the
   registry.
 
@@ -96,6 +99,7 @@ exclusive it would call:
 Which would produce the following effects:
 
 - It creates the variable \\=`editing--exclusive-modes'.
+- It creates the variable \\=`editing--exclusive-modes-off'.
 - It creates the function \\=`editing--exclusive-mode-add'.
 - It creates the function \\=`editing--exclusive-mode-remove'.
 - It creates two functions,
@@ -106,12 +110,19 @@ Which would produce the following effects:
 "
   (let* ((package-name (symbol-name package))
          (package-exclusive-modes (intern (format "%s--exclusive-modes" package-name)))
+         (package-exlcusive-modes-off (intern (format "%s--exclusive-modes-off" package-name)))
          (package-exclusive-mode-add (intern (format "%s--exclusive-mode-add" package-name)))
          (package-exclusive-mode-remove (intern (format "%s--exclusive-mode-remove" package-name))))
     `(progn
        (defvar ,package-exclusive-modes '()
          ,(format "`%s' modes that are mutually exclusive."
                   package-name))
+       (defun ,package-exlcusive-modes-off ()
+         ,(format "Deactivate all `%s' modes." package-exclusive-modes)
+         (interactive)
+         (dolist (mode ,package-exclusive-modes)
+           (when (symbol-value mode)
+             (funcall mode -1))))
        (defun ,package-exclusive-mode-add (mode)
          ,(format "Add MODE (a symbol) to `%s'.
 This adds `%s--exclusive-mode-ensure-MODE' as a \\=`:before' advice to MODE."

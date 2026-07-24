@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-org.el --- My `org' extensions.             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -26,5 +26,5 @@
 
 
 
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-org)
+;;; my-x-org.el ends here

@@ -1,6 +1,7 @@
 # Compiled
 *.elc
 my-lisp-loaddefs.el
+my-extensions-loaddefs.el
 
 # Packaging
 .cask/
@@ -16,3 +17,7 @@ dist/
 
 # Undo-tree save-files
 *.~undo-tree
+
+# local site files
+/local.el
+/local/

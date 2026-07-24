@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-lisp.el --- My `lisp' extensions.           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,16 @@
 
 ;;; Code:
 
+(defun my-x-lisp-forward-up-list ()
+  "Like `backward-up-list' but going forward."
+  (interactive)
+  ;; Hacky implementation
+  (let ((start (point)))
+    (with-demoted-errors "%s"
+      (call-interactively #'backward-up-list))
+    ;; Heuristic: if point moved, we upped list, thus need to move to end.
+    (when (/= start (point))
+      (forward-sexp))))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-lisp)
+;;; my-x-lisp.el ends here

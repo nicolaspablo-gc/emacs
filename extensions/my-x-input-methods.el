@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-input-methods.el --- My input method extensions.  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,9 @@
 
 ;;; Code:
 
+(defun my-x-input-methods-set-spanish-prefix ()
+  (interactive)
+  (set-input-method "spanish-prefix"))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-input-methods)
+;;; my-x-input-methods.el ends here

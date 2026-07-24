@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-isearch.el --- Isearch extensions.          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,17 @@
 
 ;;; Code:
 
+(defun my-x-isearch-change-direction ()
+  "Change isearch direction."
+  (interactive)
+  (call-interactively
+   (if isearch-forward #'isearch-repeat-backward #'isearch-repeat-forward)))
 
+(defun my-x-isearch-repeat-direction ()
+  "Repeat same isearch direction."
+  (interactive)
+  (call-interactively
+   (if isearch-forward #'isearch-repeat-forward #'isearch-repeat-backward)))
 
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-isearch)
+;;; my-x-isearch.el ends here

@@ -1,9 +1,9 @@
-;;; helpers.el --- Emacs Lisp setup helpers.         -*- lexical-binding: t; -*-
+;;; my-x-vertico.el --- My `vertico' extensions.     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords: convenience
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,7 +24,13 @@
 
 ;;; Code:
 
+(defun my-vertico-maybe-enable-marginalia ()
+  "Enable or disable marginalia based on vertico state."
+  (marginalia-mode
+   (cond ((and vertico-mode
+	       (not vertico-flat-mode))
+	  1)
+	 (t -1))))
 
-
-(provide 'helpers)
-;;; helpers.el ends here
+(provide 'my-x-vertico)
+;;; my-x-vertico.el ends here

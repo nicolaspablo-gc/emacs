@@ -1,9 +1,9 @@
-;;; editing.el --- Editing commands.                 -*- lexical-binding: t; -*-
+;;; tab-bar-icons.el --- Icon format for `tab-bar'   -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2026  Nicolás Pablo González Carrasco
+;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolás Pablo González Carrasco <nicolaspablo.gc@gmail.com>
-;; Keywords:
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Keywords: 
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,21 +20,11 @@
 
 ;;; Commentary:
 
-;;
+;; 
 
 ;;; Code:
 
-(require 'isearch)
+(defface tab-bar-icon-icon-face '(t))
 
-(defun editing-isearch-change-direction ()
-  (interactive)
-  (call-interactively
-   (if isearch-forward #'isearch-repeat-backward #'isearch-repeat-forward)))
-
-(defun editing-isearch-repeat-direction ()
-  (interactive)
-  (call-interactively
-   (if isearch-forward #'isearch-repeat-forward #'isearch-repeat-backward)))
-
-(provide 'editing)
-;;; editing.el ends here
+(provide 'tab-bar-icons)
+;;; tab-bar-icons.el ends here
