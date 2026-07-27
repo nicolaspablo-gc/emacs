@@ -35,7 +35,12 @@
   (let ((function
          (cond
           ;; More than one buffer to close for this window? 
-          ((> (length (window-prev-buffers)) 1)
+          ((> (length
+               ;; ensure the list always include the current buffer as
+               ;; `window-prev-buffers' sometimes have it and sometimes don't.
+               (delete-dups (cons (current-buffer)
+                                  (mapcar #'car (window-prev-buffers)))))
+              1)
            #'bury-buffer)
           ;; More than one window to close? (window has a parent)
           ((window-parent (selected-window))
@@ -49,7 +54,7 @@
           (t
            (user-error "Nothing else to quit.")))))
     (message "%s" function)
-    (call-interactively function :record-flag)))
+    (call-interactively function)))
 
 (provide 'my-x-window)
 ;;; my-x-window.el ends here

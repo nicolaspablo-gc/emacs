@@ -29,41 +29,6 @@
 (require 'dired)
 
 ;;;###autoload
-(defun set-frame-alpha-background (alpha &optional frame)
-  (interactive "nAlpha Background: ")
-  (set-frame-parameter frame 'alpha-background alpha))
-
-;;;###autoload
-(defun other-side-window-prefix (side &optional slot dedicated)
- "Display following command buffer in a side window.\n
-SIDE is either \\+`top', \\+`bottom', \\+`left' or \\+`right'.\n
-SLOT is a number.  If 0, the window is displayed toward the
-center.  If negative, its displayed before other side windows,
-and if positive is displayed after other side windows.\n
-DEDICATED indicates this is a dedicated window to the buffer.\n
-For more info see Info node `(elisp)Side Windows'\n
-Interactively, with a prefix argument read a number for SLOT.
-Interactively, with two prefix arguments mark the window as dedicated."
- (interactive
-  (list (read (completing-read "Side: " '("top" "bottom" "left" "right") nil t))
-        (if (>= (prefix-numeric-value current-prefix-arg) 4)
-          (read-number "Slot (0->at the middle, negative->before others, positive->after others): " 0)
-         0)
-        (when (>= (prefix-numeric-value current-prefix-arg) 16) t)))
- (display-buffer-override-next-command
-  `(lambda (buffer alist)
-    (cons (display-buffer-in-side-window
-           buffer
-           (append '((side . ,side)
-                     (slot . ,slot)
-                     (dedicate . ,dedicated))
-                   alist))
-          'window))
-  nil
-  "[other-side-window]")
- (message "Display next command buffer in a %s side window..." side))
-
-;;;###autoload
 (defun dired-side-window-dwim ()
   "Display dired in a side window.
 Defaults to project root, else the current directory."

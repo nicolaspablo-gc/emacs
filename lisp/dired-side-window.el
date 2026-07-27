@@ -1,4 +1,4 @@
-;;; my-x-frame.el --- My `frame' extensions.         -*- lexical-binding: t; -*-
+;;; dired-side-window.el --- Dired side window mode  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -24,9 +24,7 @@
 
 ;;; Code:
 
-(defun my-x-frame-set-frame-alpha-background (alpha)
-  (interactive "nAlpha Background: ")
-  (set-frame-parameter nil 'alpha-background alpha))
 
-(provide 'my-x-frame)
-;;; my-x-frame.el ends here
+
+(provide 'dired-side-window)
+;;; dired-side-window.el ends here

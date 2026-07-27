@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 (defmacro command (&rest forms)
   "Argless interactive `lambda'."
   `(lambda () (interactive) ,@forms))

@@ -60,7 +60,7 @@ custom's state) can't be loaded on next sesion.")
    nerd-icons nerd-icons-completion nerd-icons-corfu nerd-icons-dired
    orderless
    rainbow-delimiters
-   vertico vterm))
+   vertico visible-mark vterm))
 
 (unless (seq-every-p #'package-installed-p package-selected-packages)
   (package-refresh-contents)
@@ -115,6 +115,7 @@ custom's state) can't be loaded on next sesion.")
 (vertico-mode)
 (vertico-multiform-mode)
 (remove-hook 'minibuffer-setup-hook #'my-insert-mode)
+(visible-mark-mode)
 
 ;; Load local file if exists
 

@@ -26,6 +26,7 @@
 
 (require 'my-init-helpers)
 (require 'my-faces)
+(require 'ui-simple-theme)
 
 ;;;; Variables
 
@@ -144,7 +145,8 @@
 (with-eval-after-load 'dired
   (define-keymap :keymap dired-mode-map
     "SPC" #'dired-subtree-toggle
-    "," #'dired-omit-mode))
+    "," #'dired-omit-mode
+    "<remap> <find-file>" #'my-x-dired-find-file))
 
 (with-eval-after-load 'info
   (define-keymap :keymap Info-mode-map
@@ -160,9 +162,8 @@
   (define-keymap :keymap vertico-map
     "M-SPC" #'vertico-quick-jump))
 
-(with-eval-after-load 'dired
-  (define-keymap :keymap dired-mode-map
-    "<remap> <find-file>" #'my-x-dired-find-file))
+(with-eval-after-load 'vterm
+  (keymap-unset vterm-mode-map "<return>" :remove))
 
 (require 'modal)
 (require 'modal-variant)
@@ -270,6 +271,10 @@
 
 ;;;; Lists
 
+(with-eval-after-load 'elec-pair
+  (add-to-list 'electric-pair-pairs (cons ?¿ ??))
+  (add-to-list 'electric-pair-pairs (cons ?¡ ?!)))
+
 (with-eval-after-load 'corfu  
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
@@ -289,7 +294,7 @@
  '(default ((t :family "Iosevka Fixed" :width expanded)))
  
  ;; Avy prompt
- 
+ ;; 
  '(avy-lead-face-0
    ((t :inherit avy-lead-face
        :background nil)))
@@ -330,7 +335,7 @@
      :foreground "gray10")))
 
  ;; Rainbow delimiters
- 
+ ;;
  '(rainbow-delimiters-base-error-face
    ((default
      :inherit rainbow-delimiters-base-face)
@@ -419,12 +424,23 @@
     (((min-colors   8))
      :foreground "blue")))
 
+ ;; Tab Line
+ '(tab-line-tab-special ((t :family reset)))
+ 
  ;; Vertico
+ ;; 
+ '(vertico-quick1 ((t :inherit my-select-char-face :background unspecified :foreground unspecified)))
+ '(vertico-quick2 ((t :inherit my-select-char-face :background unspecified :foreground unspecified)))
 
- '(vertico-quick1 ((t :inherit my-select-char-face :background unspecified)))
- '(vertico-quick2 ((t :inherit my-select-char-face :background unspecified)))
-
+ ;; Visible Mark
+ ;;
+ `(visible-mark-face1 ((((background dark))
+                        :background ,ui-simple-dark-border-bg)
+                       (((background light))
+                        :background ,ui-simple-light-border-bg)))
  )
+
+;;; Vertico
 
 (provide 'my-init-bindings)
 ;;; my-init-bindings.el ends here
