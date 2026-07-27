@@ -27,7 +27,7 @@
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."
   (when (eq major-mode #'vterm-mode)
-    (rename-buffer (format "*vterm:%s*" ps1-string) :unique)))
+    (rename-buffer (format "vterm %s" ps1-string) :unique)))
 
 (provide 'my-x-vterm)
 ;;; my-x-vterm.el ends here
