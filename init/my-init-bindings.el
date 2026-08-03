@@ -27,10 +27,10 @@
 (require 'my-init-helpers)
 (require 'my-faces)
 (require 'ui-simple-theme)
+(require 'tab-bar-icons)
+(require 'eglot)
 
 ;;;; Variables
-
-
 
 ;; Do this before anything that could write to custom file.
 (setq custom-file my-custom-file) 
@@ -58,12 +58,136 @@
 
 (setq-default indent-tabs-mode nil)
 
+(setq ediff-merge-split-window-function #'split-window-horizontally)
+(setq ediff-split-window-function #'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+(setq major-mode-remap-alist (alistq python-mode python-ts-mode))
+
+(setq magit-format-file-function #'magit-format-file-nerd-icons)
+
+;; Org
+
+(setq org-use-speed-commands t)
+(setq org-agenda-restore-windows-after-quit t)
+(setq org-agenda-search-view-max-outline-level 1)
+(setq org-agenda-sort-notime-is-late nil)
+(setq org-agenda-span 14)
+(setq org-agenda-sticky t)
+(setq org-agenda-tags-column 0)
+(setq org-agenda-time-leading-zero t)
+(setq org-agenda-todo-ignore-scheduled 'future)
+(setq org-agenda-use-time-grid t)
+(setq org-agenda-window-setup 'current-window)
+(setq org-appear-autoemphasis t)
+(setq org-appear-autolinks t)
+(setq org-appear-autosubmarkers t)
+(setq org-archive-location ".archive/%s::")
+(setq org-babel-no-eval-on-ctrl-c-ctrl-c t)
+(setq org-capture-bookmark nil)
+(setq org-clock-into-drawer "LOG")
+(setq org-confirm-babel-evaluate nil)
+(setq org-confirm-elisp-link-function #'y-or-n-p)
+(setq org-cycle-separator-lines 0)
+(setq org-deadline-warning-days 1)
+(setq org-directory "~/.nico/home/agenda")
+(setq org-default-notes-file (concat org-directory "/agenda.org"))
+(setq org-ellipsis (format " (%s)" (if (display-graphic-p) "…" "...")))
+(setq org-fontify-done-headline t)
+(setq org-fontify-todo-headline nil)
+(setq org-hide-emphasis-markers t)
+(setq org-hide-leading-stars nil)
+(setq org-indirect-buffer-display 'current-window)
+(setq org-list-allow-alphabetical t)
+(setq org-list-demote-modify-bullet (alistq "+" "-"))
+(setq org-hide-drawer-startup nil)
+(setq org-log-into-drawer "LOG")
+(setq org-outline-path-complete-in-steps nil)
+(setq org-priority-default ?C)
+(setq org-priority-lowest ?E)
+(setq org-refile-allow-creating-parent-nodes t)
+(setq org-refile-targets (list (cons 'org-agenda-files nil)))
+(setq org-refile-use-outline-path 'full-file-path)
+(setq org-return-follows-link t)
+(setq org-special-ctrl-a t)
+(setq org-src-window-setup 'plain)
+(setq org-startup-folded t)
+(setq org-tags-column 0)
+(setq org-todo-keywords '((sequence "HACER" "PAUSA" "|" "HECHO" "YA_NO")))
+(setq org-use-speed-commands t)
+
+(setq org-agenda-prefix-format
+      (alistq agenda " %i %?-12t% s"
+              todo " %i "
+              tags " %i "
+              search " %i "))
+(setq org-todo-keyword-faces
+      (alistq "PAUSA" my-org-wait-face
+              "CONFIRMAR" my-org-confirm-face
+              "YA NO" my-org-cancel-face
+              "YA_NO" my-org-cancel-face))
+(setq org-timer-format "⏰ %s ")
+
+(with-eval-after-load 'org
+  (setf (cdr (assoc 'state org-log-note-headings)) "LOG: %t  %s"))
+
+
+;; Tab Bar
+
+(setq tab-bar-format
+      '(;; tab-bar-format-history
+        ;; tab-bar-format-tabs
+        tab-bar-icons-format-tabs
+        tab-bar-separator
+        tab-bar-format-add-tab
+        tab-bar-format-align-right
+        tab-bar-format-global))
+
+
+;; Mode Line
+
+;; based on the emacs default, put modes at the beginning and buffer
+;; name at the end.  This is because buffer names vary widely, but the
+;; list of mode lighters is short and varies minimally.  By keeping
+;; the most varied element last, all the other mode line elements are
+;; more likely to stay aligned.
+
+(setq-default
+ mode-line-format
+ '("%e"
+   mode-line-front-space
+   (7 ("" mode-line-position))
+   mode-line-frame-identification
+   (:eval (propertized-buffer-identification (truncate-string-to-width (buffer-name) 30 nil ?\s t)))
+   " "
+   my-x-emacs-mode-line-modes
+   mode-line-format-right-align
+   (:propertize
+    " "
+    display (min-width (6.0)))
+   (project-mode-line project-mode-line-format)
+   (vc-mode vc-mode)
+   "  "
+   (eglot--managed-mode (" [" eglot--mode-line-format "] "))
+   (:propertize
+    (""
+     mode-line-mule-info
+     mode-line-client
+     mode-line-modified
+     mode-line-remote
+     mode-line-window-dedicated)
+    display (min-width (6.0)))
+   "  "
+   mode-line-end-spaces))
+
 ;; Dired
 
 (setq dired-listing-switches "-alF --group-directories-first"
       dired-omit-files "\\`[.].*\\'"
       dired-subtree-use-backgrounds nil
-      dired-subtree-line-prefix (format "  %s" (propertize " " 'face 'my-dired-subtree-line-prefix-face)))
+      dired-subtree-line-prefix (format
+                                 "  %s"
+                                 (propertize " " 'face 'my-x-dired-subtree-line-prefix-face)))
 
 ;; Window
 
@@ -138,15 +262,24 @@
     (vertico-buffer-display-action
      (display-buffer-in-side-window)
      (side . left)))
-   ("consult.*" (:not flat))))
+   ("consult.*\\|my-x-vterm-dwim" (:not flat))))
 
 ;;;; Keymaps
+
+(keymap-global-set "<f1>" #'keyboard-quit)
+
+(with-eval-after-load 'tab-bar
+  (define-keymap :keymap tab-bar-mode-map
+    "C-TAB" nil
+    "C-<tab>" nil
+    "C-S-<iso-lefttab>" nil))
 
 (with-eval-after-load 'dired
   (define-keymap :keymap dired-mode-map
     "SPC" #'dired-subtree-toggle
     "," #'dired-omit-mode
-    "<remap> <find-file>" #'my-x-dired-find-file))
+    "<remap> <find-file>" #'my-x-dired-find-file
+    "s" #'isearch-forward))
 
 (with-eval-after-load 'info
   (define-keymap :keymap Info-mode-map
@@ -158,12 +291,34 @@
     "TAB" #'my-x-isearch-repeat-direction
     "<Hangul>" #'my-x-isearch-change-direction))
 
+(with-eval-after-load 'prog-mode
+  (define-keymap :keymap prog-mode-map
+    "<remap> <end-of-line>" #'mwim-end
+    "<remap> <beginning-of-line>" #'mwim-beginning))
+
+(with-eval-after-load 'text-mode
+  (define-keymap :keymap text-mode-map
+    "<remap> <end-of-line>" #'mwim-end
+    "<remap> <beginning-of-line>" #'mwim-beginning))
+
 (with-eval-after-load 'vertico
   (define-keymap :keymap vertico-map
-    "M-SPC" #'vertico-quick-jump))
+    "M-SPC" #'vertico-quick-insert))
 
 (with-eval-after-load 'vterm
-  (keymap-unset vterm-mode-map "<return>" :remove))
+  (keymap-unset vterm-mode-map "<return>" :remove)
+  (define-keymap :keymap vterm-mode-map
+    "M-SPC" #'vterm-copy-mode
+    "<remap> <previous-line>" (command (vterm-send "C-p"))
+    "<remap> <next-line>" (command (vterm-send "C-n"))
+    "<remap> <end-of-line>" (command (vterm-send "C-e"))
+    "<remap> <beginning-of-line>" (command (vterm-send "C-a"))
+    "<remap> <forward-char>" (command (vterm-send "C-f"))
+    "<remap> <backward-char>" (command (vterm-send "C-b"))
+    "<remap> <delete-char>" (command (vterm-send "C-d"))
+    "<remap> <isearch-backward>" (command (vterm-send "C-r"))
+    "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
+    "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))))
 
 (require 'modal)
 (require 'modal-variant)
@@ -188,15 +343,15 @@
   ">" #'end-of-buffer
   "\"" #'my-x-simple-unpop-to-mark-command
   "\\" #'cycle-spacing
-  "a" #'mwim-beginning
+  "a" #'beginning-of-line
   "b" #'backward-char
-  "c" #'undefined
+  "c" #'keyboard-quit
   "d" #'delete-char
-  "e" #'mwim-end
+  "e" #'end-of-line
   "f" #'forward-char
   "g" #'my-x-simple-keyboard-quit-dwim
   "h" help-map
-  "i" #'undefined
+  "i" #'recenter-top-bottom
   "j" #'my-x-simple-forward-delete-indentation
   "k" #'kill-sexp
   "l" #'kill-line
@@ -232,7 +387,7 @@
   ")" #'enlarge-window-horizontally
   "a" #'tab-bar-switch-to-prev-tab
   "b" #'switch-to-buffer
-  "c" #'undefined
+  "c" #'keyboard-quit
   "d" #'dired-jump
   "e" #'tab-bar-switch-to-next-tab
   "f" #'find-file
@@ -254,20 +409,40 @@
   "t" tab-prefix-map
   "u" #'universal-argument
   "v" #'undefined
-  "w" #'undefined
-  "x" #'undefined
+  "w" #'agent-shell
+  "x" #'my-x-vterm-dwim
   "z" #'repeat)
+
+(keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
+
+(define-keymap :keymap search-map
+  "SPC" #'replace-regexp
+  "RET" #'query-replace-regexp)
 
 ;;;; Hooks
 
+(add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
+(add-hook 'prog-mode-hook #'eglot-ensure)
+(add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
-(add-hook 'vertico-mode-hook #'my-vertico-maybe-enable-marginalia)
+(add-hook 'vertico-flat-mode-hook #'my-x-vertico-maybe-enable-marginalia)
+(add-hook 'vertico-mode-hook #'my-x-vertico-maybe-enable-marginalia)
+(add-hook 'vertico-multiform-mode-hook #'my-x-vertico-maybe-enable-marginalia)
 (add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
 (add-hook 'telega-chat-mode-hook #'abbrev-mode)
+(add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
+(add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
+
+(add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
+
+(add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
+(add-hook 'ediff-quit-hook #'my-x-ediff-restore)
+(add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
+
 
 ;;;; Lists
 
@@ -280,6 +455,13 @@
 
 (with-eval-after-load 'vterm
   (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename)))
+
+(with-eval-after-load 'eglot
+  (add-to-list
+   'eglot-server-programs
+   `((python-mode python-ts-mode)
+     . ,(eglot-alternatives
+         '(("basedpyright-langserver" "--stdio"))))))
 
 ;;;; Advices
 
@@ -334,6 +516,15 @@
     (((background dark))
      :foreground "gray10")))
 
+ ;; Ediff
+ ;;
+ '(ediff-current-diff-A ((t :foreground unspecified)))
+ '(ediff-current-diff-B ((t :foreground unspecified)))
+ '(ediff-current-fine-diff-A ((t :foreground unspecified :weight bold)))
+ '(ediff-current-fine-diff-B ((t :foreground unspecified :weight bold)))
+ '(ediff-fine-diff-A ((t :foreground unspecified :weight normal)))
+ '(ediff-fine-diff-B ((t :foreground unspecified :weight normal)))'(smerge-lower ((t :foreground unspecified)))
+ 
  ;; Rainbow delimiters
  ;;
  '(rainbow-delimiters-base-error-face
@@ -424,7 +615,14 @@
     (((min-colors   8))
      :foreground "blue")))
 
+
+ ;; Smerge
+ ;;
+ '(smerge-refined-changed ((t :foreground unspecified)))
+ '(smerge-upper ((t :foreground unspecified)))
+
  ;; Tab Line
+ ;;
  '(tab-line-tab-special ((t :family reset)))
  
  ;; Vertico
@@ -437,8 +635,7 @@
  `(visible-mark-face1 ((((background dark))
                         :background ,ui-simple-dark-border-bg)
                        (((background light))
-                        :background ,ui-simple-light-border-bg)))
- )
+                        :background ,ui-simple-light-border-bg))) )
 
 ;;; Vertico
 

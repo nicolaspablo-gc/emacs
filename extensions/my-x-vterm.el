@@ -24,10 +24,50 @@
 
 ;;; Code:
 
+(defun my-x-vterm-in-dir (dir)
+  (interactive "DVterm in dir:")
+  (let ((default-directory dir))
+    (vterm)))
+
+(defun my-x-vterm-dwim (&optional new)
+  "Switch to a vterm buffer, or create a new one in a dir."
+  (interactive "P")
+  (if new
+      (my-x-vterm-in-dir (read-directory-name "Vterm in dir: "))
+    (switch-to-buffer
+     (completing-read
+      "Vterm Buffer: " 
+      (completion-table-with-metadata
+       (let (buffers
+             (exclude (and (eq major-mode #'vterm-mode) (current-buffer))))
+         (dolist (buffer (buffer-list))
+           (when (and (with-current-buffer buffer (eq major-mode #'vterm-mode))
+                      (not (eq buffer exclude)))
+             (push (buffer-name buffer) buffers)))
+         buffers)
+       '((category . buffer)))
+      nil
+      :require-match))))
+
+
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."
   (when (eq major-mode #'vterm-mode)
     (rename-buffer (format "vterm %s" ps1-string) :unique)))
+
+(defun my-x-vterm-suspend-ssh ()
+  "Send escape sequences for suspending ssh session."
+  (interactive)
+  (vterm-send-return)
+  (vterm-send "~")
+  (vterm-send "C-z"))
+
+(defun my-x-vterm-close-ssh ()
+  "Send escape sequences for suspending ssh session."
+  (interactive)
+  (vterm-send-return)
+  (vterm-send "~")
+  (vterm-send "."))
 
 (provide 'my-x-vterm)
 ;;; my-x-vterm.el ends here

@@ -24,7 +24,47 @@
 
 ;;; Code:
 
-(defface tab-bar-icon-icon-face '(t))
+(defvar tab-bar-icons-default "🗂️"
+  "Default icon for tabs that don't match in `tab-bar-icons-alist'.")
+
+(defvar tab-bar-icons-alist '()
+  "Alist of names and icons for displaying in tab bar.")
+
+(defvar tab-bar-icons-name-size 20
+  "Size for the current tab name.")
+
+(defun tab-bar-icons--format-current-tab-name (tab n)
+  "Format the current tab TAB's indexed by N."
+  (truncate-string-to-width
+   (format
+    (concat "%2i %-" (number-to-string tab-bar-icons-name-size) "s ")
+    n
+    (alist-get 'name tab))
+   tab-bar-icons-name-size
+   nil
+   " "))
+
+(defun tab-bar-icons--tab-icon-format-function (tab n)
+  "Format one tab's icon."
+  (propertize
+   (format " %s " (alist-get (alist-get 'name tab)
+                           tab-bar-icons-alist
+                           tab-bar-icons-default
+                           nil
+                           #'string-match-p))
+   'face
+   (funcall tab-bar-tab-face-function tab)))
+
+(defun tab-bar-icons-format-tabs ()
+  "Construct for formatting current tab name followed by all tab icons.
+Meant to be placed near the start of `tab-bar-format'."
+  (let (name tabs (i 0))
+    (dolist (tab (funcall tab-bar-tabs-function))
+      (setq i (1+ i))
+      (push (tab-bar-icons--tab-icon-format-function tab i) tabs)
+      (when (eq (car tab) 'current-tab)
+        (setq name (tab-bar-icons--format-current-tab-name tab i))))
+    (format "%s %s" name (string-join (nreverse tabs) " "))))
 
 (provide 'tab-bar-icons)
 ;;; tab-bar-icons.el ends here

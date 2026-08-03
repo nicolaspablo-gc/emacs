@@ -51,8 +51,8 @@ custom's state) can't be loaded on next sesion.")
 
 (setq
  package-selected-packages
- '(auto-dark avy
-   breadcrumb
+ '(agent-shell auto-dark avy
+   blow breadcrumb 
    corfu
    dired-subtree
    info-rename-buffer
@@ -87,6 +87,16 @@ custom's state) can't be loaded on next sesion.")
   (require (intern (file-name-sans-extension file))))
 
 ;;;; Ignition.  Setup State.
+
+;; Register lighters to kill
+
+(delete-lighters-after-load-multi
+ autorevert auto-revert-mode
+ auto-dark auto-dark-mode
+ eldoc eldoc-mode
+ nerd-icons-dired nerd-icons-dired-mode
+ dired-x dired-omit-mode
+ simple visual-line-mode)
 
 ;; Load themes.
 

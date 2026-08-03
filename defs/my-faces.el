@@ -42,5 +42,18 @@
      :background "blue" :foreground "white" ))
   "Face for one char selections, `avy' style.")
 
+(defface my-org-cancel-face
+  '((t :foreground "gray50" :weight bold))
+  "Face for org cancel status.")
+
+(defface my-org-confirm-face
+  '((t :foreground "#005faf" :weight bold))
+  "Face for confirmation status.")
+
+(defface my-org-wait-face
+  '((t :foreground "dark orange"))
+  "Face for org wait status.")
+
+
 (provide 'my-faces)
 ;;; my-faces.el ends here

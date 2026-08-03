@@ -1,4 +1,4 @@
-;;; my-x-vertico.el --- My `vertico' extensions.     -*- lexical-binding: t; -*-
+;;; my-x-nerd-icons-completion.el --- My `nerd-icons-completion' extensions.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -24,10 +24,13 @@
 
 ;;; Code:
 
-(defun my-x-vertico-maybe-enable-marginalia ()
-  "Enable or disable marginalia based on vertico state."
-  (marginalia-mode
-   (if (and vertico-mode (not vertico-flat-mode)) 1 -1)))
+(defun my-x-nerd-icons-completion-reactivate ()
+  "Reactivate `nerd-icons-completion' if active.
+This is needed because when `marginalia-mode' is enabled,
+`nerd-icons-completion' needs to be reactivated to take effect."
+  (when nerd-icons-completion-mode
+    (nerd-icons-completion-mode -1)
+    (nerd-icons-completion-mode +1)))
 
-(provide 'my-x-vertico)
-;;; my-x-vertico.el ends here
+(provide 'my-x-nerd-icons-completion)
+;;; my-x-nerd-icons-completion.el ends here

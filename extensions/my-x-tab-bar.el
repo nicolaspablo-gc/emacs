@@ -1,4 +1,4 @@
-;;; my-x-vertico.el --- My `vertico' extensions.     -*- lexical-binding: t; -*-
+;;; my-x-tab-bar.el --- My `tab-bar' extensions.     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -24,10 +24,7 @@
 
 ;;; Code:
 
-(defun my-x-vertico-maybe-enable-marginalia ()
-  "Enable or disable marginalia based on vertico state."
-  (marginalia-mode
-   (if (and vertico-mode (not vertico-flat-mode)) 1 -1)))
+(defvar my-x-tab-bar-format )
 
-(provide 'my-x-vertico)
-;;; my-x-vertico.el ends here
+(provide 'my-x-tab-bar)
+;;; my-x-tab-bar.el ends here

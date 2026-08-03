@@ -1,4 +1,4 @@
-;;; my-x-vertico.el --- My `vertico' extensions.     -*- lexical-binding: t; -*-
+;;; my-x-emacs.el --- My emacs extensions.           -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -24,10 +24,21 @@
 
 ;;; Code:
 
-(defun my-x-vertico-maybe-enable-marginalia ()
-  "Enable or disable marginalia based on vertico state."
-  (marginalia-mode
-   (if (and vertico-mode (not vertico-flat-mode)) 1 -1)))
+(defvar my-x-emacs-mode-line-modes
+  (seq-filter
+   (lambda (elt)
+     (or (not (stringp elt))
+         (seq-every-p
+          (lambda (paren) (not (string= elt paren)))
+          (list "(" ")"))))
+   mode-line-modes)
+  "Mode line construct for active modes display.
+Its made by taking `mode-line-modes' and removing the parenthesis.")
+(put 'my-x-emacs-mode-line-modes 'risky-local-variable t)
 
-(provide 'my-x-vertico)
-;;; my-x-vertico.el ends here
+(defun my-x-emacs-set-header-line-as-buffer-name ()
+  "Sets `header-line-format' to display the buffer name."
+  (setq header-line-format '" %b"))
+
+(provide 'my-x-emacs)
+;;; my-x-emacs.el ends here

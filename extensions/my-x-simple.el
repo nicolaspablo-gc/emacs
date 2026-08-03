@@ -69,9 +69,9 @@ Source: https://www.emacswiki.org/emacs/MarkCommands#h5o-4"
 
 (defun my-x-simple-keyboard-quit-dwim ()
   "If on the minibuffer call `abort-minibuffer', else call `keyboard-quit'."
+  (interactive)
   (call-interactively
-   (cond ((major-mode-p 'minibuffer-mode) #'abort-minibuffers)
-         (t #'keyboard-quit))))
+   (if (eq major-mode #'minibuffer-mode) #'abbort-minibuffers #'keyboard-quit)))
 
 (provide 'my-x-simple)
 ;;; my-x-simple.el ends here
