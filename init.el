@@ -57,7 +57,7 @@ custom's state) can't be loaded on next sesion.")
    dired-subtree
    info-rename-buffer
    marginalia mwim
-   nerd-icons nerd-icons-completion nerd-icons-corfu nerd-icons-dired
+   nerd-icons nerd-icons-completion nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer
    orderless
    rainbow-delimiters
    vertico visible-mark vterm))

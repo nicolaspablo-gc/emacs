@@ -131,6 +131,13 @@
 (with-eval-after-load 'org
   (setf (cdr (assoc 'state org-log-note-headings)) "LOG: %t  %s"))
 
+(setq dired-side-window-display-buffer-base-action
+      '((display-buffer-reuse-window
+         display-buffer-in-previous-window
+         display-buffer-same-window
+         display-buffer-use-some-window
+         display-buffer-pop-up-window)
+        (reusable-frames . nil)))
 
 ;; Tab Bar
 
@@ -388,7 +395,7 @@
   "a" #'tab-bar-switch-to-prev-tab
   "b" #'switch-to-buffer
   "c" #'keyboard-quit
-  "d" #'dired-jump
+  "d" #'dired-side-window-dwim
   "e" #'tab-bar-switch-to-next-tab
   "f" #'find-file
   "g" #'my-x-simple-keyboard-quit-dwim
@@ -421,10 +428,11 @@
 
 ;;;; Hooks
 
+(add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
-(add-hook 'prog-mode-hook #'eglot-ensure)
+(add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
@@ -442,6 +450,7 @@
 (add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
 (add-hook 'ediff-quit-hook #'my-x-ediff-restore)
 (add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
+(add-hook 'dired-side-window-hook #'dired-hide-details-mode)
 
 
 ;;;; Lists
