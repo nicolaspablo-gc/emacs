@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(require 'dired)
+(require 'project)
+
 (defvar dired-side-window-side 'left
   "Side to display the dired side window.")
 
@@ -41,10 +44,11 @@
   (when (eq major-mode #'dired-mode)
     (use-local-map dired-side-window-map)
     (run-hooks 'dired-side-window-hook)
-    (when dired-side-window-display-buffer-alist
+    (when dired-side-window-display-buffer-base-action
       (setq-local display-buffer-base-action
-                  dired-side-window-display-buffer-alist))))
+                  dired-side-window-display-buffer-base-action))))
 
+;;;###autoload
 (defun dired-side-window-dwim (&optional dir)
   "Display dired in a side window.
 "
@@ -64,7 +68,8 @@
                   default-directory))))
            (display-buffer-overriding-action
             `(display-buffer-in-side-window
-              (side . ,dired-side-window-side)))
+              (side . ,dired-side-window-side)
+              (dedicated . t)))
            (exists (dired-find-buffer-nocreate dir)))
       (dired dir)
       (unless exists

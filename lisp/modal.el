@@ -44,6 +44,10 @@
   "Configurable modal bindings."
   :group 'convenience)
 
+(defvar modal-global-mode-cursor-color nil
+  "Cursor color when `modal-global-mode' is active.
+Nil means the cursor is not changed on mode activation.")
+
 (defun modal--make-map ()
   "Make an \"empty\" keymap used in modal modes."
   (let ((map (make-keymap)))
@@ -112,8 +116,23 @@ without being able to exit."
            'minibuffer-setup-hook
            #'modal--maybe-minibuffer-disable)
   ;; Refresh the mode line to display in all buffers global mode is active.
-  (force-mode-line-update :all))
-
+  (force-mode-line-update :all)
+  ;; Maybe change cursor color if a user face is defined
+  (set-face-attribute
+   'cursor nil
+   :background
+   (when modal-global-mode-cursor-color
+     (dolist (frame (visible-frame-list))
+       (set-frame-parameter
+        frame
+        'cursor-color
+        (if modal-global-mode
+            modal-global-mode-cursor-color
+          (let ((background (face-attribute 'cursor :background)))
+            (if (not (eq background 'unspecified))
+                background
+              (plist-get (face-spec-choose (face-default-spec 'cursor))
+                         :background)))))))))
 ;; Register modal mode in `emulation-mode-map-alists'.
 (add-to-list 'emulation-mode-map-alists modal--mode-map-alist)
 

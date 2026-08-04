@@ -65,6 +65,7 @@
 (setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 
 (setq magit-format-file-function #'magit-format-file-nerd-icons)
+(setq modal-global-mode-cursor-color "red")
 
 ;; Org
 
@@ -433,6 +434,7 @@
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)

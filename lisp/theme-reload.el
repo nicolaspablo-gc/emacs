@@ -46,9 +46,9 @@ Note that these are reloaded only if enabled.")
   (unless (seq-contains-p (append '(user) theme-reload-themes)
                           theme
 			  #'eq)
-     (dolist (reload-theme (reverse theme-reload-themes))
-       (when (custom-theme-enabled-p reload-theme)
-	(load-theme reload-theme 'no-confirm)))))
+    (dolist (reload-theme (reverse theme-reload-themes))
+      (when (custom-theme-enabled-p reload-theme)
+	(enable-theme reload-theme)))))
 
 ;;;###autoload
 (define-minor-mode theme-reload-mode
