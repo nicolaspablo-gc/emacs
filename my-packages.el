@@ -54,6 +54,7 @@
    nerd-icons-dired
    nerd-icons-ibuffer
    nov
+   openwith
    orderless
    rainbow-delimiters
    vertico

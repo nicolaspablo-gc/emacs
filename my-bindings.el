@@ -39,6 +39,10 @@
 
 (setq text-scale-mode-step 1.05)
 
+(setq recenter-positions '(top bottom middle))
+
+(setq openwith-associations '(("\\.xlsx\\'" "libreoffice" (file))))
+
 (setq-default line-spacing 2)
 
 (setq-default olivetti-body-width 0.65)
@@ -364,6 +368,8 @@
   (keymap-unset vterm-mode-map "<return>" :remove)
   (define-keymap :keymap vterm-mode-map
     "M-SPC" #'vterm-copy-mode
+    "<f3>" nil ;; allow macro defining and playup
+    "<f4>" nil
     "<remap> <previous-line>" (command (vterm-send "C-p"))
     "<remap> <next-line>" (command (vterm-send "C-n"))
     "<remap> <end-of-line>" (command (vterm-send "C-e"))
@@ -504,7 +510,7 @@
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
-(add-hook 'vertico-flat-mode-hook #'my-x-vertico-maybe-enable-marginalia)
+(add-hook 'vertico-flat-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-mode-hook #'my-x-vertico-maybe-enable-marginalia)
 (add-hook 'vertico-multiform-mode-hook #'my-x-vertico-maybe-enable-marginalia)
 (add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
@@ -652,11 +658,14 @@
  '(info-title-3 ((t :height 1.1 :underline (:position 0))))
  '(info-title-4 ((t :height 1.1 :underline (:position 0))))
 
+ ;; Modus Themes
+ '(modus-themes-completion-selected ((t :weight reset)))
+
  ;; Org
  ;;
  '(org-headline-todo ((t :foreground reset :weight medium))) ;; don't use special colors for todo headlines.
  '(org-headline-done ((t :foreground "gray" :strike-through t)))
- '(org-mode-line-clock ((t :inherit reset :weight reset)))
+ '(org-mode-line-clock ((t :inherit reset :weight reset :height 0.9)))
 
  ;; Rainbow delimiters
  ;;

@@ -93,6 +93,7 @@ custom's state) can't be loaded on next sesion.")
 (remove-hook 'minibuffer-setup-hook #'my-insert-mode)
 (visible-mark-mode)
 (recentf-mode)
+(openwith-mode)
 
 ;; Load local file if exists
 
