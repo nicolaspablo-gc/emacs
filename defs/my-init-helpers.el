@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -29,6 +29,20 @@
 (defmacro command (&rest forms)
   "Argless interactive `lambda'."
   `(lambda () (interactive) ,@forms))
+
+(defmacro hook-defun (hook name &rest body)
+  "Add a new `defun' named HOOK-NAME to HOOK.
+
+HOOK is the unquoted symbol where for the hook.
+NAME is an unquoted symbol used for defining the full name of the function.
+BODY are the body forms of the function.
+
+Normally for one-off functons one uses an anonymous function, but for
+hooks, its better to use a named function, because that way is easier to
+unhook later on."
+  (declare (indent defun))
+  (let ((fun (read (format "my-%s-%s" (symbol-name hook) (symbol-name name)))))
+    `(add-hook ',hook (defun ,fun () ,@body))))
 
 (defun alist (&rest contents)
   "Build an alist consing each succesive element.
@@ -65,7 +79,7 @@ Both FILE and MODES are auto-quoted, so call with bare symbols/lists, e.g.:
 
   (delete-lighters-after-load-multi
     feature-1 mode-1
-    feature-2 (mode-2 mode-3))"  
+    feature-2 (mode-2 mode-3))"
   (unless (cl-evenp (length file-mode-pairs))
     (error "Uneven number of arguments passed to `delete-lighters-after-load-multi'."))
   `(progn

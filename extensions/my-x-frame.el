@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,13 +20,21 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 (defun my-x-frame-set-frame-alpha-background (alpha)
+  "Set current frame's  \\=`alpha' parameter."
   (interactive "nAlpha Background: ")
   (set-frame-parameter nil 'alpha-background alpha))
+
+(defun my-x-toggle-frame-undecorated (&optional frame)
+  "Toggle frame's \\=`undecorated' parameter."
+  (interactive)
+  (let* ((frame (or frame (selected-frame)))
+         (status (frame-parameter frame 'undecorated)))
+    (set-frame-parameter frame 'undecorated (not status))))
 
 (provide 'my-x-frame)
 ;;; my-x-frame.el ends here

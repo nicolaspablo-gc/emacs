@@ -40,63 +40,29 @@ custom's state) can't be loaded on next sesion.")
 ;; There used to be more dirs where I generated loaddefs.  Now theres
 ;; only one, but I keep the alist idioms in case I need to add more
 ;; dirs.
-(dolist (dir.file (list (cons my-lisp-directory my-lisp-loaddefs)))
-  (loaddefs-generate (car dir.file) (cdr dir.file))
-  (load (cdr dir.file) nil t))
+(dolist (dir-file (list (cons my-lisp-directory my-lisp-loaddefs)))
+  (loaddefs-generate (car dir-file) (cdr dir-file))
+  (load (cdr dir-file) nil t))
 
 ;; Bootstrap packages
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(require 'my-packages)
 
-(setq
- package-selected-packages
- '(agent-shell auto-dark avy
-   blow breadcrumb 
-   corfu
-   dired-subtree
-   info-rename-buffer
-   marginalia mwim
-   nerd-icons nerd-icons-completion nerd-icons-corfu nerd-icons-dired nerd-icons-ibuffer
-   orderless
-   rainbow-delimiters
-   vertico visible-mark vterm))
+;;;; Setup
 
-(unless (seq-every-p #'package-installed-p package-selected-packages)
-  (package-refresh-contents)
-  (package-install-selected-packages :noconfirm))
-
-;;;; Strata (layers).
-
-;; First definitions and extensions, then bindings, finall setup state
-;; in next section.
-
-;; Extensions and init files first (they are definitions), bindings
-;; second, finally initialize state (next section).
+;; First, definitions and extensions, then apply bindings, finally
+;; enable modes and themes.
 
 ;; definitions, dinamically require all `my-' files in `my-definitions-directory'.
-(dolist (file (directory-files my-definitions-directory nil "my-definitions.*\\.el\\'"))
+(dolist (file (directory-files my-definitions-directory nil "my-.*\\.el\\'"))
   (require (intern (file-name-sans-extension file))))
 
 ;; extensions, dinamically require all `my-x' files in `my-extensions-directory'.
 (dolist (file (directory-files my-extensions-directory nil "my-x.*\\.el\\'"))
   (require (intern (file-name-sans-extension file))))
 
-;; init files, dinamically require all `my-init' files in `my-extensions-directory'.
-(dolist (file (directory-files my-init-directory nil "my-init.*\\.el\\'"))
-  (require (intern (file-name-sans-extension file))))
-
-;;;; Ignition.  Setup State.
-
-;; Register lighters to kill
-
-(delete-lighters-after-load-multi
- autorevert auto-revert-mode
- auto-dark auto-dark-mode
- eldoc eldoc-mode
- nerd-icons-dired nerd-icons-dired-mode
- dired-x dired-omit-mode
- simple visual-line-mode)
+;; Apply bindings
+(require 'my-bindings)
 
 ;; Load themes.
 
@@ -126,6 +92,7 @@ custom's state) can't be loaded on next sesion.")
 (vertico-multiform-mode)
 (remove-hook 'minibuffer-setup-hook #'my-insert-mode)
 (visible-mark-mode)
+(recentf-mode)
 
 ;; Load local file if exists
 

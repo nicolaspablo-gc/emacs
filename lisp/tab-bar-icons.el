@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -57,7 +57,7 @@
 
 (defun tab-bar-icons-format-tabs ()
   "Construct for formatting current tab name followed by all tab icons.
-Meant to be placed near the start of `tab-bar-format'."
+Meant to be placed at the start of `tab-bar-format'."
   (let (name tabs (i 0))
     (dolist (tab (funcall tab-bar-tabs-function))
       (setq i (1+ i))

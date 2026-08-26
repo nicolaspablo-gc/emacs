@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -36,7 +36,7 @@
       (my-x-vterm-in-dir (read-directory-name "Vterm in dir: "))
     (switch-to-buffer
      (completing-read
-      "Vterm Buffer: " 
+      "Vterm Buffer: "
       (completion-table-with-metadata
        (let (buffers
              (exclude (and (eq major-mode #'vterm-mode) (current-buffer))))
@@ -53,7 +53,7 @@
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."
   (when (eq major-mode #'vterm-mode)
-    (rename-buffer (format "vterm %s" ps1-string) :unique)))
+    (rename-buffer (format "vt %s" ps1-string) :unique)))
 
 (defun my-x-vterm-suspend-ssh ()
   "Send escape sequences for suspending ssh session."

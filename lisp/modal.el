@@ -99,7 +99,13 @@ without being able to exit."
 (defun modal--maybe-minibuffer-disable ()
   "Disable `modal-global-mode' in minibuffer based on
 `modal-minibuffer-disable'."
-  (when modal-minibuffer-disable (modal-global-mode -1)))
+  (when modal-minibuffer-disable (modal-global-mode-disable)))
+
+(defun modal-global-mode-disable ()
+  (modal-global-mode -1))
+
+(defun modal-mode-disable ()
+  (modal-mode -1))
 
 (define-minor-mode modal-mode
   "User customizable modal mode for the current buffer."

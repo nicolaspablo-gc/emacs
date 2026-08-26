@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -29,12 +29,12 @@
   (interactive "p\ni\np")
   (other-window (- count)))
 
-(defun my-x-window-quit-window-dwim ()
+(defun my-x-window-quit-dwim ()
   "Try quitting in succession buffer, window, tab or frame."
-  (interactive) 
+  (interactive)
   (let ((function
          (cond
-          ;; More than one buffer to close for this window? 
+          ;; More than one buffer to close for this window?
           ((> (length
                ;; ensure the list always include the current buffer as
                ;; `window-prev-buffers' sometimes have it and sometimes don't.

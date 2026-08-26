@@ -34,19 +34,27 @@
   :doc "Keymap for dired in side window."
   :parent dired-mode-map)
 
-(defvar dired-side-window-hook '()
-  "Hook for dired side window.")
+(defvar dired-side-window-setup-hook '()
+  "Hook run when creating a new dired buffer in side window.")
+
+(defvar dired-side-window-pop-up-hook '()
+  "Hook run when popping to the dired side window buffer.")
 
 (defvar dired-side-window-display-buffer-base-action nil
   "Optional action for buffers created from dired side window.")
 
-(defun dired-side-window--enable ()
+(defvar dired-side-window-mode-line-format nil
+  "Optional `mode-line-format' to use in dired side window.")
+
+(defun dired-side-window--setup ()
   (when (eq major-mode #'dired-mode)
     (use-local-map dired-side-window-map)
-    (run-hooks 'dired-side-window-hook)
+    (run-hooks 'dired-side-window-setup-hook)
     (when dired-side-window-display-buffer-base-action
       (setq-local display-buffer-base-action
-                  dired-side-window-display-buffer-base-action))))
+                  dired-side-window-display-buffer-base-action))
+    (when dired-side-window-mode-line-format
+      (setq mode-line-format dired-side-window-mode-line-format))))
 
 ;;;###autoload
 (defun dired-side-window-dwim (&optional dir)
@@ -74,7 +82,8 @@
       (dired dir)
       (unless exists
         (with-current-buffer (dired-find-buffer-nocreate dir)
-          (dired-side-window--enable)))))))
+          (dired-side-window--setup)))
+      (run-hooks 'dired-side-window-pop-up-hook)))))
 
 (provide 'dired-side-window)
 ;;; dired-side-window.el ends here

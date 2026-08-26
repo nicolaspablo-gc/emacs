@@ -1,9 +1,9 @@
-;;; my-init-bindings.el --- My init bindings.           -*- lexical-binding: t; -*-
+;;; my-bindings.el --- My init bindings.           -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+;;;; Requirements
+
 (require 'my-init-helpers)
 (require 'my-faces)
 (require 'ui-simple-theme)
@@ -33,10 +35,20 @@
 ;;;; Variables
 
 ;; Do this before anything that could write to custom file.
-(setq custom-file my-custom-file) 
+(setq custom-file my-custom-file)
+
+(setq text-scale-mode-step 1.05)
+
+(setq-default line-spacing 2)
+
+(setq-default olivetti-body-width 0.65)
+(setq olivetti-style 'fancy)
+
+(setq shr-max-width 80)
+(setq shr-use-fonts nil)
 
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
-(setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask 
+(setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
 (setq completion-styles '(initials partial-completion basic partial-completion emacs22 orderless))
 (setq create-lockfiles nil)
@@ -65,7 +77,7 @@
 (setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 
 (setq magit-format-file-function #'magit-format-file-nerd-icons)
-(setq modal-global-mode-cursor-color "red")
+(setq modal-global-mode-cursor-color "royal blue")
 
 ;; Org
 
@@ -93,9 +105,9 @@
 (setq org-deadline-warning-days 1)
 (setq org-directory "~/.nico/home/agenda")
 (setq org-default-notes-file (concat org-directory "/agenda.org"))
-(setq org-ellipsis (format " (%s)" (if (display-graphic-p) "…" "...")))
+(setq org-ellipsis (format " [%s]" (if (display-graphic-p) "…" "...")))
 (setq org-fontify-done-headline t)
-(setq org-fontify-todo-headline nil)
+(setq org-fontify-todo-headline t)
 (setq org-hide-emphasis-markers t)
 (setq org-hide-leading-stars nil)
 (setq org-indirect-buffer-display 'current-window)
@@ -116,6 +128,7 @@
 (setq org-tags-column 0)
 (setq org-todo-keywords '((sequence "HACER" "PAUSA" "|" "HECHO" "YA_NO")))
 (setq org-use-speed-commands t)
+(setq org-fontify-whole-heading-line t)
 
 (setq org-agenda-prefix-format
       (alistq agenda " %i %?-12t% s"
@@ -140,6 +153,14 @@
          display-buffer-pop-up-window)
         (reusable-frames . nil)))
 
+(setq dired-side-window-mode-line-format
+      '(""
+        mode-line-front-space
+        " "
+        my-x-emacs-mode-line-modes))
+
+(setq dired-dwim-target t)
+
 ;; Tab Bar
 
 (setq tab-bar-format
@@ -154,18 +175,10 @@
 
 ;; Mode Line
 
-;; based on the emacs default, put modes at the beginning and buffer
-;; name at the end.  This is because buffer names vary widely, but the
-;; list of mode lighters is short and varies minimally.  By keeping
-;; the most varied element last, all the other mode line elements are
-;; more likely to stay aligned.
-
 (setq-default
  mode-line-format
  '("%e"
-   mode-line-front-space
-   (7 ("" mode-line-position))
-   mode-line-frame-identification
+   "  "
    (:eval (propertized-buffer-identification (truncate-string-to-width (buffer-name) 30 nil ?\s t)))
    " "
    my-x-emacs-mode-line-modes
@@ -177,14 +190,16 @@
    (vc-mode vc-mode)
    "  "
    (eglot--managed-mode (" [" eglot--mode-line-format "] "))
-   (:propertize
-    (""
-     mode-line-mule-info
-     mode-line-client
-     mode-line-modified
-     mode-line-remote
-     mode-line-window-dedicated)
-    display (min-width (6.0)))
+   "%5l:"     ; up to 99 999 lines
+   (3 "%c")   ; up to 999 columns
+   " "
+   (-3 "%p")  ; Truncate "Bottom" to "Bot"
+   " "
+   my-x-emacs-mode-line-mule-info
+   mode-line-client
+   mode-line-modified
+   mode-line-remote
+   mode-line-window-dedicated
    "  "
    mode-line-end-spaces))
 
@@ -218,7 +233,7 @@
    (reusable-frames . nil))
  display-buffer-alist
  `(("Rec Edit\\| ?\\*Capture\\|\\*agent-shell-diff\\*"
-    display-buffer-same-window)     
+    display-buffer-same-window)
    ("\\*\\(:?git-grep-transient-.*\\|grep\\|Occur\\|xref\\|Outline .*\\.pdf\\|image-dired\\)\\*"
     display-buffer-in-side-window (side . left))
    ("\\*\\(:?Agenda Commands\\|appt-buf\\)\\*"
@@ -274,7 +289,36 @@
 
 ;;;; Keymaps
 
-(keymap-global-set "<f1>" #'keyboard-quit)
+(define-keymap :keymap help-map
+  "j" #'describe-face
+  "z" #'describe-keymap)
+
+(keymap-global-set "<f1>" #'my-x-simple-keyboard-quit-dwim)
+(keymap-global-set "M-`" #'other-window)
+
+(with-eval-after-load 'corfu
+  (define-keymap :keymap corfu-map
+    "M-RET" #'corfu-quick-insert))
+
+(with-eval-after-load 'agent-shell
+  (define-keymap :keymap agent-shell-mode-map
+    "RET" nil
+    "M-RET" #'agent-shell-submit
+    "M-SPC" #'markdown-insert-gfm-code-block))
+
+(with-eval-after-load 'nov
+  (define-keymap :keymap nov-mode-map
+    "j" #'link-hint-open-link
+    "-" #'text-scale-adjust
+    "=" #'text-scale-adjust
+    ")" #'nov-next-document
+    "(" #'nov-previous-document))
+
+(with-eval-after-load 'eww
+  (define-keymap :keymap eww-mode-map
+    "j" #'link-hint-open-link
+    "-" #'text-scale-adjust
+    "=" #'text-scale-adjust))
 
 (with-eval-after-load 'tab-bar
   (define-keymap :keymap tab-bar-mode-map
@@ -287,7 +331,10 @@
     "SPC" #'dired-subtree-toggle
     "," #'dired-omit-mode
     "<remap> <find-file>" #'my-x-dired-find-file
-    "s" #'isearch-forward))
+    "s" #'isearch-forward
+    "M-n" #'dired-subtree-next-sibling
+    "M-p" #'dired-subtree-previous-sibling
+    "M-u" #'dired-subtree-up))
 
 (with-eval-after-load 'info
   (define-keymap :keymap Info-mode-map
@@ -326,7 +373,8 @@
     "<remap> <delete-char>" (command (vterm-send "C-d"))
     "<remap> <isearch-backward>" (command (vterm-send "C-r"))
     "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
-    "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))))
+    "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
+    "M-:" nil))
 
 (require 'modal)
 (require 'modal-variant)
@@ -357,6 +405,7 @@
   "d" #'delete-char
   "e" #'end-of-line
   "f" #'forward-char
+  "F" #'my-x-emacs-copy-current-file-name
   "g" #'my-x-simple-keyboard-quit-dwim
   "h" help-map
   "i" #'recenter-top-bottom
@@ -394,22 +443,24 @@
   "(" #'shrink-window-horizontally
   ")" #'enlarge-window-horizontally
   "a" #'tab-bar-switch-to-prev-tab
-  "b" #'switch-to-buffer
+  "b" #'teleport-switch-to-window-buffer
+  "B" #'switch-to-buffer
   "c" #'keyboard-quit
   "d" #'dired-side-window-dwim
   "e" #'tab-bar-switch-to-next-tab
   "f" #'find-file
+  "F" #'my-x-emacs-copy-current-file-name
   "g" #'my-x-simple-keyboard-quit-dwim
   "h" help-map
   "i" #'my-x-window-other-backward-window
   "j" #'undefined
-  "k" #'kill-current-buffer
+  "k" #'my-x-simple-kill-current-buffer-dwim
   "l" #'my-x-tab-line-switch-to-buffer-tab
   "m" #'link-hint-open-link
   "n" #'tab-line-switch-to-next-tab
   "o" #'other-window
   "p" #'tab-line-switch-to-prev-tab
-  "q" #'my-x-window-quit-window-dwim
+  "q" #'my-x-window-quit-dwim
   "r" #'revert-buffer-quick
   "R" #'recentf
   "s" #'save-buffer
@@ -419,7 +470,8 @@
   "v" #'undefined
   "w" #'agent-shell
   "x" #'my-x-vterm-dwim
-  "z" #'repeat)
+  "z" #'repeat
+  "TAB" #'tab-bar-switch-to-recent-tab)
 
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
@@ -429,11 +481,24 @@
 
 ;;;; Hooks
 
+(add-hook 'tabulated-list-mode-hook #'hl-line-mode)
+(add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
+(add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
+(add-hook 'occur-mode-hook #'buffer-wrap-mode)
+
+(add-hook 'before-save-hook #'whitespace-cleanup)
+(add-hook 'telega-root-mode-hook #'telega-notifications-mode)
+(add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
+(add-hook 'org-mode-hook #'abbrev-mode)
+(add-hook 'org-mode-hook #'auto-fill-mode)
+
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
+(add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
 (add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
@@ -446,26 +511,47 @@
 (add-hook 'telega-chat-mode-hook #'abbrev-mode)
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
 (add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
+(add-hook 'vterm-copy-mode-hook #'modal-mode)
 
 (add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
 
 (add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
 (add-hook 'ediff-quit-hook #'my-x-ediff-restore)
 (add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
-(add-hook 'dired-side-window-hook #'dired-hide-details-mode)
+(add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
+(add-hook 'dired-side-window-setup-hook #'my-x-emacs-truncate-lines)
+(add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
 
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
+(hook-defun nov-mode-hook set-vars
+  (setq-local
+   line-spacing 8
+   nov-variable-pitch nil
+   nov-text-width 70))
+
+(with-eval-after-load 'agent-shell
+  (global-agent-recall-transcript-mode 1))
 
 ;;;; Lists
+
+(add-to-list 'global-mode-string
+             '(telega-mode-line-mode telega-mode-line-format))
 
 (with-eval-after-load 'elec-pair
   (add-to-list 'electric-pair-pairs (cons ?¿ ??))
   (add-to-list 'electric-pair-pairs (cons ?¡ ?!)))
 
-(with-eval-after-load 'corfu  
+(with-eval-after-load 'files
+  (add-to-list 'safe-local-eval-forms
+               '(set-input-method "spanish-prefix")))
+
+(with-eval-after-load 'corfu
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
 (with-eval-after-load 'vterm
-  (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename)))
+  (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename))
+  (add-to-list 'vterm-eval-cmds (list "magit" #'magit)))
 
 (with-eval-after-load 'eglot
   (add-to-list
@@ -474,20 +560,34 @@
      . ,(eglot-alternatives
          '(("basedpyright-langserver" "--stdio"))))))
 
+
 ;;;; Advices
 
 (advice-add #'dired-revert :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-dired-x-omit-mode-refresh)
 
+
+;;;; Mode Lighters
+
+(delete-lighters-after-load-multi
+ autorevert auto-revert-mode
+ auto-dark auto-dark-mode
+ eldoc eldoc-mode
+ nerd-icons-dired nerd-icons-dired-mode
+ dired-x dired-omit-mode
+ simple visual-line-mode)
+
+
 ;;;; Faces
 
-(custom-theme-set-faces 'user
-                        
+(custom-theme-set-faces
+ 'user
+
  '(default ((t :family "Iosevka Fixed" :width expanded)))
- 
+
  ;; Avy prompt
- ;; 
+ ;;
  '(avy-lead-face-0
    ((t :inherit avy-lead-face
        :background nil)))
@@ -527,6 +627,10 @@
     (((background dark))
      :foreground "gray10")))
 
+ ;; Display Line Numbers
+ ;;
+ '(line-number-current-line ((t :background reset)))
+
  ;; Ediff
  ;;
  '(ediff-current-diff-A ((t :foreground unspecified)))
@@ -535,7 +639,25 @@
  '(ediff-current-fine-diff-B ((t :foreground unspecified :weight bold)))
  '(ediff-fine-diff-A ((t :foreground unspecified :weight normal)))
  '(ediff-fine-diff-B ((t :foreground unspecified :weight normal)))'(smerge-lower ((t :foreground unspecified)))
- 
+
+ ;; Faces (`faces' package)
+ ;;
+ '(variable-pitch ((t :family reset)))
+ '(variable-pitch-text ((t :height unspecified)))
+
+ ;; Info
+ ;;
+ '(info-title-1 ((t :height 1.2 :underline (:position 0))))
+ '(info-title-2 ((t :height 1.1 :underline (:position 0))))
+ '(info-title-3 ((t :height 1.1 :underline (:position 0))))
+ '(info-title-4 ((t :height 1.1 :underline (:position 0))))
+
+ ;; Org
+ ;;
+ '(org-headline-todo ((t :foreground reset :weight medium))) ;; don't use special colors for todo headlines.
+ '(org-headline-done ((t :foreground "gray" :strike-through t)))
+ '(org-mode-line-clock ((t :inherit reset :weight reset)))
+
  ;; Rainbow delimiters
  ;;
  '(rainbow-delimiters-base-error-face
@@ -626,18 +748,21 @@
     (((min-colors   8))
      :foreground "blue")))
 
-
  ;; Smerge
  ;;
  '(smerge-refined-changed ((t :foreground unspecified)))
  '(smerge-upper ((t :foreground unspecified)))
 
+ ;; Tab Bar
+ ;;
+ ;; '(tab-bar ((t :height 1.0)))
+
  ;; Tab Line
  ;;
  '(tab-line-tab-special ((t :family reset)))
- 
+
  ;; Vertico
- ;; 
+ ;;
  '(vertico-quick1 ((t :inherit my-select-char-face :background unspecified :foreground unspecified)))
  '(vertico-quick2 ((t :inherit my-select-char-face :background unspecified :foreground unspecified)))
 
@@ -646,13 +771,7 @@
  `(visible-mark-face1 ((((background dark))
                         :background ,ui-simple-dark-border-bg)
                        (((background light))
-                        :background ,ui-simple-light-border-bg))) )
+                        :background ,ui-simple-light-border-bg))))
 
-;;; Vertico
-
-(provide 'my-init-bindings)
-;;; my-init-bindings.el ends here
-
-;; Local Variables:
-;; outline-regexp: " '(\\|;;;;* [^ \t\n]\\|(\\|\\(^;;;###\\(\\([-[:alnum:]]+?\\)-\\)?\\(autoload\\)\\)"
-;; End:
+(provide 'my-bindings)
+;;; my-bindings.el ends here

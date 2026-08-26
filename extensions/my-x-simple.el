@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,9 +20,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
+
+(require 'my-x-window)
 
 (defun my-x-simple-yank-dwim (&optional yank-from-kill-ring)
   "DWIM between `yank', `yank-pop' and `yank-from-kill-ring'.
@@ -70,8 +72,17 @@ Source: https://www.emacswiki.org/emacs/MarkCommands#h5o-4"
 (defun my-x-simple-keyboard-quit-dwim ()
   "If on the minibuffer call `abort-minibuffer', else call `keyboard-quit'."
   (interactive)
-  (call-interactively
-   (if (eq major-mode #'minibuffer-mode) #'abbort-minibuffers #'keyboard-quit)))
+  (funcall
+   (if (eq major-mode #'minibuffer-mode) #'abort-minibuffers #'keyboard-quit)))
+
+(defun my-x-simple-kill-current-buffer-dwim ()
+  "`kill-current-buffer' and maybe also call `my-x-window-quit-dwim'."
+  (interactive)
+  (kill-current-buffer)
+  (when (and (not (window-next-buffers))
+             (not (window-prev-buffers)))
+    (with-demoted-errors "error: %s"
+      (my-x-window-quit-dwim))))
 
 (provide 'my-x-simple)
 ;;; my-x-simple.el ends here

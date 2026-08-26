@@ -1,4 +1,4 @@
-;;; my-x-org.el --- My `org' extensions.             -*- lexical-binding: t; -*-
+;;; my-x-paragraphs.el --- My `pargraphs' extensions.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
@@ -24,24 +24,14 @@
 
 ;;; Code:
 
-(defun my-x-org-ensure-two-lines-before-heading ()
-  "Ensure at least 2 empty lines are before the org heading."
-  (interactive)
-  (save-excursion
-    (if (org-at-heading-p)
-        (beginning-of-line)
-      (org-previous-visible-heading 1))
-    (unless (= (point) (point-min))
-      (let (start
-            (end (point))
-            (before (char-before)))
-        (while (eq before ?\n)
-          (backward-char)
-          (setq start (point)
-                before (char-before)))
-        (when start
-          (delete-region start end)
-          (insert "\n\n\n"))))))
+(defun my-x-paragraphs-mark-sentence (arg)
+  (interactive "p")
+  (unless (looking-at (sentence-end))
+    (forward-sentence))
+  (backward-sentence)
+  (unless (region-active-p)
+    (set-mark-command nil))
+  (forward-sentence arg))
 
-(provide 'my-x-org)
-;;; my-x-org.el ends here
+(provide 'my-x-paragraphs)
+;;; my-x-paragraphs.el ends here

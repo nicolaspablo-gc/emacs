@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -36,9 +36,38 @@
 Its made by taking `mode-line-modes' and removing the parenthesis.")
 (put 'my-x-emacs-mode-line-modes 'risky-local-variable t)
 
+(defvar my-x-emacs-mode-line-mule-info
+  `(""
+    (3
+     (current-input-method
+      (:propertize ("" current-input-method-title)
+                   help-echo (concat
+                              ,(purecopy "Current input method: ")
+                              current-input-method
+                              ,(purecopy "\n\
+mouse-2: Disable input method\n\
+mouse-3: Describe current input method"))
+                   local-map ,mode-line-input-method-map
+                   mouse-face mode-line-highlight)))
+    ,(propertize
+      "%z"
+      'help-echo 'mode-line-mule-info-help-echo
+      'mouse-face 'mode-line-highlight
+      'local-map mode-line-coding-system-map)
+    (:eval (mode-line-eol-desc)))
+  "Like `mode-line-mule-info' but with fixed space for input method.")
+(put 'my-x-emacs-mode-line-mule-info 'risky-local-variable t)
+
+(defun my-x-emacs-truncate-lines ()
+  (setq truncate-lines t))
+
 (defun my-x-emacs-set-header-line-as-buffer-name ()
   "Sets `header-line-format' to display the buffer name."
   (setq header-line-format '" %b"))
+
+(defun my-x-emacs-copy-current-file-name ()
+  (interactive)
+  (kill-new (message "%s" (buffer-file-name))))
 
 (provide 'my-x-emacs)
 ;;; my-x-emacs.el ends here
