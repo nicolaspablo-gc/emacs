@@ -1,8 +1,8 @@
-;;; my-x-dired.el --- My dired extensions.           -*- lexical-binding: t; -*-
+;;; my-x-tab-bar.el --- My `tab-bar' extensions.     -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
-;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
+;; Author: Nicolas Pablo Gonzalez Carrasco <nico@asus-zenbook-13>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,18 +24,11 @@
 
 ;;; Code:
 
-(defun my-x-dired-find-file ()
-  "`find-file' aware of current dired line.."
+(defun my-x-tab-bar-kill-buffer-and-tab ()
+  "Kill current buffer and current tab."
   (interactive)
-  (let ((default-directory (dired-current-directory)))
-    (call-interactively #'find-file)))
+  (kill-current-buffer)
+  (tab-close))
 
-(defun my-x-dired-do-find-all-files ()
-  "Find all marked files in dired."
-  (interactive)
-  (seq-do (lambda (f) (find-file f))
-          (nreverse (dired-get-marked-files))))
-
-
-(provide 'my-x-dired)
-;;; my-x-dired.el ends here
+(provide 'my-x-tab-bar)
+;;; my-x-tab-bar.el ends here

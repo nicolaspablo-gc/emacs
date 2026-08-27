@@ -37,20 +37,6 @@
 ;; Do this before anything that could write to custom file.
 (setq custom-file my-custom-file)
 
-(setq text-scale-mode-step 1.05)
-
-(setq recenter-positions '(top bottom middle))
-
-(setq openwith-associations '(("\\.xlsx\\'" "libreoffice" (file))))
-
-(setq-default line-spacing 2)
-
-(setq-default olivetti-body-width 0.65)
-(setq olivetti-style 'fancy)
-
-(setq shr-max-width 80)
-(setq shr-use-fonts nil)
-
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
 (setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
@@ -59,29 +45,33 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (setq custom-safe-themes t)
 (setq delete-pair-blink-delay 0)
+(setq ediff-merge-split-window-function #'split-window-horizontally)
+(setq ediff-split-window-function #'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq enable-recursive-minibuffers t)
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
+(setq magit-format-file-function #'magit-format-file-nerd-icons)
+(setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 (setq make-backup-files nil)
+(setq modal-global-mode-cursor-color "royal blue")
 (setq nerd-icons-scale-factor 0.85)
+(setq olivetti-style 'fancy)
+(setq openwith-associations '(("\\.xlsx\\'" "libreoffice" (file))))
+(setq recenter-positions '(top bottom middle))
 (setq ring-bell-function #'ignore)
+(setq shr-max-width 80)
+(setq shr-use-fonts nil)
 (setq tab-always-indent 'complete)
-;; (setq tab-line-tabs-function #'tab-line-tabs-fixed-window-buffers)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
+(setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
 (setq vc-follow-symlinks t)
 
+(setq-default line-spacing 2)
+(setq-default olivetti-body-width 0.65)
 (setq-default indent-tabs-mode nil)
-
-(setq ediff-merge-split-window-function #'split-window-horizontally)
-(setq ediff-split-window-function #'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-(setq major-mode-remap-alist (alistq python-mode python-ts-mode))
-
-(setq magit-format-file-function #'magit-format-file-nerd-icons)
-(setq modal-global-mode-cursor-color "royal blue")
 
 ;; Org
 
@@ -132,7 +122,7 @@
 (setq org-tags-column 0)
 (setq org-todo-keywords '((sequence "HACER" "PAUSA" "|" "HECHO" "YA_NO")))
 (setq org-use-speed-commands t)
-(setq org-fontify-whole-heading-line t)
+(setq org-fontify-whole-heading-line nil)
 
 (setq org-agenda-prefix-format
       (alistq agenda " %i %?-12t% s"
@@ -300,6 +290,10 @@
 (keymap-global-set "<f1>" #'my-x-simple-keyboard-quit-dwim)
 (keymap-global-set "M-`" #'other-window)
 
+(with-eval-after-load 'tab-bar
+  (define-keymap :keymap tab-prefix-map
+    "k" #'my-x-tab-bar-kill-buffer-and-tab))
+
 (with-eval-after-load 'corfu
   (define-keymap :keymap corfu-map
     "M-RET" #'corfu-quick-insert))
@@ -332,6 +326,7 @@
 
 (with-eval-after-load 'dired
   (define-keymap :keymap dired-mode-map
+    "F" #'my-x-dired-do-find-all-files
     "SPC" #'dired-subtree-toggle
     "," #'dired-omit-mode
     "<remap> <find-file>" #'my-x-dired-find-file
@@ -368,6 +363,7 @@
   (keymap-unset vterm-mode-map "<return>" :remove)
   (define-keymap :keymap vterm-mode-map
     "M-SPC" #'vterm-copy-mode
+    "C-x" #'vterm--self-insert
     "<f3>" nil ;; allow macro defining and playup
     "<f4>" nil
     "<remap> <previous-line>" (command (vterm-send "C-p"))
@@ -511,8 +507,8 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
 (add-hook 'vertico-flat-mode-hook #'my-x-vertico-flat-setup)
-(add-hook 'vertico-mode-hook #'my-x-vertico-maybe-enable-marginalia)
-(add-hook 'vertico-multiform-mode-hook #'my-x-vertico-maybe-enable-marginalia)
+(add-hook 'vertico-mode-hook #'my-x-vertico-flat-setup)
+(add-hook 'vertico-multiform-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
 (add-hook 'telega-chat-mode-hook #'abbrev-mode)
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)

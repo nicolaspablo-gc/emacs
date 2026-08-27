@@ -59,7 +59,7 @@ custom's state) can't be loaded on next sesion.")
 
 ;; extensions, dinamically require all `my-x' files in `my-extensions-directory'.
 (dolist (file (directory-files my-extensions-directory nil "my-x.*\\.el\\'"))
-  (require (intern (file-name-sans-extension file))))
+  (require (intern (message "%s" (file-name-sans-extension file)))))
 
 ;; Apply bindings
 (require 'my-bindings)
