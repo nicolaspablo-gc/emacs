@@ -283,6 +283,9 @@
 
 ;;;; Keymaps
 
+(define-keymap :keymap ctl-x-4-map
+  "0" #'ace-delete-window)
+
 (define-keymap :keymap help-map
   "j" #'describe-face
   "z" #'describe-keymap)
@@ -490,6 +493,7 @@
 
 (add-hook 'before-save-hook #'whitespace-cleanup)
 (add-hook 'telega-root-mode-hook #'telega-notifications-mode)
+(add-hook 'telega-root-mode-hook #'telega-mode-line-mode)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
 (add-hook 'org-mode-hook #'abbrev-mode)
 (add-hook 'org-mode-hook #'auto-fill-mode)

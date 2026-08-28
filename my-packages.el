@@ -34,7 +34,8 @@
 
 (setq
  package-selected-packages
- '(agent-recall
+ '(ace-window
+   agent-recall
    agent-shell
    aggressive-indent
    auto-dark
