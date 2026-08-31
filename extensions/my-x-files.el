@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'ffap)
+
 (defun my-x-files-copy-file-name (file)
   (interactive (list (read-file-name "File: " nil nil nil (ffap-file-at-point))))
   (kill-new (message "%s" (expand-file-name file))))

@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,9 +20,14 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
+
+(defun my-x-nerd-icons-dired-maybe-enable ()
+  "Maybe enable `nerd-icons-dired' in `dired-mode'."
+  (when (display-graphic-p)
+    (nerd-icons-dired-mode)))
 
 (defun my-x-nerd-icons-dired--resfresh-advice (&rest args)
   "Refresh `nerd-icons-dired-mode' if enabled."

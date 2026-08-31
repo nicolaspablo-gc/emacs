@@ -52,7 +52,7 @@
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
-(setq magit-format-file-function #'magit-format-file-nerd-icons)
+(setq magit-format-file-function (if (display-graphic-p) #'magit-format-file-nerd-icons #'magit-format-file-default))
 (setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 (setq make-backup-files nil)
 (setq modal-global-mode-cursor-color "royal blue")
@@ -346,7 +346,7 @@
 (with-eval-after-load 'isearch
   (define-keymap :keymap isearch-mode-map
     "TAB" #'my-x-isearch-repeat-direction
-    "<Hangul>" #'my-x-isearch-change-direction))
+    "<f8>" #'my-x-isearch-change-direction))
 
 (with-eval-after-load 'prog-mode
   (define-keymap :keymap prog-mode-map
@@ -366,9 +366,10 @@
   (keymap-unset vterm-mode-map "<return>" :remove)
   (define-keymap :keymap vterm-mode-map
     "M-SPC" #'vterm-copy-mode
-    "C-x" #'vterm--self-insert
     "<f3>" nil ;; allow macro defining and playup
     "<f4>" nil
+    "<f8>" nil
+    "C-q" #'vterm-send-next-key
     "<remap> <previous-line>" (command (vterm-send "C-p"))
     "<remap> <next-line>" (command (vterm-send "C-n"))
     "<remap> <end-of-line>" (command (vterm-send "C-e"))
@@ -385,12 +386,12 @@
 (require 'modal-variant)
 
 ;; In and out of modal mode
-(keymap-set global-map "<Hangul>" #'modal-mode)
+(keymap-set global-map "<f8>" #'modal-mode)
 (keymap-set modal-mode-map "RET" #'modal-mode)
 
 ;; In and out of modal global mode.
-(keymap-set modal-mode-map "<Hangul>" #'modal-global-mode)
-(keymap-set modal-global-mode-map "<Hangul>" #'modal-global-mode)
+(keymap-set modal-mode-map "<f8>" #'modal-global-mode)
+(keymap-set modal-global-mode-map "<f8>" #'modal-global-mode)
 (keymap-set modal-global-mode-map "RET" (command (modal-global-mode -1) (modal-mode -1)))
 
 (define-keymap :keymap modal-mode-map
@@ -501,7 +502,7 @@
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
-(add-hook 'dired-mode-hook #'nerd-icons-dired-mode)
+(add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
