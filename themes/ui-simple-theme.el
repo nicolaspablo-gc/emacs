@@ -172,6 +172,7 @@
      ((default :box nil)
       (,light-p :background ,ui-simple-light-inactive-bg :foreground ,ui-simple-light-inactive-fg)
       (,dark-p :background ,ui-simple-dark-inactive-bg :foreground ,ui-simple-dark-inactive-fg)
+      (((type tty) (background dark)) :background "black" :foreground "black" :weight bold)
       (t :inverse-video t)))
    `(tab-line
      ((,light-p :background ,ui-simple-light-border-bg :overline ,ui-simple-light-border-bg)

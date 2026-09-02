@@ -37,6 +37,7 @@
 ;; Do this before anything that could write to custom file.
 (setq custom-file my-custom-file)
 
+
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
 (setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
@@ -45,6 +46,8 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (setq custom-safe-themes t)
 (setq delete-pair-blink-delay 0)
+(setq display-time-format " %d %b, %H:%M")
+(setq display-time-default-load-average nil)
 (setq ediff-merge-split-window-function #'split-window-horizontally)
 (setq ediff-split-window-function #'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -59,7 +62,7 @@
 (setq nerd-icons-scale-factor 0.85)
 (setq olivetti-style 'fancy)
 (setq openwith-associations '(("\\.xlsx\\'" "libreoffice" (file))))
-(setq recenter-positions '(top bottom middle))
+(setq recenter-positions '(top middle bottom))
 (setq ring-bell-function #'ignore)
 (setq shr-max-width 80)
 (setq shr-use-fonts nil)
@@ -554,7 +557,8 @@
                '(set-input-method "spanish-prefix")))
 
 (with-eval-after-load 'corfu
-  (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
+  (when (display-graphic-p)
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
 
 (with-eval-after-load 'vterm
   (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename))

@@ -21,8 +21,8 @@
 (defconst my-definitions-directory (expand-file-name "defs" my-emacs-directory)
   "Directory containing my personal definitions.")
 
-(defconst my-init-directory (expand-file-name "init" my-emacs-directory)
-  "Directory containing my init files.")
+(defconst my-themes-directory (expand-file-name "themes" my-emacs-directory)
+  "Directory containing my personal themes.")
 
 (defconst my-custom-file (make-temp-file "my-custom-" nil ".el")
   "My file where `custom' saves config.
@@ -31,11 +31,12 @@ accidental writing to `custom' (by triggering commands that save the
 custom's state) can't be loaded on next sesion.")
 
 (add-to-list 'load-path my-emacs-directory)
+(add-to-list 'load-path my-themes-directory)
 (add-to-list 'load-path my-lisp-directory)
 (add-to-list 'load-path my-definitions-directory)
-(add-to-list 'load-path my-init-directory)
-(add-to-list 'custom-theme-load-path my-lisp-directory)
 (add-to-list 'load-path my-extensions-directory)
+
+(add-to-list 'custom-theme-load-path my-themes-directory)
 
 ;; There used to be more dirs where I generated loaddefs.  Now theres
 ;; only one, but I keep the alist idioms in case I need to add more
