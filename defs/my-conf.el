@@ -51,13 +51,13 @@ calls regular `find-file' at the project root."
        (call-interactively #'find-file)
      (project-find-file :include-all))))
 
-(defun my-conf--occur (&optional regexp nlines region)
-  "Call `occur' interactively and pop to occur buffer.
-If REGEXP is passed, call `occur' non interactively.  REGEXP, NLINES and
-REGIONS are passed through in that case."
-  (if regexp
-      (occur regexp nlines region)
-    (call-interactively #'occur))
+(defun my-conf--read-regexp (prompt)
+  "Read a space separated string, tranform each space into \".*\""
+  (replace-regexp-in-string " " ".*" (read-string prompt)))
+
+(defun my-conf--occur (&optional regexp)
+  "Call `occur' and jump to its window buffer."
+  (occur (or regexp (my-conf--read-regexp "Search: ")))
   (pop-to-buffer "*Occur*"))
 
 (defun my-conf--find-bindings-file ()

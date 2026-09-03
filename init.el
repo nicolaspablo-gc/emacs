@@ -83,8 +83,6 @@ custom's state) can't be loaded on next sesion.")
 (tab-bar-history-mode)
 (info-rename-buffer-mode)
 ;;(my-global-map-mode)
-(nerd-icons-completion-mode)
-(nerd-icons-tab-line-mode)
 (save-place-mode)
 (savehist-mode)
 (theme-reload-mode)
@@ -95,6 +93,13 @@ custom's state) can't be loaded on next sesion.")
 (visible-mark-mode)
 (recentf-mode)
 (openwith-mode)
+
+(when (display-graphic-p)
+  (nerd-icons-completion-mode)
+  (nerd-icons-tab-line-mode))
+
+(unless (display-graphic-p)
+  (corfu-terminal-mode))
 
 ;; Load local file if exists
 

@@ -161,11 +161,7 @@
 ;; Tab Bar
 
 (setq tab-bar-format
-      '(;; tab-bar-format-history
-        ;; tab-bar-format-tabs
-        tab-bar-icons-format-tabs
-        tab-bar-separator
-        tab-bar-format-add-tab
+      '(tab-bar-icons-format-tabs
         tab-bar-format-align-right
         tab-bar-format-global))
 
@@ -508,6 +504,7 @@
 (add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
+(add-hook 'prog-mode-hook #'git-gutter-mode)
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
@@ -655,6 +652,13 @@
  ;;
  '(variable-pitch ((t :family reset)))
  '(variable-pitch-text ((t :height unspecified)))
+
+ ;; Git Gutter
+ ;;
+ '(git-gutter:added ((t :foreground "medium aquamarine" :background reset)))
+ '(git-gutter:deleted ((t :foreground "orange red" :background reset)))
+ '(git-gutter:modified ((t :foreground "gold2" :background reset)))
+ '(git-gutter:separator ((t :inherit font-lock-comment-face)))
 
  ;; Info
  ;;

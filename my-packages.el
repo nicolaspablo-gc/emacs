@@ -44,7 +44,9 @@
    breadcrumb
    buffer-wrap
    corfu
+   corfu-terminal
    dired-subtree
+   git-gutter
    info-rename-buffer
    marginalia
    markdown-mode
