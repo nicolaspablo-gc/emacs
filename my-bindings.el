@@ -40,7 +40,6 @@
 ;; Do this before anything that could write to custom file.
 (setq custom-file my-custom-file)
 
-
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
 (setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
@@ -76,6 +75,22 @@
 (setq theme-reload-themes '(ui-simple))
 (setq vc-follow-symlinks t)
 (setq vterm-copy-mode-remove-fake-newlines t)
+
+(setq treesit-language-source-alist
+      '((bash "https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3")
+        (c "https://github.com/tree-sitter/tree-sitter-c")
+        (cpp "https://github.com/tree-sitter/tree-sitter-cpp" "v0.22.0")
+        (css "https://github.com/tree-sitter/tree-sitter-css")
+        (go "https://github.com/tree-sitter/tree-sitter-go" "v0.23.4")
+        (html "https://github.com/tree-sitter/tree-sitter-html")
+        (javascript "https://github.com/tree-sitter/tree-sitter-javascript")
+        (json "https://github.com/tree-sitter/tree-sitter-json")
+        (python "https://github.com/tree-sitter/tree-sitter-python" "v0.23.6")
+        (rust "https://github.com/tree-sitter/tree-sitter-rust")
+        (toml "https://github.com/tree-sitter-grammars/tree-sitter-toml")
+        (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+        (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+        (yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml" "v0.7.2")))
 
 (setq-default line-spacing 2)
 (setq-default olivetti-body-width 0.65)
@@ -498,52 +513,46 @@
 
 ;;;; Hooks
 
-(add-hook 'tabulated-list-mode-hook #'hl-line-mode)
-(add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
-(add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
-(add-hook 'occur-mode-hook #'buffer-wrap-mode)
-
+(add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
+(add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'before-save-hook #'whitespace-cleanup)
-(add-hook 'telega-root-mode-hook #'telega-notifications-mode)
-(add-hook 'telega-root-mode-hook #'telega-mode-line-mode)
-(add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
+(add-hook 'dired-mode-hook #'dired-omit-mode)
+(add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
+(add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
+(add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
+(add-hook 'dired-side-window-setup-hook #'my-x-emacs-truncate-lines)
+(add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
+(add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
+(add-hook 'ediff-quit-hook #'my-x-ediff-restore)
+(add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
+(add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
+(add-hook 'occur-mode-hook #'buffer-wrap-mode)
 (add-hook 'org-agenda-mode-hook #'hl-line-mode)
 (add-hook 'org-agenda-mode-hook #'my-x-emacs-toggle-cursor)
+(add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
 (add-hook 'org-mode-hook #'abbrev-mode)
 (add-hook 'org-mode-hook #'auto-fill-mode)
-
-(add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
-(add-hook 'agent-shell-mode-hook #'corfu-mode)
-(add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
-(add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
-(add-hook 'dired-mode-hook #'dired-omit-mode)
-(add-hook 'python-ts-mode-hook #'eglot-ensure)
-(add-hook 'prog-mode-hook #'git-gutter-mode)
-(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
-(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'shell-mode-hook #'corfu-mode)
+(add-hook 'tabulated-list-mode-hook #'hl-line-mode)
+(add-hook 'telega-chat-mode-hook #'abbrev-mode)
+(add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
+(add-hook 'telega-root-mode-hook #'telega-mode-line-mode)
+(add-hook 'telega-root-mode-hook #'telega-notifications-mode)
 (add-hook 'vertico-flat-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-multiform-mode-hook #'my-x-vertico-flat-setup)
-(add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
-(add-hook 'telega-chat-mode-hook #'abbrev-mode)
-(add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
-(add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
 (add-hook 'vterm-copy-mode-hook #'modal-mode)
-
-(add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
-
-(add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
-(add-hook 'ediff-quit-hook #'my-x-ediff-restore)
-(add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
-(add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
-(add-hook 'dired-side-window-setup-hook #'my-x-emacs-truncate-lines)
-(add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
-
-(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+(add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
+(add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
+(add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
 
 (hook-defun nov-mode-hook set-vars
   (setq-local
@@ -553,6 +562,10 @@
 
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))
+
+(hook-defun prog-mode-hook enable-git-gutter-locally
+  (unless (file-remote-p default-directory)
+    (git-gutter-mode)))
 
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))

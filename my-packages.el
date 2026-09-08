@@ -46,6 +46,7 @@
    corfu
    corfu-terminal
    dired-subtree
+   dotenv-mode
    git-gutter
    info-rename-buffer
    marginalia
