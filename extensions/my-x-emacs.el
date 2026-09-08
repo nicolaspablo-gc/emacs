@@ -59,6 +59,7 @@ mouse-3: Describe current input method"))
 (put 'my-x-emacs-mode-line-mule-info 'risky-local-variable t)
 
 (defun my-x-emacs-truncate-lines ()
+  "Sets `truncate-lines' to `t'."
   (setq truncate-lines t))
 
 (defun my-x-emacs-set-header-line-as-buffer-name ()
@@ -66,8 +67,15 @@ mouse-3: Describe current input method"))
   (setq header-line-format '" %b"))
 
 (defun my-x-emacs-copy-current-file-name ()
+  "Copies current file name to kill ring."
   (interactive)
-  (kill-new (message "%s" (buffer-file-name))))
+  (kill-new (message "%s" (or (buffer-file-name)
+                              default-directory))))
+
+(defun my-x-emacs-toggle-cursor ()
+  "Toggles cursor visibility."
+  (interactive)
+  (setq cursor-type (not cursor-type)))
 
 (provide 'my-x-emacs)
 ;;; my-x-emacs.el ends here

@@ -26,11 +26,14 @@
 
 ;;;; Requirements
 
+(require 'modal)
+(require 'modal-variant)
 (require 'my-init-helpers)
 (require 'my-faces)
 (require 'ui-simple-theme)
 (require 'tab-bar-icons)
 (require 'eglot)
+(require 'rx)
 
 ;;;; Variables
 
@@ -67,10 +70,12 @@
 (setq shr-max-width 80)
 (setq shr-use-fonts nil)
 (setq tab-always-indent 'complete)
+(setq tab-line-new-button-show nil)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
 (setq vc-follow-symlinks t)
+(setq vterm-copy-mode-remove-fake-newlines t)
 
 (setq-default line-spacing 2)
 (setq-default olivetti-body-width 0.65)
@@ -199,7 +204,10 @@
 ;; Dired
 
 (setq dired-listing-switches "-alF --group-directories-first"
-      dired-omit-files "\\`[.].*\\'"
+      dired-omit-files (rx (or (seq bos "." (zero-or-more any))  ; dotfiles
+                               (seq bos "#" (zero-or-more any) eos) ; autosave
+                               "\\.elc$"
+                               "__pycache__"))
       dired-subtree-use-backgrounds nil
       dired-subtree-line-prefix (format
                                  "  %s"
@@ -282,6 +290,9 @@
 
 ;;;; Keymaps
 
+(define-keymap :keymap global-map
+  "M-i" #'cape-file)
+
 (define-keymap :keymap ctl-x-4-map
   "0" #'ace-delete-window)
 
@@ -298,7 +309,9 @@
 
 (with-eval-after-load 'corfu
   (define-keymap :keymap corfu-map
-    "M-RET" #'corfu-quick-insert))
+    "M-RET" #'corfu-quick-insert)
+  (define-keymap :keymap corfu-mode-map
+    "M-/" #'cape-dabbrev))
 
 (with-eval-after-load 'agent-shell
   (define-keymap :keymap agent-shell-mode-map
@@ -381,8 +394,7 @@
     "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
     "M-:" nil))
 
-(require 'modal)
-(require 'modal-variant)
+
 
 ;; In and out of modal mode
 (keymap-set global-map "<f8>" #'modal-mode)
@@ -495,6 +507,8 @@
 (add-hook 'telega-root-mode-hook #'telega-notifications-mode)
 (add-hook 'telega-root-mode-hook #'telega-mode-line-mode)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
+(add-hook 'org-agenda-mode-hook #'hl-line-mode)
+(add-hook 'org-agenda-mode-hook #'my-x-emacs-toggle-cursor)
 (add-hook 'org-mode-hook #'abbrev-mode)
 (add-hook 'org-mode-hook #'auto-fill-mode)
 
@@ -536,6 +550,9 @@
    line-spacing 8
    nov-variable-pitch nil
    nov-text-width 70))
+
+(hook-defun vterm-copy-mode-hook truncate-lines
+  (setq truncate-lines vterm-copy-mode))
 
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))
