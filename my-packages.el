@@ -49,6 +49,7 @@
    dotenv-mode
    git-gutter
    info-rename-buffer
+   link-hint
    marginalia
    markdown-mode
    mwim

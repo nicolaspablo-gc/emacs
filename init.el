@@ -80,6 +80,7 @@ custom's state) can't be loaded on next sesion.")
 
 (electric-pair-mode)
 (global-tab-line-mode)
+(global-auto-revert-mode)
 (tab-bar-history-mode)
 (info-rename-buffer-mode)
 ;;(my-global-map-mode)
@@ -95,6 +96,9 @@ custom's state) can't be loaded on next sesion.")
 (openwith-mode)
 
 (when (display-graphic-p)
+  (require 'nerd-icons)
+  (unless (file-exists-p (expand-file-name "NFM.ttf" "~/.local/share/fonts/"))
+    (nerd-icons-install-fonts t))
   (nerd-icons-completion-mode)
   (nerd-icons-tab-line-mode))
 

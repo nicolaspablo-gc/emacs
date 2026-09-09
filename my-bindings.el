@@ -316,7 +316,7 @@
   "z" #'describe-keymap)
 
 (keymap-global-set "<f1>" #'my-x-simple-keyboard-quit-dwim)
-(keymap-global-set "M-`" #'other-window)
+(keymap-global-set "M-`" #'tab-bar-switch-to-recent-tab)
 
 (with-eval-after-load 'tab-bar
   (define-keymap :keymap tab-prefix-map
@@ -524,6 +524,7 @@
 (add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
 (add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
 (add-hook 'ediff-quit-hook #'my-x-ediff-restore)
+(add-hook 'magit-ediff-quit-hook #'my-x-ediff-restore)
 (add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
@@ -623,6 +624,7 @@
  'user
 
  '(default ((t :family "Iosevka Fixed" :width expanded)))
+ '(bold ((t :weight medium)))
 
  ;; Avy prompt
  ;;
@@ -807,6 +809,7 @@
 
  ;; Tab Line
  ;;
+ '(tab-line-tab-current ((t :weight reset)))
  '(tab-line-tab-special ((t :family reset)))
 
  ;; Vertico
