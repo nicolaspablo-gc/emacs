@@ -98,7 +98,6 @@
 
 ;; Org
 
-(setq org-use-speed-commands t)
 (setq org-agenda-restore-windows-after-quit t)
 (setq org-agenda-search-view-max-outline-level 1)
 (setq org-agenda-sort-notime-is-late nil)
@@ -120,17 +119,18 @@
 (setq org-confirm-elisp-link-function #'y-or-n-p)
 (setq org-cycle-separator-lines 0)
 (setq org-deadline-warning-days 1)
-(setq org-directory "~/.nico/home/agenda")
 (setq org-default-notes-file (concat org-directory "/agenda.org"))
+(setq org-directory "~/.nico/home/agenda")
 (setq org-ellipsis (format " [%s]" (if (display-graphic-p) "…" "...")))
 (setq org-fontify-done-headline t)
-(setq org-fontify-todo-headline t)
+(setq org-fontify-todo-headline nil)
+(setq org-fontify-whole-heading-line nil)
+(setq org-hide-drawer-startup nil)
 (setq org-hide-emphasis-markers t)
 (setq org-hide-leading-stars nil)
 (setq org-indirect-buffer-display 'current-window)
 (setq org-list-allow-alphabetical t)
 (setq org-list-demote-modify-bullet (alistq "+" "-"))
-(setq org-hide-drawer-startup nil)
 (setq org-log-into-drawer "LOG")
 (setq org-outline-path-complete-in-steps nil)
 (setq org-priority-default ?C)
@@ -145,7 +145,7 @@
 (setq org-tags-column 0)
 (setq org-todo-keywords '((sequence "HACER" "PAUSA" "|" "HECHO" "YA_NO")))
 (setq org-use-speed-commands t)
-(setq org-fontify-whole-heading-line nil)
+(setq org-use-speed-commands t)
 
 (setq org-agenda-prefix-format
       (alistq agenda " %i %?-12t% s"
@@ -704,9 +704,17 @@
 
  ;; Org
  ;;
- '(org-headline-todo ((t :foreground reset :weight medium))) ;; don't use special colors for todo headlines.
+ '(org-headline-todo ((t :foreground unspecified :weight medium)))
  '(org-headline-done ((t :foreground "gray" :strike-through t)))
  '(org-mode-line-clock ((t :inherit reset :weight reset :height 0.9)))
+ '(org-level-1 ((t :foreground reset)))
+ '(org-level-2 ((t :foreground reset)))
+ '(org-level-3 ((t :foreground reset)))
+ '(org-level-4 ((t :foreground reset)))
+ '(org-level-5 ((t :foreground reset)))
+ '(org-level-6 ((t :foreground reset)))
+ '(org-level-7 ((t :foreground reset)))
+ '(org-level-8 ((t :foreground reset)))
 
  ;; Rainbow delimiters
  ;;
@@ -819,10 +827,9 @@
 
  ;; Visible Mark
  ;;
- `(visible-mark-face1 ((((background dark))
-                        :background ,ui-simple-dark-border-bg)
-                       (((background light))
-                        :background ,ui-simple-light-border-bg))))
+ `(visible-mark-face1
+   ((((background dark)) :background ,ui-simple-dark-border-bg)
+    (((background light)) :background ,ui-simple-light-border-bg))))
 
 (provide 'my-bindings)
 ;;; my-bindings.el ends here
