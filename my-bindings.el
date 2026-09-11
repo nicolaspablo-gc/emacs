@@ -54,6 +54,8 @@
 (setq ediff-split-window-function #'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq enable-recursive-minibuffers t)
+(setq desktop-environment-brightness-small-increment "1%+")
+(setq desktop-environment-brightness-small-decrement "1%-")
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
