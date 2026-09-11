@@ -119,8 +119,6 @@
 (setq org-confirm-elisp-link-function #'y-or-n-p)
 (setq org-cycle-separator-lines 0)
 (setq org-deadline-warning-days 1)
-(setq org-default-notes-file (concat org-directory "/agenda.org"))
-(setq org-directory "~/.nico/home/agenda")
 (setq org-ellipsis (format " [%s]" (if (display-graphic-p) "…" "...")))
 (setq org-fontify-done-headline t)
 (setq org-fontify-todo-headline nil)
@@ -133,7 +131,7 @@
 (setq org-list-demote-modify-bullet (alistq "+" "-"))
 (setq org-log-into-drawer "LOG")
 (setq org-outline-path-complete-in-steps nil)
-(setq org-priority-default ?C)
+(setq org-priority-default 64) ;; uncategorized goes first, so it gets categorized
 (setq org-priority-lowest ?E)
 (setq org-refile-allow-creating-parent-nodes t)
 (setq org-refile-targets (list (cons 'org-agenda-files nil)))
@@ -306,7 +304,9 @@
 ;;;; Keymaps
 
 (define-keymap :keymap global-map
-  "M-i" #'cape-file)
+  "M-i" #'cape-file
+  "<f1>" #'keyboard-quit
+  "M-`" #'tab-bar-switch-to-recent-tab)
 
 (define-keymap :keymap ctl-x-4-map
   "0" #'ace-delete-window)
@@ -314,9 +314,6 @@
 (define-keymap :keymap help-map
   "j" #'describe-face
   "z" #'describe-keymap)
-
-(keymap-global-set "<f1>" #'my-x-simple-keyboard-quit-dwim)
-(keymap-global-set "M-`" #'tab-bar-switch-to-recent-tab)
 
 (with-eval-after-load 'tab-bar
   (define-keymap :keymap tab-prefix-map
@@ -704,6 +701,7 @@
 
  ;; Org
  ;;
+ '(org-agenda-done ((t :inherit org-headline-done :extend t :strike-through reset)))
  '(org-headline-todo ((t :foreground unspecified :weight medium)))
  '(org-headline-done ((t :foreground "gray" :strike-through t)))
  '(org-mode-line-clock ((t :inherit reset :weight reset :height 0.9)))

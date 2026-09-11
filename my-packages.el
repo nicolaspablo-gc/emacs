@@ -50,6 +50,7 @@
    git-gutter
    info-rename-buffer
    link-hint
+   magit
    marginalia
    markdown-mode
    mwim
