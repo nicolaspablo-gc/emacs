@@ -67,7 +67,9 @@ custom's state) can't be loaded on next sesion.")
 
 ;; Load themes.
 
-(auto-dark-mode)
+(when (display-graphic-p)
+  (auto-dark-mode))
+
 (load-theme 'ui-simple :no-confirm)
 
 ;; Start server.

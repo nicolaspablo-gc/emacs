@@ -18,6 +18,8 @@ dist/
 # Undo-tree save-files
 *.~undo-tree
 
+/gitignored/
+
 # local site files
 /local.el
 /local/

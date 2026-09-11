@@ -92,6 +92,12 @@
         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
         (yaml "https://github.com/tree-sitter-grammars/tree-sitter-yaml" "v0.7.2")))
 
+(setq
+ webjump-sites
+ '(("DuckDuckGo" . [simple-query "duckduckgo.com" "duckduckgo.com/?q=" ""])
+   ("Wikipedia" . [simple-query "wikipedia.org" "wikipedia.org/wiki/" ""])
+   ("SpanishDict" . [simple-query "https://spanishdict.com" "https://spanishdict.com/translate/" ""])))
+
 (setq-default line-spacing 2)
 (setq-default olivetti-body-width 0.65)
 (setq-default indent-tabs-mode nil)
