@@ -308,7 +308,9 @@
     (vertico-buffer-display-action
      (display-buffer-in-side-window)
      (side . left)))
-   ("consult.*\\|my-x-vterm-dwim" (:not flat))))
+   ("consult.*\\|my-x-vterm-dwim" (:not flat)))
+ vertico-sort-function #'vertico-sort-history-length-alpha)
+
 
 ;;;; Keymaps
 
@@ -436,6 +438,7 @@
 (keymap-set modal-global-mode-map "RET" (command (modal-global-mode -1) (modal-mode -1)))
 
 (define-keymap :keymap modal-mode-map
+  "!" #'shell-command
   "'" #'pop-to-mark-command
   "," #'duplicate-dwim
   "." #'set-mark-command
@@ -550,6 +553,7 @@
 (add-hook 'org-agenda-mode-hook #'hl-line-mode)
 (add-hook 'org-agenda-mode-hook #'my-x-emacs-toggle-cursor)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
+(add-hook 'org-mode-hook #'corfu-mode)
 (add-hook 'org-mode-hook #'abbrev-mode)
 (add-hook 'org-mode-hook #'auto-fill-mode)
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)

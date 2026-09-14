@@ -43,6 +43,7 @@
    blow
    breadcrumb
    buffer-wrap
+   cape
    corfu
    corfu-terminal
    dired-subtree
