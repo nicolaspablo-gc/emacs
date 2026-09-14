@@ -53,6 +53,7 @@
    magit
    marginalia
    markdown-mode
+   multiple-cursors
    mwim
    nerd-icons
    nerd-icons-completion

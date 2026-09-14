@@ -69,12 +69,6 @@ Source: https://www.emacswiki.org/emacs/MarkCommands#h5o-4"
               (list (region-beginning) (region-end)))))
   (delete-indentation arg beg end))
 
-(defun my-x-simple-keyboard-quit-dwim ()
-  "If on the minibuffer call `abort-minibuffer', else call `keyboard-quit'."
-  (interactive)
-  (funcall
-   (if (eq major-mode #'minibuffer-mode) #'abort-minibuffers #'keyboard-quit)))
-
 (defun my-x-simple-kill-current-buffer-dwim ()
   "`kill-current-buffer' and maybe also call `my-x-window-quit-dwim'."
   (interactive)

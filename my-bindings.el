@@ -56,6 +56,7 @@
 (setq enable-recursive-minibuffers t)
 (setq desktop-environment-brightness-small-increment "1%+")
 (setq desktop-environment-brightness-small-decrement "1%-")
+(setq fit-window-to-buffer-horizontally t)
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
@@ -314,14 +315,23 @@
 (define-keymap :keymap global-map
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
-  "M-`" #'tab-bar-switch-to-recent-tab)
+  "M-`" #'tab-bar-switch-to-recent-tab
+  "<f12>" #'mc/mark-next-like-this
+  "<f11>" #'mc/mark-next-lines)
 
 (define-keymap :keymap ctl-x-4-map
-  "0" #'ace-delete-window)
+  "0" #'ace-delete-window
+  "=" #'balance-windows
+  "-" #'my-x-ace-window-fit-to-buffer)
 
 (define-keymap :keymap help-map
   "j" #'describe-face
   "z" #'describe-keymap)
+
+(with-eval-after-load 'multiple-cursors
+  (keymap-unset mc/keymap "<return>" :remove)
+  (define-keymap :keymap mc/keymap
+    "<remap> <keyboard-quit>" #'mc/keyboard-quit))
 
 (with-eval-after-load 'tab-bar
   (define-keymap :keymap tab-prefix-map
@@ -471,8 +481,10 @@
   "." #'tab-bar-history-forward
   "0" #'delete-window
   "1" #'delete-other-windows
-  "2" #'split-window-below
-  "3" #'split-window-right
+  "2" #'my-x-window-move-buffer-below
+  "@" #'split-window-below
+  "3" #'my-x-window-move-buffer-right
+  "#" #'split-window-right
   "4" ctl-x-4-map
   "5" ctl-x-5-map
   "6" #'enlarge-window
@@ -560,6 +572,15 @@
 (add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
 (add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
 
+(with-eval-after-load 'agent-shell
+  (global-agent-recall-transcript-mode 1))
+
+(hook-defun dired-side-window-setup-hook set-display-buffer-action
+  (setq-local
+   display-buffer-overriding-action
+   '((display-buffer-in-direction)
+     (direction . right))))
+
 (hook-defun nov-mode-hook set-vars
   (setq-local
    line-spacing 8
@@ -568,13 +589,6 @@
 
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))
-
-(hook-defun prog-mode-hook enable-git-gutter-locally
-  (unless (file-remote-p default-directory)
-    (git-gutter-mode)))
-
-(with-eval-after-load 'agent-shell
-  (global-agent-recall-transcript-mode 1))
 
 ;;;; Lists
 

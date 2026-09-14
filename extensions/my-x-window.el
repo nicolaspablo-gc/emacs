@@ -56,5 +56,32 @@
     (message "%s" function)
     (call-interactively function)))
 
+(defun my-x-window--move-buffer-direction (direction &optional select-new-window)
+  "Move the current buffer into a new window in DIRECTION.
+If SELECT-WINDOW is no nil, also select the new window."
+  (unless (seq-contains-p '(right below) direction)
+    (error "Invalid direction: `%s'" direction))
+  (let (new-win)
+    (save-selected-window
+      (setq new-win
+            (pcase direction
+              ('right (split-window-right))
+              ('below (split-window-below)))))
+    (bury-buffer)
+    (when select-new-window
+      (select-window new-win))))
+
+(defun my-x-window-move-buffer-right (&optional select-new-window)
+  "Move the current buffer into a new window to the right.
+If SELECT-WINDOW is no nil, also select the new window."
+  (interactive "P")
+  (my-x-window--move-buffer-direction 'right select-new-window))
+
+(defun my-x-window-move-buffer-below (&optional select-new-window)
+  "Move the current buffer into a new window below.
+If SELECT-WINDOW is no nil, also select the new window."
+  (interactive "P")
+  (my-x-window--move-buffer-direction 'below select-new-window))
+
 (provide 'my-x-window)
 ;;; my-x-window.el ends here
