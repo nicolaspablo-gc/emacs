@@ -78,6 +78,7 @@
 (setq theme-reload-themes '(ui-simple))
 (setq vc-follow-symlinks t)
 (setq vterm-copy-mode-remove-fake-newlines t)
+(setq vterm-max-scrollback 100000)
 
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3")
@@ -317,7 +318,8 @@
 (define-keymap :keymap global-map
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
-  "M-`" #'tab-bar-switch-to-recent-tab
+  "M-`" #'other-window
+  "M-1" #'tab-bar-switch-to-recent-tab
   "<f12>" #'mc/mark-next-like-this
   "<f11>" #'mc/mark-next-lines)
 
@@ -350,6 +352,10 @@
     "RET" nil
     "M-RET" #'agent-shell-submit
     "M-SPC" #'markdown-insert-gfm-code-block))
+
+(with-eval-after-load 'magit
+  (define-keymap :keymap magit-mode-map
+    "M-1" nil))
 
 (with-eval-after-load 'nov
   (define-keymap :keymap nov-mode-map
@@ -408,6 +414,7 @@
 
 (with-eval-after-load 'vterm
   (keymap-unset vterm-mode-map "<return>" :remove)
+  (keymap-unset vterm-mode-map "M-1" :remove)
   (define-keymap :keymap vterm-mode-map
     "M-SPC" #'vterm-copy-mode
     "<f3>" nil ;; allow macro defining and playup
@@ -702,6 +709,10 @@
  '(ediff-current-fine-diff-B ((t :foreground unspecified :weight bold)))
  '(ediff-fine-diff-A ((t :foreground unspecified :weight normal)))
  '(ediff-fine-diff-B ((t :foreground unspecified :weight normal)))'(smerge-lower ((t :foreground unspecified)))
+
+ ;; Dired
+ ;;
+ '(dired-symlink ((t :underline reset)))
 
  ;; Faces (`faces' package)
  ;;

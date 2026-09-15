@@ -26,6 +26,12 @@
 
 (require 'dired-side-window)
 
+(defvar my-conf-default-directory my-emacs-directory
+  "Directory used for config admin commands.")
+
+(defvar my-conf-tab-name "emacs"
+  "Tab name for displaying config buffers.")
+
 (defmacro my-conf--with-defaults (&rest forms)
   "Run `forms' with emacs configuration defaults.
 The defaults are:
@@ -35,11 +41,10 @@ The defaults are:
 - The default directory is `my-emacs-directory' which is set to the root
   my emacs config project.
 "
-  `(let ((default-directory my-emacs-directory)
+  `(let ((default-directory my-conf-default-directory)
          (display-buffer-overriding-action
-          '(display-buffer-in-tab
-            (tab-name . "emacs"))))
-    ,@forms))
+          (list #'display-buffer-in-tab (cons 'tab-name my-conf-tab-name))))
+     ,@forms))
 
 (defun my-conf-find-file (&optional regular-find-file)
   "Find a file within `my-emacs-directory'.
