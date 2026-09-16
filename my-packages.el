@@ -67,7 +67,8 @@
    rainbow-delimiters
    vertico
    visible-mark
-   vterm))
+   vterm
+   vundo))
 
 (unless (seq-every-p #'package-installed-p package-selected-packages)
   (package-refresh-contents)
