@@ -259,7 +259,7 @@
  `(("Rec Edit\\| ?\\*Capture\\|\\*agent-shell-diff\\*"
     display-buffer-same-window)
    ("\\*\\(:?git-grep-transient-.*\\|grep\\|Occur\\|xref\\|Outline .*\\.pdf\\|image-dired\\)\\*"
-    display-buffer-in-side-window (side . left))
+    display-buffer-in-side-window (side . left) (dedicated . t) (slot . -1))
    ("\\*\\(:?Agenda Commands\\|appt-buf\\)\\*"
     display-buffer-in-side-window (side . top))
    ("\\*\\(:?Server\\|Help\\|Messages\\|Telegram Animations\\| ?docker[- ]containers?.*\\|Password-Store\\|info.*\\|Man .*\\)\\*"
@@ -476,6 +476,10 @@
   "=" #'text-scale-adjust
   ")" #'nov-next-document
   "(" #'nov-previous-document)
+
+(define-keys-after-load org org-mode-map
+  "M-n" #'org-move-subtree-down
+  "M-p" #'org-move-subtree-up)
 
 (with-eval-after-load 'prog-mode
   (define-keymap :keymap prog-mode-map
