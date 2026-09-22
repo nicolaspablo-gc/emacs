@@ -315,7 +315,40 @@
 
 ;;;; Keymaps
 
+(with-eval-after-load 'agent-shell
+  (define-keymap :keymap agent-shell-mode-map
+    "RET" nil
+    "M-RET" #'agent-shell-submit
+    "M-SPC" #'markdown-insert-gfm-code-block))
+
+(define-keys-after-load corfu corfu-map
+  "M-RET"#'corfu-quick-insert)
+
+(define-keys-after-load corfu corfu-mode-map
+  "M-/"#'cape-dabbrev)
+
+(define-keymap :keymap ctl-x-4-map
+  "0" #'ace-delete-window
+  "=" #'balance-windows
+  "-" #'my-x-ace-window-fit-to-buffer)
+
+(define-keys-after-load dired dired-mode-map
+  "F"#'my-x-dired-do-find-all-files
+  "SPC"#'dired-subtree-toggle
+  ","#'dired-omit-mode
+  "<remap> <find-file>"#'my-x-dired-find-file
+  "s"#'isearch-forward
+  "M-n"#'dired-subtree-next-sibling
+  "M-p"#'dired-subtree-previous-sibling
+  "M-u"#'dired-subtree-up)
+
+(define-keys-after-load eww eww-mode-map
+  "j" #'link-hint-open-link
+  "-" #'text-scale-adjust
+  "=" #'text-scale-adjust)
+
 (define-keymap :keymap global-map
+  "<f8>" #'modal-mode
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
   "M-`" #'other-window
@@ -323,128 +356,26 @@
   "<f12>" #'mc/mark-next-like-this
   "<f11>" #'mc/mark-next-lines)
 
-(define-keymap :keymap ctl-x-4-map
-  "0" #'ace-delete-window
-  "=" #'balance-windows
-  "-" #'my-x-ace-window-fit-to-buffer)
-
 (define-keymap :keymap help-map
   "j" #'describe-face
   "z" #'describe-keymap)
 
-(with-eval-after-load 'multiple-cursors
-  (keymap-unset mc/keymap "<return>" :remove)
-  (define-keymap :keymap mc/keymap
-    "<remap> <keyboard-quit>" #'mc/keyboard-quit))
+(define-keys-after-load info Info-mode-map
+  ")" #'Info-forward-node
+  "(" #'Info-backward-node)
 
-(with-eval-after-load 'tab-bar
-  (define-keymap :keymap tab-prefix-map
-    "k" #'my-x-tab-bar-kill-buffer-and-tab))
+(define-keys-after-load isearch isearch-mode-map
+  "TAB" #'my-x-isearch-repeat-direction
+  "<f8>" #'my-x-isearch-change-direction)
 
-(with-eval-after-load 'corfu
-  (define-keymap :keymap corfu-map
-    "M-RET" #'corfu-quick-insert)
-  (define-keymap :keymap corfu-mode-map
-    "M-/" #'cape-dabbrev))
+(define-keys-after-load magit magit-mode-map
+  "M-1" nil)
 
-(with-eval-after-load 'agent-shell
-  (define-keymap :keymap agent-shell-mode-map
-    "RET" nil
-    "M-RET" #'agent-shell-submit
-    "M-SPC" #'markdown-insert-gfm-code-block))
-
-(with-eval-after-load 'magit
-  (define-keymap :keymap magit-mode-map
-    "M-1" nil))
-
-(with-eval-after-load 'nov
-  (define-keymap :keymap nov-mode-map
-    "j" #'link-hint-open-link
-    "-" #'text-scale-adjust
-    "=" #'text-scale-adjust
-    ")" #'nov-next-document
-    "(" #'nov-previous-document))
-
-(with-eval-after-load 'eww
-  (define-keymap :keymap eww-mode-map
-    "j" #'link-hint-open-link
-    "-" #'text-scale-adjust
-    "=" #'text-scale-adjust))
-
-(with-eval-after-load 'tab-bar
-  (define-keymap :keymap tab-bar-mode-map
-    "C-TAB" nil
-    "C-<tab>" nil
-    "C-S-<iso-lefttab>" nil))
-
-(with-eval-after-load 'dired
-  (define-keymap :keymap dired-mode-map
-    "F" #'my-x-dired-do-find-all-files
-    "SPC" #'dired-subtree-toggle
-    "," #'dired-omit-mode
-    "<remap> <find-file>" #'my-x-dired-find-file
-    "s" #'isearch-forward
-    "M-n" #'dired-subtree-next-sibling
-    "M-p" #'dired-subtree-previous-sibling
-    "M-u" #'dired-subtree-up))
-
-(with-eval-after-load 'info
-  (define-keymap :keymap Info-mode-map
-    ")" #'Info-forward-node
-    "(" #'Info-backward-node))
-
-(with-eval-after-load 'isearch
-  (define-keymap :keymap isearch-mode-map
-    "TAB" #'my-x-isearch-repeat-direction
-    "<f8>" #'my-x-isearch-change-direction))
-
-(with-eval-after-load 'prog-mode
-  (define-keymap :keymap prog-mode-map
-    "<remap> <end-of-line>" #'mwim-end
-    "<remap> <beginning-of-line>" #'mwim-beginning))
-
-(with-eval-after-load 'text-mode
-  (define-keymap :keymap text-mode-map
-    "<remap> <end-of-line>" #'mwim-end
-    "<remap> <beginning-of-line>" #'mwim-beginning))
-
-(with-eval-after-load 'vertico
-  (define-keymap :keymap vertico-map
-    "M-SPC" #'vertico-quick-insert))
-
-(with-eval-after-load 'vterm
-  (keymap-unset vterm-mode-map "<return>" :remove)
-  (keymap-unset vterm-mode-map "M-1" :remove)
-  (define-keymap :keymap vterm-mode-map
-    "M-SPC" #'vterm-copy-mode
-    "<f3>" nil ;; allow macro defining and playup
-    "<f4>" nil
-    "<f8>" nil
-    "C-q" #'vterm-send-next-key
-    "<remap> <previous-line>" (command (vterm-send "C-p"))
-    "<remap> <next-line>" (command (vterm-send "C-n"))
-    "<remap> <end-of-line>" (command (vterm-send "C-e"))
-    "<remap> <beginning-of-line>" (command (vterm-send "C-a"))
-    "<remap> <forward-char>" (command (vterm-send "C-f"))
-    "<remap> <backward-char>" (command (vterm-send "C-b"))
-    "<remap> <delete-char>" (command (vterm-send "C-d"))
-    "<remap> <isearch-backward>" (command (vterm-send "C-r"))
-    "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
-    "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
-    "M-:" nil))
-
-
-
-;; In and out of modal mode
-(keymap-set global-map "<f8>" #'modal-mode)
-(keymap-set modal-mode-map "RET" #'modal-mode)
-
-;; In and out of modal global mode.
-(keymap-set modal-mode-map "<f8>" #'modal-global-mode)
-(keymap-set modal-global-mode-map "<f8>" #'modal-global-mode)
-(keymap-set modal-global-mode-map "RET" (command (modal-global-mode -1) (modal-mode -1)))
+(keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
 (define-keymap :keymap modal-mode-map
+  "<f8>" #'modal-global-mode
+  "RET" #'modal-mode
   "!" #'shell-command
   "'" #'pop-to-mark-command
   "," #'duplicate-dwim
@@ -476,7 +407,8 @@
   "q" search-map
   "r" #'isearch-backward
   "s" #'isearch-forward
-  "t" #'undefined
+  "t" #'transpose-sexps
+  "T" #'transpose-regions
   "u" #'universal-argument
   "v" #'undefined
   "x" #'exchange-point-and-mark
@@ -486,6 +418,8 @@
   "SPC" #'execute-extended-command)
 
 (define-keymap :keymap modal-global-mode-map
+  "RET" (command (modal-global-mode -1) (modal-mode -1))
+  "<f8>" #'modal-global-mode
   "," #'tab-bar-history-back
   "-" #'text-scale-adjust
   "." #'tab-bar-history-forward
@@ -532,11 +466,60 @@
   "z" #'repeat
   "TAB" #'tab-bar-switch-to-recent-tab)
 
-(keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
+(define-keys-after-load multiple-cursors mc/keymap
+  "<return>" nil
+  "<remap> <keyboard-quit>" #'mc/keyboard-quit)
+
+(define-keys-after-load nov nov-mode-map
+  "j" #'link-hint-open-link
+  "-" #'text-scale-adjust
+  "=" #'text-scale-adjust
+  ")" #'nov-next-document
+  "(" #'nov-previous-document)
+
+(with-eval-after-load 'prog-mode
+  (define-keymap :keymap prog-mode-map
+    "<remap> <end-of-line>" #'mwim-end
+    "<remap> <beginning-of-line>" #'mwim-beginning))
 
 (define-keymap :keymap search-map
   "SPC" #'replace-regexp
   "RET" #'query-replace-regexp)
+
+(define-keys-after-load tab-bar tab-prefix-map
+  "k" #'my-x-tab-bar-kill-buffer-and-tab)
+
+(define-keys-after-load tab-bar tab-bar-mode-map
+  "C-TAB" nil
+  "C-<tab>" nil
+  "C-S-<iso-lefttab>" nil)
+
+(define-keys-after-load text-mode text-mode-map
+  "<remap> <end-of-line>" #'mwim-end
+  "<remap> <beginning-of-line>" #'mwim-beginning)
+
+(define-keys-after-load vertico vertico-map
+  "M-SPC" #'vertico-quick-insert)
+
+(define-keys-after-load vterm vterm-mode-map
+  "<return>" nil
+  "M-1" nil
+  "M-SPC" #'vterm-copy-mode
+  "<f3>" nil ;; allow macro defining and playup
+  "<f4>" nil
+  "<f8>" nil
+  "C-q" #'vterm-send-next-key
+  "<remap> <previous-line>" (command (vterm-send "C-p"))
+  "<remap> <next-line>" (command (vterm-send "C-n"))
+  "<remap> <end-of-line>" (command (vterm-send "C-e"))
+  "<remap> <beginning-of-line>" (command (vterm-send "C-a"))
+  "<remap> <forward-char>" (command (vterm-send "C-f"))
+  "<remap> <backward-char>" (command (vterm-send "C-b"))
+  "<remap> <delete-char>" (command (vterm-send "C-d"))
+  "<remap> <isearch-backward>" (command (vterm-send "C-r"))
+  "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
+  "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
+  "M-:" nil)
 
 ;;;; Hooks
 
@@ -628,7 +611,6 @@
    `((python-mode python-ts-mode)
      . ,(eglot-alternatives
          '(("basedpyright-langserver" "--stdio"))))))
-
 
 ;;;; Advices
 

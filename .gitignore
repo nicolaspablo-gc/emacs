@@ -20,3 +20,4 @@ dist/
 
 # Local per machine settings
 /local.el
+/local/

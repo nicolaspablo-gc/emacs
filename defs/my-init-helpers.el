@@ -84,11 +84,19 @@ Both FILE and MODES are auto-quoted, so call with bare symbols/lists, e.g.:
     (error "Uneven number of arguments passed to `delete-lighters-after-load-multi'."))
   `(progn
      ,@(let (forms)
-        (while file-mode-pairs
-          (push `(delete-lighters-after-load ',(pop file-mode-pairs) ',(pop file-mode-pairs))
-                forms))
-        (nreverse forms))))
+         (while file-mode-pairs
+           (push `(delete-lighters-after-load ',(pop file-mode-pairs) ',(pop file-mode-pairs))
+                 forms))
+         (nreverse forms))))
 
+(defmacro define-keys-after-load (feature keymap &rest keys)
+  "Bind KEYS in KEYMAP after loading FEATURE."
+  (declare (indent defun))
+  (unless (cl-evenp (length keys))
+    (error "Uneven number of KEYS passed to `define-keys-after-load'."))
+  `(with-eval-after-load ',feature
+     (define-keymap :keymap ,keymap
+       ,@keys)))
 
 (provide 'my-init-helpers)
 ;;; my-init-helpers.el ends here
