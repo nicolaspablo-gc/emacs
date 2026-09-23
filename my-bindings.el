@@ -66,7 +66,6 @@
 (setq modal-global-mode-cursor-color "royal blue")
 (setq nerd-icons-scale-factor 0.85)
 (setq olivetti-style 'fancy)
-(setq openwith-associations '(("\\.xlsx\\'" "libreoffice" (file))))
 (setq recenter-positions '(top middle bottom))
 (setq ring-bell-function #'ignore)
 (setq shr-max-width 80)
@@ -76,10 +75,14 @@
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
+(setq use-short-answers t)
 (setq vc-follow-symlinks t)
 (setq vterm-copy-mode-remove-fake-newlines t)
 (setq vterm-max-scrollback 100000)
 
+(setq openwith-associations
+      '(("\\.xlsx\\'" "libreoffice" (file))
+        ("\\.xcf\\'" "gimp" (file))))
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3")
         (c "https://github.com/tree-sitter/tree-sitter-c")
@@ -243,6 +246,7 @@
  '((display-buffer-reuse-window
     display-buffer-in-previous-window
     display-buffer-same-window
+    display-buffer-use-some-window
     display-buffer-pop-up-window)
    (reusable-frames . nil))
  display-buffer-fallback-action
@@ -256,7 +260,7 @@
     display-buffer-pop-up-frame)
    (reusable-frames . nil))
  display-buffer-alist
- `(("Rec Edit\\| ?\\*Capture\\|\\*agent-shell-diff\\*"
+ `(("Rec Edit\\| ?\\*Capture\\|\\*agent-shell-diff\\*\\|*image-dired-display-image\\*\\'"
     display-buffer-same-window)
    ("\\*\\(:?git-grep-transient-.*\\|grep\\|Occur\\|xref\\|Outline .*\\.pdf\\|image-dired\\)\\*"
     display-buffer-in-side-window (side . left) (dedicated . t) (slot . -1))
@@ -592,6 +596,8 @@
 
 (add-to-list 'global-mode-string
              '(telega-mode-line-mode telega-mode-line-format))
+
+(add-to-list 'auto-mode-alist '("/bash-fc.[[:alnum:]]+\\'" . sh-mode))
 
 (with-eval-after-load 'elec-pair
   (add-to-list 'electric-pair-pairs (cons ?¿ ??))

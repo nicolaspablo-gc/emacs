@@ -25,9 +25,34 @@
 ;;; Code:
 
 (defun my-x-vterm-in-dir (dir)
+  "Create a vterm buffer in a dir."
   (interactive "DVterm in dir:")
   (let ((default-directory dir))
     (vterm)))
+
+(defun my-x-vterm-in-project ()
+  "Switch to a project vterm buffer or create one.
+If no project is found the vterm is created at `default-directory'."
+  (interactive)
+  (let* ((project-dir (nth 2 (project-current)))
+         (target
+          (expand-file-name
+           (or project-dir
+               default-directory)))
+         (vterms
+          (seq-filter (lambda (buf)
+                        (with-current-buffer buf
+                          (and (eq major-mode 'vterm-mode)
+                               (string= default-directory target))))
+                      (buffer-list)))
+         (n (length vterms)))
+    (cond
+     ((= n 0)
+      (my-x-vterm-in-dir target))
+     ((= n 1)
+      (pop-to-buffer (nth 0 vterms)))
+     (t
+      ()))))
 
 (defun my-x-vterm-dwim (&optional new)
   "Switch to a vterm buffer, or create a new one in a dir."
@@ -48,7 +73,6 @@
        '((category . buffer)))
       nil
       :require-match))))
-
 
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."
