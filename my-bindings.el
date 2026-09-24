@@ -419,7 +419,8 @@
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
   "|" #'shell-command-on-region
-  "SPC" #'execute-extended-command)
+  "SPC" #'execute-extended-command
+  "M-SPC" #'string-rectangle)
 
 (define-keymap :keymap modal-global-mode-map
   "RET" (command (modal-global-mode -1) (modal-mode -1))
@@ -428,7 +429,7 @@
   "-" #'text-scale-adjust
   "." #'tab-bar-history-forward
   "0" #'delete-window
-  "1" #'delete-other-windows
+  "1" window-prefix-map
   "2" #'my-x-window-move-buffer-below
   "@" #'split-window-below
   "3" #'my-x-window-move-buffer-right
@@ -468,10 +469,13 @@
   "w" #'agent-shell
   "x" #'my-x-vterm-dwim
   "z" #'repeat
-  "TAB" #'tab-bar-switch-to-recent-tab)
+  "TAB" #'tab-bar-switch-to-recent-tab
+  "<tab>" #'tab-bar-switch-to-recent-tab
+  )
 
 (define-keys-after-load multiple-cursors mc/keymap
   "<return>" nil
+  "RET" nil
   "<remap> <keyboard-quit>" #'mc/keyboard-quit)
 
 (define-keys-after-load nov nov-mode-map
@@ -495,7 +499,8 @@
   "RET" #'query-replace-regexp)
 
 (define-keys-after-load tab-bar tab-prefix-map
-  "k" #'my-x-tab-bar-kill-buffer-and-tab)
+  "k" #'my-x-tab-bar-kill-buffer-and-tab
+  "SPC" #'tab-bar-select-tab-by-name)
 
 (define-keys-after-load tab-bar tab-bar-mode-map
   "C-TAB" nil
@@ -528,6 +533,9 @@
   "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
   "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
   "M-:" nil)
+
+(define-keymap :keymap window-prefix-map
+  "1" #'delete-other-windows)
 
 ;;;; Hooks
 
@@ -576,6 +584,9 @@
 
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))
+
+(hook-defun dired-mode-hook set-variables
+  (setq-local truncate-lines t))
 
 (hook-defun dired-side-window-setup-hook set-display-buffer-action
   (setq-local
