@@ -355,6 +355,7 @@
   "<f8>" #'modal-mode
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
+  "<f2>" #'tab-bar-switch-to-recent-tab
   "M-`" #'other-window
   "M-1" #'tab-bar-switch-to-recent-tab
   "<f12>" #'mc/mark-next-like-this
@@ -373,7 +374,8 @@
   "<f8>" #'my-x-isearch-change-direction)
 
 (define-keys-after-load magit magit-mode-map
-  "M-1" nil)
+  "M-1" nil
+  "M-u" #'magit-section-up)
 
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
@@ -414,7 +416,8 @@
   "t" #'transpose-sexps
   "T" #'transpose-regions
   "u" #'universal-argument
-  "v" #'undefined
+  "v" #'scroll-up-command
+  "V" #'scroll-down-command
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
@@ -522,6 +525,7 @@
   "<f4>" nil
   "<f8>" nil
   "C-q" #'vterm-send-next-key
+  "<remap> <string-rectangle>" #'vterm-copy-mode
   "<remap> <previous-line>" (command (vterm-send "C-p"))
   "<remap> <next-line>" (command (vterm-send "C-n"))
   "<remap> <end-of-line>" (command (vterm-send "C-e"))
@@ -593,6 +597,10 @@
    display-buffer-overriding-action
    '((display-buffer-in-direction)
      (direction . right))))
+
+(hook-defun modal-mode-hook set-state
+  (hl-line-mode (if modal-mode 1 -1))
+  )
 
 (hook-defun nov-mode-hook set-vars
   (setq-local

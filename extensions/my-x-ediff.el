@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -28,13 +28,13 @@
   (tab-switch "ediff"))
 
 (defun my-x-ediff-restore ()
-   (with-demoted-errors "Error: %s"
-     (tab-bar-close-tab-by-name "ediff")))
+  (with-demoted-errors "Error: %s"
+    (tab-bar-close-tab-by-name "ediff")))
 
 (defun my-x-ediff-prepare-buffer ()
-   (unless (eq major-mode #'ediff-mode)
-     (setq mode-line-format nil)
-     (display-line-numbers-mode -1)))
+  (unless (eq major-mode #'ediff-mode)
+    (setq mode-line-format nil)
+    (display-line-numbers-mode 1)))
 
 (defun ediff-copy-both-to-C ()
   "Merge both A and B in ediff for three way merge.
