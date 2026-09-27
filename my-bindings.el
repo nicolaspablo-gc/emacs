@@ -80,9 +80,6 @@
 (setq vterm-copy-mode-remove-fake-newlines t)
 (setq vterm-max-scrollback 100000)
 
-(setq openwith-associations
-      '(("\\.xlsx\\'" "libreoffice" (file))
-        ("\\.xcf\\'" "gimp" (file))))
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3")
         (c "https://github.com/tree-sitter/tree-sitter-c")
@@ -337,6 +334,7 @@
   "-" #'my-x-ace-window-fit-to-buffer)
 
 (define-keys-after-load dired dired-mode-map
+  "RET" #'my-x-dired-open-dwim
   "F"#'my-x-dired-do-find-all-files
   "SPC"#'dired-subtree-toggle
   ","#'dired-omit-mode
@@ -375,7 +373,8 @@
 
 (define-keys-after-load magit magit-mode-map
   "M-1" nil
-  "M-u" #'magit-section-up)
+  "M-u" #'magit-section-up
+  )
 
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
@@ -468,7 +467,8 @@
   "SPC" #'execute-extended-command
   "t" tab-prefix-map
   "u" #'universal-argument
-  "v" #'undefined
+  "v" #'scroll-other-window
+  "V" #'scroll-other-window-down
   "w" #'agent-shell
   "x" #'my-x-vterm-dwim
   "z" #'repeat
@@ -526,6 +526,8 @@
   "<f8>" nil
   "C-q" #'vterm-send-next-key
   "<remap> <string-rectangle>" #'vterm-copy-mode
+  "<remap> <kill-line>" (command (vterm-send "C-k"))
+  "<remap> <kill-sexp>" (command (vterm-send "M-d"))
   "<remap> <previous-line>" (command (vterm-send "C-p"))
   "<remap> <next-line>" (command (vterm-send "C-n"))
   "<remap> <end-of-line>" (command (vterm-send "C-e"))
@@ -606,7 +608,7 @@
   (setq-local
    line-spacing 8
    nov-variable-pitch nil
-   nov-text-width 70))
+   nov-text-width 75))
 
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))

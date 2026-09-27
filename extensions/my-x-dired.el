@@ -24,11 +24,23 @@
 
 ;;; Code:
 
+(defvar my-x-dired-external-files-regexp "\\.\\(?:png\\|jpe?g\\)\\'"
+  "Regexp for files that should be opened with an external program.")
+
 (defun my-x-dired-find-file ()
-  "`find-file' aware of current dired line.."
+  "Do `find-file' with awareness of current dired line."
   (interactive)
   (let ((default-directory (dired-current-directory)))
     (call-interactively #'find-file)))
+
+(defun my-x-dired-open-dwim ()
+  "Open current file, either normally or with an external program."
+  (interactive)
+  (call-interactively
+   (if (string-match-p my-x-dired-external-files-regexp
+                       (dired-get-file-for-visit))
+       #'dired-do-open
+     #'dired-find-file)))
 
 (defun my-x-dired-do-find-all-files ()
   "Find all marked files in dired."
