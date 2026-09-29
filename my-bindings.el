@@ -334,6 +334,7 @@
   "-" #'my-x-ace-window-fit-to-buffer)
 
 (define-keys-after-load dired dired-mode-map
+  "M-SPC" #'wdired-change-to-wdired-mode
   "RET" #'my-x-dired-open-dwim
   "F"#'my-x-dired-do-find-all-files
   "SPC"#'dired-subtree-toggle
@@ -539,6 +540,9 @@
   "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
   "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
   "M-:" nil)
+
+(define-keys-after-load wdired wdired-mode-map
+  "M-SPC" #'wdired-finish-edit)
 
 (define-keymap :keymap window-prefix-map
   "1" #'delete-other-windows)
