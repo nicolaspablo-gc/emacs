@@ -80,6 +80,16 @@
 (setq vterm-copy-mode-remove-fake-newlines t)
 (setq vterm-max-scrollback 100000)
 
+(setq my-x-dired-external-files-regexp
+      (rx "."
+          (or "png"
+              (seq "jp" (? "e") "g")
+              "svg")
+          string-end))
+
+(setq openwith-associations
+      '(("\\.xlsx\\'" "libreoffice" (file))))
+
 (setq treesit-language-source-alist
       '((bash "https://github.com/tree-sitter/tree-sitter-bash" "v0.23.3")
         (c "https://github.com/tree-sitter/tree-sitter-c")

@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(defvar my-x-dired-external-files-regexp "\\.\\(?:png\\|jpe?g\\)\\'"
+(defvar my-x-dired-external-files-regexp nil
   "Regexp for files that should be opened with an external program.")
 
 (defun my-x-dired-find-file ()
@@ -37,8 +37,9 @@
   "Open current file, either normally or with an external program."
   (interactive)
   (call-interactively
-   (if (string-match-p my-x-dired-external-files-regexp
-                       (dired-get-file-for-visit))
+   (if (and my-x-dired-external-files-regexp
+            (string-match-p my-x-dired-external-files-regexp
+                            (dired-get-file-for-visit)))
        #'dired-do-open
      #'dired-find-file)))
 
