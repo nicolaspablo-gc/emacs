@@ -48,6 +48,7 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (setq custom-safe-themes t)
 (setq delete-pair-blink-delay 0)
+(setq dictionary-server "dict.org")
 (setq display-time-format " %d %b, %H:%M")
 (setq display-time-default-load-average nil)
 (setq ediff-merge-split-window-function #'split-window-horizontally)
@@ -343,6 +344,9 @@
   "=" #'balance-windows
   "-" #'my-x-ace-window-fit-to-buffer)
 
+(define-keys-after-load dictionary dictionary-mode-map
+  "q" #'my-x-window-quit-dwim)
+
 (define-keys-after-load dired dired-mode-map
   "M-SPC" #'wdired-change-to-wdired-mode
   "RET" #'my-x-dired-open-dwim
@@ -436,6 +440,7 @@
   "M-SPC" #'string-rectangle)
 
 (define-keymap :keymap modal-global-mode-map
+  "?" #'dictionary-search
   "RET" (command (modal-global-mode -1) (modal-mode -1))
   "<f8>" #'modal-global-mode
   "," #'tab-bar-history-back

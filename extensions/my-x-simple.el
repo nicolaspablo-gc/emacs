@@ -78,5 +78,14 @@ Source: https://www.emacswiki.org/emacs/MarkCommands#h5o-4"
     (with-demoted-errors "error: %s"
       (my-x-window-quit-dwim))))
 
+(defun my-x-simple-shell-command-on-buffer (command &optional dont-replace)
+  "Execute COMMAND piping whole buffer and replacing its contents.
+The main use case is for using shell commands to help editing, thus the
+buffer contents are replaced by the command's output.  Use DONT-REPLACE
+to avoid replacing the buffer contents."
+  (interactive (list (read-shell-command "Shell command on buffer: ")))
+  (shell-command-on-region (point-min) (point-max) command nil (not dont-replace)))
+
 (provide 'my-x-simple)
 ;;; my-x-simple.el ends here
+p
