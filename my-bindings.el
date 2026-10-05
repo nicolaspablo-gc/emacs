@@ -536,6 +536,7 @@
 (define-keys-after-load vterm vterm-mode-map
   "<return>" nil
   "M-1" nil
+  "M-`" nil
   "M-SPC" #'vterm-copy-mode
   "<f3>" nil ;; allow macro defining and playup
   "<f4>" nil
