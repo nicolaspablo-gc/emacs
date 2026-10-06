@@ -76,8 +76,10 @@
 
 ;; Add extra autoloads.
 
-(autoload 'nov-open-directory "nov" "Open EPUB buffer using DIR as directory of the document." 'interactive)
 (autoload 'markdown-insert-gfm-code-block "markdown-mode" "Insert GFM code block for language LANG." 'interactive)
+(autoload 'nov-open-directory "nov" "Open EPUB buffer using DIR as directory of the document." 'interactive)
+(autoload 'with-editor-finish "with-editor" "Finish the current edit session." 'interactive)
+(autoload 'with-editor-cancel "with-editor" "Cancel the current edit session." 'interactive)
 
 (provide 'my-packages)
 ;;; my-packages.el ends here

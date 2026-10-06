@@ -88,4 +88,4 @@ to avoid replacing the buffer contents."
 
 (provide 'my-x-simple)
 ;;; my-x-simple.el ends here
-p
+

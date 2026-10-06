@@ -517,6 +517,12 @@
   "SPC" #'replace-regexp
   "RET" #'query-replace-regexp)
 
+(define-keys-after-load sql sql-mode-map
+  "M-RET" (command
+           (save-mark-and-excursion
+             (mark-paragraph)
+             (sql-send-region (region-beginning) (region-end)))))
+
 (define-keys-after-load tab-bar tab-prefix-map
   "k" #'my-x-tab-bar-kill-buffer-and-tab
   "SPC" #'tab-bar-select-tab-by-name)
@@ -629,6 +635,16 @@
    line-spacing 8
    nov-variable-pitch nil
    nov-text-width 75))
+
+(hook-defun sql-mode-hook set-vars
+  (setq-local
+   cape-dabbrev-buffer-function
+   (lambda ()
+     (seq-filter (lambda (buf)
+                   (with-current-buffer buf
+                     (or (eq major-mode #'sql-mode)
+                         (eq major-mode #'sql-interactive-mode))))
+                 (buffer-list)))))
 
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))
