@@ -43,5 +43,12 @@
           (delete-region start end)
           (insert "\n\n\n"))))))
 
+(defun my-x-org-goto-today-now ()
+  (interactive)
+  (org-agenda-list)
+  (org-agenda-redo)
+  (org-agenda-goto-today)
+  (search-forward "← now"))
+
 (provide 'my-x-org)
 ;;; my-x-org.el ends here

@@ -508,6 +508,9 @@
   "M-n" #'org-move-subtree-down
   "M-p" #'org-move-subtree-up)
 
+(define-keys-after-load org-agenda org-agenda-mode-map
+  "." #'my-x-org-goto-today-now)
+
 (with-eval-after-load 'prog-mode
   (define-keymap :keymap prog-mode-map
     "<remap> <end-of-line>" #'mwim-end
@@ -616,6 +619,11 @@
 
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))
+
+(hook-defun org-agenda-finalize-hook set-variables
+  (when (eq org-agenda-type 'agenda)
+    (visual-wrap-prefix-mode -1)
+    (setq wrap-prefix (make-string 14 ?\s))))
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))

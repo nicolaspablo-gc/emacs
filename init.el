@@ -96,6 +96,7 @@ custom's state) can't be loaded on next sesion.")
 (visible-mark-mode)
 (recentf-mode)
 (openwith-mode)
+(global-visual-line-mode)
 
 (when (display-graphic-p)
   (require 'nerd-icons)
