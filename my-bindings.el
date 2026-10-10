@@ -604,6 +604,7 @@
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'shell-mode-hook #'corfu-mode)
+(add-hook 'sh-mode-hook #'flymake-mode)
 (add-hook 'tabulated-list-mode-hook #'hl-line-mode)
 (add-hook 'telega-chat-mode-hook #'abbrev-mode)
 (add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
@@ -711,7 +712,9 @@
  'user
 
  '(default ((t :family "Iosevka Fixed" :width expanded)))
+
  '(bold ((t :weight medium)))
+ '(mode-line ((((type tty)) :background reset)))
 
  ;; Avy prompt
  ;;
