@@ -81,6 +81,9 @@
 (setq vterm-copy-mode-remove-fake-newlines t)
 (setq vterm-max-scrollback 100000)
 
+(setq initial-frame-alist
+      (alistq name "emacs"))
+
 (setq my-x-dired-external-files-regexp
       (rx "."
           (or "png"
@@ -116,6 +119,8 @@
 (setq-default line-spacing 2)
 (setq-default olivetti-body-width 0.65)
 (setq-default indent-tabs-mode nil)
+
+
 
 ;; Org
 
@@ -324,7 +329,6 @@
    ("consult.*\\|my-x-vterm-dwim" (:not flat)))
  vertico-sort-function #'vertico-sort-history-length-alpha)
 
-
 ;;;; Keymaps
 
 (with-eval-after-load 'agent-shell
@@ -492,7 +496,7 @@
   "<tab>" #'tab-bar-switch-to-recent-tab
   )
 
-(define-keys-after-load multiple-cursors mc/keymap
+(define-keys-after-load multiple-cursors-core mc/keymap
   "<return>" nil
   "RET" nil
   "<remap> <keyboard-quit>" #'mc/keyboard-quit)
