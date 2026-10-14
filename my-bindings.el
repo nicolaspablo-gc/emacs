@@ -67,6 +67,8 @@
 (setq modal-global-mode-cursor-color "royal blue")
 (setq nerd-icons-scale-factor 0.85)
 (setq olivetti-style 'fancy)
+(setq org-gcal-remove-api-cancelled-events t)
+(setq plstore-cache-passphrase-for-symmetric-encryption t)
 (setq recenter-positions '(top middle bottom))
 (setq ring-bell-function #'ignore)
 (setq shr-max-width 80)
@@ -132,6 +134,7 @@
 (setq org-agenda-tags-column 0)
 (setq org-agenda-time-leading-zero t)
 (setq org-agenda-todo-ignore-scheduled 'future)
+(setq org-agenda-todo-keyword-format "%-12s")
 (setq org-agenda-use-time-grid t)
 (setq org-agenda-window-setup 'current-window)
 (setq org-appear-autoemphasis t)
@@ -381,6 +384,9 @@
 (define-keymap :keymap help-map
   "j" #'describe-face
   "z" #'describe-keymap)
+
+(define-keys-after-load help-mode help-mode-map
+  "j" #'link-hint-open-link)
 
 (define-keys-after-load info Info-mode-map
   ")" #'Info-forward-node
