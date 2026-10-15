@@ -24,12 +24,21 @@
 
 ;;; Code:
 
+(require 'my-x-window)
+
 (defun my-x-ace-window-fit-to-buffer ()
   "`fit-window-to-buffer' trough `ace-window'ing."
   (interactive)
   (save-selected-window
     (ace-select-window)
     (fit-window-to-buffer)))
+
+(defun my-x-ace-window-fit-to-fill-column ()
+  "Use ace to set the size of a window to its buffer's fill column."
+  (interactive)
+  (save-selected-window
+    (with-selected-window (ace-select-window)
+      (my-x-window-fit-to-fill-column))))
 
 (provide 'my-x-ace-window)
 ;;; my-x-ace-window.el ends here

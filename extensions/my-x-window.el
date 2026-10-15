@@ -83,5 +83,11 @@ If SELECT-WINDOW is no nil, also select the new window."
   (interactive "P")
   (my-x-window--move-buffer-direction 'below select-new-window))
 
+(defun my-x-window-fit-to-fill-column  (&optional window)
+  "Set the selected window's size to its current buffer's fill column."
+  (interactive)
+  (enlarge-window-horizontally
+   (- fill-column (window-body-width))))
+
 (provide 'my-x-window)
 ;;; my-x-window.el ends here

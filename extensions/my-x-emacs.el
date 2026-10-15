@@ -77,5 +77,24 @@ mouse-3: Describe current input method"))
   (interactive)
   (setq cursor-type (not cursor-type)))
 
+(defun my-x-emacs-append-region-to-buffer (buffer start end &optional pop-to-buffer)
+  "Append START-END region to BUFFER.
+With a prefix arg pop to BUFFER after appending."
+  (interactive
+   (list (let ((buffer-or-name (read-buffer "Buffer: ")))
+           (unless (get-buffer buffer-or-name)
+             (with-current-buffer (setq buffer-or-name (generate-new-buffer buffer-or-name))
+               (set-buffer-major-mode buffer-or-name)))
+           buffer-or-name)
+         (region-beginning)
+         (region-end)
+         current-prefix-arg))
+  (let ((text (buffer-substring-no-properties start end)))
+    (with-current-buffer buffer
+      (end-of-buffer)
+      (insert text)))
+  (when pop-to-buffer
+    (pop-to-buffer buffer)))
+
 (provide 'my-x-emacs)
 ;;; my-x-emacs.el ends here

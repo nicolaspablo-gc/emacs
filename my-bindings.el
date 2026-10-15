@@ -58,6 +58,9 @@
 (setq desktop-environment-brightness-small-increment "1%+")
 (setq desktop-environment-brightness-small-decrement "1%-")
 (setq fit-window-to-buffer-horizontally t)
+(setq highlight-indent-guides-auto-enabled nil)
+(setq highlight-indent-guides-bitmap-function #'highlight-indent-guides--bitmap-line)
+(setq highlight-indent-guides-method 'bitmap)
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
@@ -75,6 +78,7 @@
 (setq shr-use-fonts nil)
 (setq tab-always-indent 'complete)
 (setq tab-line-new-button-show nil)
+(setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
@@ -349,7 +353,8 @@
 (define-keymap :keymap ctl-x-4-map
   "0" #'ace-delete-window
   "=" #'balance-windows
-  "-" #'my-x-ace-window-fit-to-buffer)
+  "-" #'my-x-ace-window-fit-to-buffer
+  "\\" #'my-x-ace-window-fit-to-fill-column)
 
 (define-keys-after-load dictionary dictionary-mode-map
   "q" #'my-x-window-quit-dwim)
@@ -357,7 +362,6 @@
 (define-keys-after-load dired dired-mode-map
   "M-SPC" #'wdired-change-to-wdired-mode
   "RET" #'my-x-dired-open-dwim
-  "F"#'my-x-dired-do-find-all-files
   "SPC"#'dired-subtree-toggle
   ","#'dired-omit-mode
   "<remap> <find-file>"#'my-x-dired-find-file
@@ -365,6 +369,9 @@
   "M-n"#'dired-subtree-next-sibling
   "M-p"#'dired-subtree-previous-sibling
   "M-u"#'dired-subtree-up)
+
+(define-keys-after-load dired-x dired-mode-map
+  "F" #'my-x-dired-do-find-all-files)
 
 (define-keys-after-load eww eww-mode-map
   "j" #'link-hint-open-link
@@ -483,9 +490,9 @@
   "k" #'my-x-simple-kill-current-buffer-dwim
   "l" #'my-x-tab-line-switch-to-buffer-tab
   "m" #'link-hint-open-link
-  "n" #'tab-line-switch-to-next-tab
+  "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
-  "p" #'tab-line-switch-to-prev-tab
+  "p" #'my-x-tab-line-switch-to-prev-tab
   "q" #'my-x-window-quit-dwim
   "r" #'revert-buffer-quick
   "R" #'recentf
@@ -580,7 +587,8 @@
   "M-SPC" #'wdired-finish-edit)
 
 (define-keymap :keymap window-prefix-map
-  "1" #'delete-other-windows)
+  "1" #'delete-other-windows
+  "\\" #'my-x-window-fit-to-fill-column)
 
 ;;;; Hooks
 
@@ -613,6 +621,7 @@
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
+(add-hook 'python-ts-mode-hook #'highlight-indent-guides-mode)
 (add-hook 'shell-mode-hook #'corfu-mode)
 (add-hook 'sh-mode-hook #'flymake-mode)
 (add-hook 'tabulated-list-mode-hook #'hl-line-mode)
@@ -726,6 +735,10 @@
  '(bold ((t :weight medium)))
  '(mode-line ((((type tty)) :background reset)))
 
+ `(hl-line
+   ((((background light)) :background "gray97")
+    (((background dark)) :background ,ui-simple-dark-border-bg)))
+
  ;; Avy prompt
  ;;
  '(avy-lead-face-0
@@ -795,6 +808,12 @@
  '(git-gutter:deleted ((t :foreground "orange red" :background reset)))
  '(git-gutter:modified ((t :foreground "gold2" :background reset)))
  '(git-gutter:separator ((t :inherit font-lock-comment-face)))
+
+ ;; Highlight Indent Guides
+ ;;
+ `(highlight-indent-guides-character-face
+   ((((background dark)) :foreground ,ui-simple-dark-border-fg)
+    (((background light)) :foreground ,ui-simple-light-border-fg)))
 
  ;; Info
  ;;

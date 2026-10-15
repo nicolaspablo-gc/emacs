@@ -49,6 +49,7 @@
    dired-subtree
    dotenv-mode
    git-gutter
+   highlight-indent-guides
    info-rename-buffer
    link-hint
    magit
