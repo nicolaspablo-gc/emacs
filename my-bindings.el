@@ -138,7 +138,7 @@
 (setq org-agenda-tags-column 0)
 (setq org-agenda-time-leading-zero t)
 (setq org-agenda-todo-ignore-scheduled 'future)
-(setq org-agenda-todo-keyword-format "%-12s")
+(setq org-agenda-todo-keyword-format "%s")
 (setq org-agenda-use-time-grid t)
 (setq org-agenda-window-setup 'current-window)
 (setq org-appear-autoemphasis t)
@@ -431,7 +431,7 @@
   "e" #'end-of-line
   "f" #'forward-char
   "F" #'my-x-emacs-copy-current-file-name
-  "g" #'my-x-simple-keyboard-quit-dwim
+  "g" #'keyboard-quit
   "h" help-map
   "i" #'recenter-top-bottom
   "j" #'my-x-simple-forward-delete-indentation
@@ -483,7 +483,7 @@
   "e" #'tab-bar-switch-to-next-tab
   "f" #'find-file
   "F" #'my-x-emacs-copy-current-file-name
-  "g" #'my-x-simple-keyboard-quit-dwim
+  "g" #'keyboard-quit
   "h" help-map
   "i" #'my-x-window-other-backward-window
   "j" #'undefined
@@ -610,7 +610,6 @@
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
 (add-hook 'occur-mode-hook #'buffer-wrap-mode)
 (add-hook 'org-agenda-mode-hook #'hl-line-mode)
-(add-hook 'org-agenda-mode-hook #'my-x-emacs-toggle-cursor)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
 (add-hook 'org-mode-hook #'corfu-mode)
 (add-hook 'org-mode-hook #'abbrev-mode)
