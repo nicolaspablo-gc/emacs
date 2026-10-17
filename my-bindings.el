@@ -431,7 +431,7 @@
   "<f8>" #'modal-global-mode
   ">" #'end-of-buffer
   "?" #'vundo
-  "M-SPC" #'string-rectangle
+  "M-SPC" #'my-x-rect-string-rectangle
   "RET" #'modal-mode
   "SPC" #'execute-extended-command
   "T" #'transpose-regions
