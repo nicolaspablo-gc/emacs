@@ -26,19 +26,27 @@
 
 (require 'my-x-window)
 
+(defmacro my-x-ace--with-ace-window (&rest forms)
+  "Execute FORMS within an ace selected window."
+  `(save-selected-window
+     (with-selected-window (ace-select-window)
+       ,@forms)))
+
 (defun my-x-ace-window-fit-to-buffer ()
   "`fit-window-to-buffer' trough `ace-window'ing."
   (interactive)
-  (save-selected-window
-    (ace-select-window)
-    (fit-window-to-buffer)))
+  (my-x-ace--with-ace-window (fit-window-to-buffer)))
 
 (defun my-x-ace-window-fit-to-fill-column ()
   "Use ace to set the size of a window to its buffer's fill column."
   (interactive)
-  (save-selected-window
-    (with-selected-window (ace-select-window)
-      (my-x-window-fit-to-fill-column))))
+  (my-x-ace--with-ace-window (my-x-window-fit-to-fill-column)))
+
+(defun my-x-ace-window-set-dedicated ()
+  "Use ace to set a window dedicated."
+  (interactive)
+  (my-x-ace--with-ace-window (toggle-window-dedicated)))
+
 
 (provide 'my-x-ace-window)
 ;;; my-x-ace-window.el ends here

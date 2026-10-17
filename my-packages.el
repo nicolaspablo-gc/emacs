@@ -48,6 +48,7 @@
    corfu-terminal
    dired-subtree
    dotenv-mode
+   embark
    git-gutter
    highlight-indent-guides
    info-rename-buffer

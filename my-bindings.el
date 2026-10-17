@@ -55,9 +55,13 @@
 (setq ediff-split-window-function #'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 (setq enable-recursive-minibuffers t)
+(setq epg-pinentry-mode 'loopback)
 (setq desktop-environment-brightness-small-increment "1%+")
 (setq desktop-environment-brightness-small-decrement "1%-")
 (setq fit-window-to-buffer-horizontally t)
+(setq flymake-error-bitmap '(flymake-double-exclamation-mark error))
+(setq flymake-warning-bitmap '(exclamation-mark warning))
+(setq flymake-note-bitmap '(exclamation-mark success))
 (setq highlight-indent-guides-auto-enabled nil)
 (setq highlight-indent-guides-bitmap-function #'highlight-indent-guides--bitmap-line)
 (setq highlight-indent-guides-method 'bitmap)
@@ -80,6 +84,7 @@
 (setq tab-line-new-button-show nil)
 (setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
+(setq telega-notifications-msg-body-limit 0)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
 (setq use-short-answers t)
@@ -341,6 +346,7 @@
 (with-eval-after-load 'agent-shell
   (define-keymap :keymap agent-shell-mode-map
     "RET" nil
+    "M-." #'find-file-at-point
     "M-RET" #'agent-shell-submit
     "M-SPC" #'markdown-insert-gfm-code-block))
 
@@ -354,7 +360,8 @@
   "0" #'ace-delete-window
   "=" #'balance-windows
   "-" #'my-x-ace-window-fit-to-buffer
-  "\\" #'my-x-ace-window-fit-to-fill-column)
+  "\\" #'my-x-ace-window-fit-to-fill-column
+  "d" #'my-x-ace-window-set-dedicated)
 
 (define-keys-after-load dictionary dictionary-mode-map
   "q" #'my-x-window-quit-dwim)
@@ -382,7 +389,7 @@
   "<f8>" #'modal-mode
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
-  "<f2>" #'tab-bar-switch-to-recent-tab
+  "<f2>" #'embark-act
   "M-`" #'other-window
   "M-1" #'tab-bar-switch-to-recent-tab
   "<f12>" #'mc/mark-next-like-this
@@ -401,7 +408,8 @@
 
 (define-keys-after-load isearch isearch-mode-map
   "TAB" #'my-x-isearch-repeat-direction
-  "<f8>" #'my-x-isearch-change-direction)
+  "<f8>" #'my-x-isearch-change-direction
+  "M-SPC" #'avy-isearch)
 
 (define-keys-after-load magit magit-mode-map
   "M-1" nil
@@ -411,17 +419,23 @@
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
 (define-keymap :keymap modal-mode-map
-  "<f8>" #'modal-global-mode
-  "RET" #'modal-mode
   "!" #'shell-command
   "'" #'pop-to-mark-command
+  "(" #'backward-paragraph
+  ")" #'forward-paragraph
   "," #'duplicate-dwim
   "." #'set-mark-command
   "/" #'undo
-  "?" #'vundo
   ":" #'comment-dwim
   "<" #'beginning-of-buffer
+  "<f8>" #'modal-global-mode
   ">" #'end-of-buffer
+  "?" #'vundo
+  "M-SPC" #'string-rectangle
+  "RET" #'modal-mode
+  "SPC" #'execute-extended-command
+  "T" #'transpose-regions
+  "V" #'scroll-down-command
   "\"" #'my-x-simple-unpop-to-mark-command
   "\\" #'cycle-spacing
   "a" #'beginning-of-line
@@ -437,7 +451,8 @@
   "j" #'my-x-simple-forward-delete-indentation
   "k" #'kill-sexp
   "l" #'kill-line
-  "m" #'undefined
+  "L" #'goto-line
+  "m" #'embark-act
   "n" #'next-line
   "o" #'newline
   "p" #'previous-line
@@ -445,16 +460,13 @@
   "r" #'isearch-backward
   "s" #'isearch-forward
   "t" #'transpose-sexps
-  "T" #'transpose-regions
   "u" #'universal-argument
   "v" #'scroll-up-command
-  "V" #'scroll-down-command
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
   "|" #'shell-command-on-region
-  "SPC" #'execute-extended-command
-  "M-SPC" #'string-rectangle)
+  )
 
 (define-keymap :keymap modal-global-mode-map
   "?" #'dictionary-search
@@ -653,9 +665,11 @@
    '((display-buffer-in-direction)
      (direction . right))))
 
+(hook-defun eglot-managed-mode-hook disable-inlay-hints
+  (eglot-inlay-hints-mode -1))
+
 (hook-defun modal-mode-hook set-state
-  (hl-line-mode (if modal-mode 1 -1))
-  )
+  (hl-line-mode (if modal-mode 1 -1)))
 
 (hook-defun nov-mode-hook set-vars
   (setq-local
@@ -735,7 +749,8 @@
  '(mode-line ((((type tty)) :background reset)))
 
  `(hl-line
-   ((((background light)) :background "gray97")
+   ((((type tty)) :background "blue")
+    (((background light)) :background "gray97")
     (((background dark)) :background ,ui-simple-dark-border-bg)))
 
  ;; Avy prompt
@@ -801,6 +816,11 @@
  '(variable-pitch ((t :family reset)))
  '(variable-pitch-text ((t :height unspecified)))
 
+ ;; Flymake
+ ;;
+ '(flymake-warning ((t :underline (:style wave :color "#f2f2b2"))))
+ '(flymake-error ((t :underline (:style wave :color "#ff8888"))))
+
  ;; Git Gutter
  ;;
  '(git-gutter:added ((t :foreground "medium aquamarine" :background reset)))
@@ -812,7 +832,7 @@
  ;;
  `(highlight-indent-guides-character-face
    ((((background dark)) :foreground ,ui-simple-dark-border-fg)
-    (((background light)) :foreground ,ui-simple-light-border-fg)))
+    (((background light)) :foreground "gray95")))
 
  ;; Info
  ;;
