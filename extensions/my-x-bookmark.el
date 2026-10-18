@@ -35,10 +35,12 @@
   "Create a bookmark NAME that opens URL with `browse-url'."
   (interactive
    (let ((url (read-string "URL: " (thing-at-point 'url))))
-     (list url (read-string "Bookmark name: " url))))
+     (list url (read-string "Bookmark name: "))))
   (bookmark-store name `((location . ,url)
                          (handler . my-x-bookmark--url-jump))
                   nil))
+
+(defalias 'my-x-bookmark-link #'my-x-bookmark-url)
 
 (provide 'my-x-bookmark)
 ;;; my-x-bookmark.el ends here

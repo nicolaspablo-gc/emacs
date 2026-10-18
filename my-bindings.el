@@ -43,6 +43,7 @@
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
 (setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
+(setq bookmark-save-flag 1)
 (setq completion-styles '(initials partial-completion basic partial-completion emacs22 orderless))
 (setq create-lockfiles nil)
 (setq custom-file (locate-user-emacs-file "custom.el"))
@@ -68,6 +69,7 @@
 (setq inhibit-startup-screen t)
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
+(setq magit-bury-buffer-function #'my-x-magit-bury-buffer-function)
 (setq magit-format-file-function (if (display-graphic-p) #'magit-format-file-nerd-icons #'magit-format-file-default))
 (setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 (setq make-backup-files nil)
@@ -538,7 +540,9 @@
   "M-p" #'org-move-subtree-up)
 
 (define-keys-after-load org-agenda org-agenda-mode-map
-  "." #'my-x-org-goto-today-now)
+  "." #'my-x-org-goto-today-now
+  "D" #'org-agenda-deadline
+  "S" #'org-agenda-schedule)
 
 (with-eval-after-load 'prog-mode
   (define-keymap :keymap prog-mode-map
