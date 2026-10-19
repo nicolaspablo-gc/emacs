@@ -89,5 +89,13 @@ If SELECT-WINDOW is no nil, also select the new window."
   (enlarge-window-horizontally
    (- fill-column (window-body-width))))
 
+(defun my-x-window-unset-sibling-buffers (&optional window)
+  "Unset window prev and next buffers.
+This is useful when the tab-line display such buffers, and we only want
+to display the current buffer."
+  (interactive)
+  (set-window-prev-buffers window nil)
+  (set-window-next-buffers window nil))
+
 (provide 'my-x-window)
 ;;; my-x-window.el ends here

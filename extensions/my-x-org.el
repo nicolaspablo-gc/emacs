@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'my-x-window)
+
 (defun my-x-org-ensure-two-lines-before-heading ()
   "Ensure at least 2 empty lines are before the org heading."
   (interactive)
@@ -43,12 +45,25 @@
           (delete-region start end)
           (insert "\n\n\n"))))))
 
-(defun my-x-org-goto-today-now ()
+(defun my-x-org-agenda-goto-today-now ()
+  "Go to current time of the current day in org-agenda."
   (interactive)
-  (org-agenda-list)
-  (org-agenda-redo)
   (org-agenda-goto-today)
   (search-forward "← now"))
+
+(defun my-x-org-agenda-in-tab ()
+  "Make a tab space and display my agenda buffers."
+  (interactive)
+  (tab-bar-switch-to-tab "agenda")
+  (delete-other-windows)
+  (org-todo-list)
+  (my-x-window-unset-sibling-buffers)
+  (split-window-right)
+  (other-window 1)
+  (org-agenda-list)
+  (my-x-org-agenda-goto-today-now)
+  (my-x-window-unset-sibling-buffers)
+  (other-window 1))
 
 (provide 'my-x-org)
 ;;; my-x-org.el ends here

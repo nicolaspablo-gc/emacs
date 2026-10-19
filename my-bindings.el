@@ -63,6 +63,7 @@
 (setq flymake-error-bitmap '(flymake-double-exclamation-mark error))
 (setq flymake-warning-bitmap '(exclamation-mark warning))
 (setq flymake-note-bitmap '(exclamation-mark success))
+(setq highlight-indent-guides-responsive t)
 (setq highlight-indent-guides-auto-enabled nil)
 (setq highlight-indent-guides-bitmap-function #'highlight-indent-guides--bitmap-line)
 (setq highlight-indent-guides-method 'bitmap)
@@ -183,13 +184,16 @@
 (setq org-tags-column 0)
 (setq org-todo-keywords '((sequence "HACER" "PAUSA" "|" "HECHO" "YA_NO")))
 (setq org-use-speed-commands t)
-(setq org-use-speed-commands t)
 
 (setq org-agenda-prefix-format
       (alistq agenda " %i %?-12t% s"
               todo " %i "
               tags " %i "
               search " %i "))
+(setq org-agenda-time-grid
+      '((daily today)
+        (800 1000 1200 1400 1600 1800 2000)
+        " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"))
 (setq org-todo-keyword-faces
       (alistq "PAUSA" my-org-wait-face
               "CONFIRMAR" my-org-confirm-face
@@ -471,6 +475,14 @@
   )
 
 (define-keymap :keymap modal-global-mode-map
+  "!" (command (tab-bar-select-tab 1))
+  "@" (command (tab-bar-select-tab 2))
+  "#" (command (tab-bar-select-tab 3))
+  "$" (command (tab-bar-select-tab 4))
+  "%" (command (tab-bar-select-tab 5))
+  "^" (command (tab-bar-select-tab 6))
+  "&" (command (tab-bar-select-tab 7))
+  "*" (command (tab-bar-select-tab 8))
   "?" #'dictionary-search
   "RET" (command (modal-global-mode -1) (modal-mode -1))
   "<f8>" #'modal-global-mode
@@ -480,9 +492,7 @@
   "0" #'delete-window
   "1" window-prefix-map
   "2" #'my-x-window-move-buffer-below
-  "@" #'split-window-below
   "3" #'my-x-window-move-buffer-right
-  "#" #'split-window-right
   "4" ctl-x-4-map
   "5" ctl-x-5-map
   "6" #'enlarge-window
@@ -490,6 +500,7 @@
   "(" #'shrink-window-horizontally
   ")" #'enlarge-window-horizontally
   "a" #'tab-bar-switch-to-prev-tab
+  "A" #'my-x-org-agenda-in-tab
   "b" #'teleport-switch-to-window-buffer
   "B" #'switch-to-buffer
   "c" #'keyboard-quit
@@ -507,9 +518,10 @@
   "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
   "p" #'my-x-tab-line-switch-to-prev-tab
+  "P" #'my-x-project-workspace-execute-command
   "q" #'my-x-window-quit-dwim
   "r" #'revert-buffer-quick
-  "R" #'recentf
+  "R" #'my-x-project-workspace-find-regexp
   "s" #'save-buffer
   "SPC" #'execute-extended-command
   "t" tab-prefix-map
@@ -520,8 +532,7 @@
   "x" #'my-x-vterm-dwim
   "z" #'repeat
   "TAB" #'tab-bar-switch-to-recent-tab
-  "<tab>" #'tab-bar-switch-to-recent-tab
-  )
+  "<tab>" #'tab-bar-switch-to-recent-tab)
 
 (define-keys-after-load multiple-cursors-core mc/keymap
   "<return>" nil
@@ -540,7 +551,9 @@
   "M-p" #'org-move-subtree-up)
 
 (define-keys-after-load org-agenda org-agenda-mode-map
-  "." #'my-x-org-goto-today-now
+  "TAB" nil
+  "<tab>" nil
+  "." #'my-x-org-agenda-goto-today-now
   "D" #'org-agenda-deadline
   "S" #'org-agenda-schedule)
 
@@ -586,6 +599,7 @@
   "C-q" #'vterm-send-next-key
   "<remap> <string-rectangle>" #'vterm-copy-mode
   "<remap> <kill-line>" (command (vterm-send "C-k"))
+  "<remap> <kill-visual-line>" (command (vterm-send "C-k"))
   "<remap> <kill-sexp>" (command (vterm-send "M-d"))
   "<remap> <previous-line>" (command (vterm-send "C-p"))
   "<remap> <next-line>" (command (vterm-send "C-n"))
@@ -658,7 +672,7 @@
 (hook-defun org-agenda-finalize-hook set-variables
   (when (eq org-agenda-type 'agenda)
     (visual-wrap-prefix-mode -1)
-    (setq wrap-prefix (make-string 14 ?\s))))
+    (setq wrap-prefix (make-string 16 ?\s))))
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))
@@ -691,6 +705,9 @@
                          (eq major-mode #'sql-interactive-mode))))
                  (buffer-list)))))
 
+(hook-defun vterm-mode-hook setup
+  (visual-line-mode -1))
+
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))
 
@@ -712,6 +729,10 @@
 (with-eval-after-load 'corfu
   (when (display-graphic-p)
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
+
+(with-eval-after-load 'org-keys
+  (add-to-list 'org-speed-commands (list "S" (command (call-interactively #'org-schedule))))
+  (add-to-list 'org-speed-commands (list "d" (command (call-interactively #'org-deadline)))))
 
 (with-eval-after-load 'vterm
   (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename))
