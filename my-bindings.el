@@ -507,7 +507,7 @@
   "d" #'dired-side-window-dwim
   "e" #'tab-bar-switch-to-next-tab
   "f" #'find-file
-  "F" #'my-x-emacs-copy-current-file-name
+  "F" #'my-x-project-workspace-find-file
   "g" #'keyboard-quit
   "h" help-map
   "i" #'my-x-window-other-backward-window
@@ -518,7 +518,6 @@
   "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
   "p" #'my-x-tab-line-switch-to-prev-tab
-  "P" #'my-x-project-workspace-execute-command
   "q" #'my-x-window-quit-dwim
   "r" #'revert-buffer-quick
   "R" #'my-x-project-workspace-find-regexp
@@ -529,7 +528,9 @@
   "v" #'scroll-other-window
   "V" #'scroll-other-window-down
   "w" #'agent-shell
+  "W" #'my-x-emacs-copy-current-file-name
   "x" #'my-x-vterm-dwim
+  "X" #'my-x-project-workspace-execute-command
   "z" #'repeat
   "TAB" #'tab-bar-switch-to-recent-tab
   "<tab>" #'tab-bar-switch-to-recent-tab)
@@ -551,6 +552,9 @@
   "M-p" #'org-move-subtree-up)
 
 (define-keys-after-load org-agenda org-agenda-mode-map
+  "C" (command
+       (org-agenda-with-point-at-orig-entry nil
+         (org-set-property "CATEGORY" nil)))
   "TAB" nil
   "<tab>" nil
   "." #'my-x-org-agenda-goto-today-now
@@ -730,8 +734,13 @@
   (when (display-graphic-p)
     (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)))
 
+(with-eval-after-load 'org-agenda
+  ;; Make priority sorting work on tags views that include categories.
+  (setf (alist-get 'tags org-agenda-sorting-strategy) '(priority-down)))
+
 (with-eval-after-load 'org-keys
   (add-to-list 'org-speed-commands (list "S" (command (call-interactively #'org-schedule))))
+  (add-to-list 'org-speed-commands (list "C" (command (org-set-property "CATEGORY" nil))))
   (add-to-list 'org-speed-commands (list "d" (command (call-interactively #'org-deadline)))))
 
 (with-eval-after-load 'vterm

@@ -65,6 +65,12 @@
   (my-x-project--with-select-workspace
    (call-interactively #'my-x-project-find-regexp)))
 
+(defun my-x-project-workspace-find-file ()
+  "Choose a project and then a file in its workspace."
+  (interactive)
+  (my-x-project--with-select-workspace
+   (call-interactively #'project-find-file)))
+
 
 (provide 'my-x-project)
 ;;; my-x-project.el ends here
