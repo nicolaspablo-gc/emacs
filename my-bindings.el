@@ -673,10 +673,15 @@
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))
 
-(hook-defun org-agenda-finalize-hook set-variables
-  (when (eq org-agenda-type 'agenda)
+(hook-defun org-agenda-finalize-hook setup
+  (cond
+   ((eq org-agenda-type 'agenda)
     (visual-wrap-prefix-mode -1)
-    (setq wrap-prefix (make-string 16 ?\s))))
+    (setq wrap-prefix (make-string 16 ?\s)))
+   ((or (eq org-agenda-type 'tags)
+        (eq org-agenda-type 'todo))
+    (visual-line-mode -1)
+    (setq truncate-lines t))))
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))
