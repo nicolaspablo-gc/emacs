@@ -369,6 +369,10 @@
   "\\" #'my-x-ace-window-fit-to-fill-column
   "d" #'my-x-ace-window-set-dedicated)
 
+(define-keymap :keymap ctl-x-5-map
+  "-" #'global-text-scale-adjust
+  "=" #'global-text-scale-adjust)
+
 (define-keys-after-load dictionary dictionary-mode-map
   "q" #'my-x-window-quit-dwim)
 
@@ -601,7 +605,7 @@
   "<f4>" nil
   "<f8>" nil
   "C-q" #'vterm-send-next-key
-  "<remap> <string-rectangle>" #'vterm-copy-mode
+  "<remap> <my-x-rect-string-rectangle>" #'vterm-copy-mode
   "<remap> <kill-line>" (command (vterm-send "C-k"))
   "<remap> <kill-visual-line>" (command (vterm-send "C-k"))
   "<remap> <kill-sexp>" (command (vterm-send "M-d"))
@@ -665,7 +669,6 @@
 (add-hook 'vertico-flat-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-multiform-mode-hook #'my-x-vertico-flat-setup)
-(add-hook 'vterm-copy-mode-hook #'modal-mode)
 (add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
 (add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
 (add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
@@ -719,6 +722,10 @@
 
 (hook-defun vterm-copy-mode-hook truncate-lines
   (setq truncate-lines vterm-copy-mode))
+
+(hook-defun vterm-copy-mode-hook setup-modal-mode
+  (modal-mode (if vterm-copy-mode 1 -1)))
+
 
 ;;;; Lists
 
