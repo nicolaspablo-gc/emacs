@@ -70,7 +70,8 @@
    vertico
    visible-mark
    vterm
-   vundo))
+   vundo
+   web-mode))
 
 (unless (seq-every-p #'package-installed-p package-selected-packages)
   (package-refresh-contents)

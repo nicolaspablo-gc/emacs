@@ -72,7 +72,6 @@
 (setq kill-whole-line t)
 (setq magit-bury-buffer-function #'my-x-magit-bury-buffer-function)
 (setq magit-format-file-function (if (display-graphic-p) #'magit-format-file-nerd-icons #'magit-format-file-default))
-(setq major-mode-remap-alist (alistq python-mode python-ts-mode))
 (setq make-backup-files nil)
 (setq modal-global-mode-cursor-color "royal blue")
 (setq nerd-icons-scale-factor 0.85)
@@ -95,8 +94,15 @@
 (setq vterm-copy-mode-remove-fake-newlines t)
 (setq vterm-max-scrollback 100000)
 
+(setq major-mode-remap-alist
+      (alistq python-mode python-ts-mode
+              html-mode web-mode
+              mhtml-mode web-mode))
+
+
 (setq initial-frame-alist
-      (alistq name "emacs"))
+      (alistq name "emacs"
+              undecorated t))
 
 (setq my-x-dired-external-files-regexp
       (rx "."
@@ -424,6 +430,7 @@
 (define-keys-after-load magit magit-mode-map
   "M-1" nil
   "M-u" #'magit-section-up
+  "M-SPC" #'magit-diff-visit-worktree-file
   )
 
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
@@ -634,6 +641,7 @@
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'before-save-hook #'whitespace-cleanup)
 (add-hook 'dired-mode-hook #'dired-omit-mode)
+(add-hook 'dired-mode-hook #'buffer-wrap-mode)
 (add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
 (add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
 (add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
