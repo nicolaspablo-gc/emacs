@@ -60,9 +60,9 @@
 (setq desktop-environment-brightness-small-increment "1%+")
 (setq desktop-environment-brightness-small-decrement "1%-")
 (setq fit-window-to-buffer-horizontally t)
-(setq flymake-error-bitmap '(flymake-double-exclamation-mark error))
-(setq flymake-warning-bitmap '(exclamation-mark warning))
-(setq flymake-note-bitmap '(exclamation-mark success))
+(setopt flymake-error-bitmap '(flymake-double-exclamation-mark error))
+(setopt flymake-warning-bitmap '(exclamation-mark warning))
+(setopt flymake-note-bitmap '(exclamation-mark success))
 (setq highlight-indent-guides-responsive t)
 (setq highlight-indent-guides-auto-enabled nil)
 (setq highlight-indent-guides-bitmap-function #'highlight-indent-guides--bitmap-line)
@@ -98,11 +98,6 @@
       (alistq python-mode python-ts-mode
               html-mode web-mode
               mhtml-mode web-mode))
-
-
-(setq initial-frame-alist
-      (alistq name "emacs"
-              undecorated t))
 
 (setq my-x-dired-external-files-regexp
       (rx "."
@@ -405,7 +400,6 @@
   "<f8>" #'modal-mode
   "M-i" #'cape-file
   "<f1>" #'keyboard-quit
-  "<f2>" #'embark-act
   "M-`" #'other-window
   "M-1" #'tab-bar-switch-to-recent-tab
   "<f12>" #'mc/mark-next-like-this

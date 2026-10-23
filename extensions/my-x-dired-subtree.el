@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
 (require 'ui-simple-theme)
 
 (defface my-x-dired-subtree-line-prefix-face
-  `((((type graphic) (background light)) :background ,ui-simple-light-border-bg)
+  `((((type graphic) (background light)) :background "gray 97")
     (((type graphic) (background dark)) :background ,ui-simple-dark-border-bg)
     (((type tty) (background dark)) :background "blue")
     (t :background "brightwhite"))
