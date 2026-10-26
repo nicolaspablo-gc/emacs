@@ -47,6 +47,7 @@
    corfu
    corfu-terminal
    dired-subtree
+   direnv
    dotenv-mode
    embark
    git-gutter

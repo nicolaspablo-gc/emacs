@@ -37,5 +37,9 @@
     (tab-bar-mode (if active -1 1))
     (setopt tab-bar-show (not active))))
 
+(defun my-x-tab-bar-current-tab-name ()
+  "Get the name of the current tab."
+  (cdr (assoc 'name (tab-bar--current-tab))))
+
 (provide 'my-x-tab-bar)
 ;;; my-x-tab-bar.el ends here

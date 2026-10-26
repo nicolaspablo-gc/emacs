@@ -133,6 +133,7 @@
    ("Wikipedia" . [simple-query "wikipedia.org" "wikipedia.org/wiki/" ""])
    ("SpanishDict" . [simple-query "https://spanishdict.com" "https://spanishdict.com/translate/" ""])))
 
+(setq-default cursor-type 'bar)
 (setq-default line-spacing 2)
 (setq-default olivetti-body-width 0.65)
 (setq-default indent-tabs-mode nil)
@@ -248,12 +249,16 @@
    (vc-mode vc-mode)
    "  "
    (eglot--managed-mode (" [" eglot--mode-line-format "] "))
+   (tab-bar-mode nil global-mode-string)
+   " "
    (tab-bar-mode nil
-                 (-10
-                  ("/"
-                   (10
-                    (:eval (cdr (assoc 'name
-                                       (tab-bar--current-tab))))))))
+                 (:eval
+                  (let ((name (my-x-tab-bar-current-tab-name)))
+                    (format "%-3.2s%-10.10s"
+                            (if (display-graphic-p)
+                                (alist-get name tab-bar-icons-alist tab-bar-icons-default nil #'string-match-p)
+                              "/")
+                            name))))
    "%5l:"     ; up to 99 999 lines
    (3 "%c")   ; up to 999 columns
    " "
@@ -363,7 +368,9 @@
     "RET" nil
     "M-." #'find-file-at-point
     "M-RET" #'agent-shell-submit
-    "M-SPC" #'markdown-insert-gfm-code-block))
+    "M-SPC" #'markdown-insert-gfm-code-block
+    "<remap> <backward-paragraph>" #'agent-shell-previous-item
+    "<remap> <forward-paragraph>" #'agent-shell-next-item))
 
 (define-keys-after-load corfu corfu-map
   "M-RET"#'corfu-quick-insert)
@@ -687,16 +694,6 @@
 (with-eval-after-load 'agent-shell
   (global-agent-recall-transcript-mode 1))
 
-(hook-defun org-agenda-finalize-hook setup
-  (cond
-   ((eq org-agenda-type 'agenda)
-    (visual-wrap-prefix-mode -1)
-    (setq wrap-prefix (make-string 16 ?\s)))
-   ((or (eq org-agenda-type 'tags)
-        (eq org-agenda-type 'todo))
-    (visual-wrap-prefix-mode -1)
-    (setq wrap-prefix (make-string 4 ?\s)))))
-
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))
 
@@ -710,7 +707,17 @@
   (eglot-inlay-hints-mode -1))
 
 (hook-defun modal-mode-hook set-state
-  (hl-line-mode (if modal-mode 1 -1)))
+  (setq cursor-type (if modal-mode 'box 'bar)))
+
+(hook-defun org-agenda-finalize-hook setup
+  (cond
+   ((eq org-agenda-type 'agenda)
+    (visual-wrap-prefix-mode -1)
+    (setq wrap-prefix (make-string 16 ?\s)))
+   ((or (eq org-agenda-type 'tags)
+        (eq org-agenda-type 'todo))
+    (visual-wrap-prefix-mode -1)
+    (setq wrap-prefix (make-string 4 ?\s)))))
 
 (hook-defun nov-mode-hook set-vars
   (setq-local
