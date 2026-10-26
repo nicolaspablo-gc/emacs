@@ -52,6 +52,8 @@
 (setq dictionary-server "dict.org")
 (setq display-time-format " %d %b, %H:%M")
 (setq display-time-default-load-average nil)
+(setq echo-bar-format 'global-mode-string)
+(setq echo-bar-minibuffer nil)
 (setq ediff-merge-split-window-function #'split-window-horizontally)
 (setq ediff-split-window-function #'split-window-horizontally)
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
@@ -246,6 +248,12 @@
    (vc-mode vc-mode)
    "  "
    (eglot--managed-mode (" [" eglot--mode-line-format "] "))
+   (tab-bar-mode nil
+                 (-10
+                  ("/"
+                   (10
+                    (:eval (cdr (assoc 'name
+                                       (tab-bar--current-tab))))))))
    "%5l:"     ; up to 99 999 lines
    (3 "%c")   ; up to 999 columns
    " "
@@ -583,7 +591,7 @@
 
 (define-keys-after-load tab-bar tab-prefix-map
   "k" #'my-x-tab-bar-kill-buffer-and-tab
-  "SPC" #'tab-bar-select-tab-by-name)
+  "SPC" #'my-x-tab-bar-toggle)
 
 (define-keys-after-load tab-bar tab-bar-mode-map
   "C-TAB" nil
@@ -640,6 +648,7 @@
 (add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
 (add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
 (add-hook 'dired-side-window-setup-hook #'my-x-emacs-truncate-lines)
+(add-hook 'echo-bar-mode-hook #'my-x-echo-bar-fill-minibuf-0)
 (add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
 (add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
 (add-hook 'ediff-quit-hook #'my-x-ediff-restore)
@@ -685,8 +694,8 @@
     (setq wrap-prefix (make-string 16 ?\s)))
    ((or (eq org-agenda-type 'tags)
         (eq org-agenda-type 'todo))
-    (visual-line-mode -1)
-    (setq truncate-lines t))))
+    (visual-wrap-prefix-mode -1)
+    (setq wrap-prefix (make-string 4 ?\s)))))
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))

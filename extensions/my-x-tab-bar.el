@@ -30,5 +30,12 @@
   (kill-current-buffer)
   (tab-close))
 
+(defun my-x-tab-bar-toggle ()
+  "Toggle `tab-bar-mode' and hide it."
+  (interactive)
+  (let ((active tab-bar-mode))
+    (tab-bar-mode (if active -1 1))
+    (setopt tab-bar-show (not active))))
+
 (provide 'my-x-tab-bar)
 ;;; my-x-tab-bar.el ends here
