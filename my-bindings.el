@@ -531,7 +531,7 @@
   "g" #'keyboard-quit
   "h" help-map
   "i" #'my-x-window-other-backward-window
-  "j" #'undefined
+  "j" #'bookmark-jump
   "k" #'my-x-simple-kill-current-buffer-dwim
   "l" #'my-x-tab-line-switch-to-buffer-tab
   "m" #'link-hint-open-link
@@ -717,8 +717,8 @@
     (setq wrap-prefix (make-string 16 ?\s)))
    ((or (eq org-agenda-type 'tags)
         (eq org-agenda-type 'todo))
-    (visual-wrap-prefix-mode -1)
-    (setq wrap-prefix (make-string 4 ?\s)))))
+    (visual-line-mode -1)
+    (setq truncate-lines t))))
 
 (hook-defun nov-mode-hook set-vars
   (setq-local

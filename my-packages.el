@@ -67,6 +67,7 @@
    nov
    openwith
    orderless
+   org-gcal
    rainbow-delimiters
    vertico
    visible-mark
