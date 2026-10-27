@@ -65,5 +65,11 @@
   (my-x-window-unset-sibling-buffers)
   (other-window 1))
 
+(defun my-x-org-agenda-switch-to ()
+  "`org-agenda-switch-to' and narrow to current subtree."
+  (interactive)
+  (call-interactively #'org-agenda-switch-to)
+  (org-narrow-to-subtree))
+
 (provide 'my-x-org)
 ;;; my-x-org.el ends here

@@ -30,12 +30,11 @@
   (kill-current-buffer)
   (tab-close))
 
-(defun my-x-tab-bar-toggle ()
-  "Toggle `tab-bar-mode' and hide it."
-  (interactive)
-  (let ((active tab-bar-mode))
-    (tab-bar-mode (if active -1 1))
-    (setopt tab-bar-show (not active))))
+(defun my-x-tab-bar-mode (&optional arg)
+  "`tab-bar-mode' with ensurance tab bar is hidden when mode is off."
+  (interactive (list (or current-prefix-arg 'toggle)))
+  (tab-bar-mode arg)
+  (setopt tab-bar-show tab-bar-mode))
 
 (defun my-x-tab-bar-current-tab-name ()
   "Get the name of the current tab."

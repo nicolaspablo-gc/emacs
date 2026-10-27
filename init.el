@@ -97,6 +97,7 @@ custom's state) can't be loaded on next sesion.")
 (vertico-mode)
 (vertico-multiform-mode)
 (visible-mark-mode)
+(my-x-tab-bar-mode -1)
 
 (when (display-graphic-p)
   (require 'nerd-icons)

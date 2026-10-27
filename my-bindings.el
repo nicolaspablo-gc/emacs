@@ -575,6 +575,7 @@
   "C" (command
        (org-agenda-with-point-at-orig-entry nil
          (org-set-property "CATEGORY" nil)))
+  "RET" #'my-x-org-agenda-switch-to
   "TAB" nil
   "<tab>" nil
   "." #'my-x-org-agenda-goto-today-now
@@ -598,7 +599,7 @@
 
 (define-keys-after-load tab-bar tab-prefix-map
   "k" #'my-x-tab-bar-kill-buffer-and-tab
-  "SPC" #'my-x-tab-bar-toggle)
+  "SPC" #'my-x-tab-bar-mode)
 
 (define-keys-after-load tab-bar tab-bar-mode-map
   "C-TAB" nil
