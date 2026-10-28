@@ -330,7 +330,7 @@
     display-buffer-in-side-window (side . bottom) (window-height . 0.25))
    ("\\*\\(:?Warnings\\|Async Shell Command\\|sly-mrepl.*\\|Quail Completions\\|compile-git-hunks\\)\\*"
     display-buffer-no-window)
-   ("\\*\\(:?Org Select\\|Occur\\|xref\\|undo-tree\\|plz-see-.*\\|ednc-log\\)\\*"
+   ("\\*\\(:?shell\\|Org Select\\|Occur\\|xref\\|undo-tree\\|plz-see-.*\\|ednc-log\\)\\*"
     display-buffer-in-side-window (side . right))))
 
 ;; Vertico
@@ -546,7 +546,7 @@
   "t" tab-prefix-map
   "u" #'universal-argument
   "v" #'scroll-other-window
-  "V" #'scroll-other-window-down
+  "V" #'my-x-project-workspace-vterm
   "w" #'agent-shell
   "W" #'my-x-emacs-copy-current-file-name
   "x" #'my-x-vterm-dwim
@@ -590,6 +590,10 @@
 (define-keymap :keymap search-map
   "SPC" #'replace-regexp
   "RET" #'query-replace-regexp)
+
+(define-keys-after-load sh-script sh-mode-map
+  "M-SPC" #'my-x-sh-send-line-or-region
+  "M-RET" #'my-x-sh-send-paragraph)
 
 (define-keys-after-load sql sql-mode-map
   "M-RET" (command

@@ -59,6 +59,15 @@
   (my-x-project--with-select-workspace
    (call-interactively #'execute-extended-command)))
 
+(defun my-x-project-workspace-vterm ()
+  "Choose a project and switch to a vterm buffer in it."
+  (interactive)
+  (my-x-project--with-select-workspace
+   (let* ((buf (or (seq-find (lambda (b) (with-current-buffer b (eq major-mode #'vterm-mode)))
+                             (project-buffers (project-current)))
+                   (save-window-excursion (vterm)))))
+     (pop-to-buffer buf))))
+
 (defun my-x-project-workspace-find-regexp ()
   "Choose a project and execute an extended command."
   (interactive)
