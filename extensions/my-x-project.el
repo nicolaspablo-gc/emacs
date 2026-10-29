@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'project)
+
 (defun my-x-project-find-regexp (regexp)
   "`project-find-regexp' but all spaces are transformed to \".*\"."
   (interactive "sRegexp: ")
@@ -32,25 +34,30 @@
 (defun my-x-project--dir-to-name (dir)
   (file-name-base (directory-file-name dir)))
 
+(defun my-x-project--pick ()
+  "Pick a project."
+  (project--ensure-read-project-list)
+  (when (null project--list)
+    (user-error "No seen projects."))
+  (let* ((projects
+          (mapcar (lambda (p)
+                    (cons (my-x-project--dir-to-name (car p))
+                          (car p)))
+                  project--list))
+         (name (completing-read "Project: " projects nil t)))
+    (list
+     :root (if (string= "" name)
+               (user-error "No project picked.")
+             (expand-file-name (cdr (assoc name projects #'string=))))
+     :name name)))
+
 (defmacro my-x-project--with-select-workspace (&rest forms)
   `(progn
-     (project--ensure-read-project-list)
-     (when (null project--list)
-       (user-error "No seen projects."))
-     (let* ((projects
-             (mapcar (lambda (p)
-                       (cons (my-x-project--dir-to-name (car p))
-                             (car p)))
-                     project--list))
-            (project (completing-read "Project: " projects nil t))
-            (default-directory
-             (if (string= "" project)
-                 (user-error "No project picked.")
-               (expand-file-name (cdr (assoc project projects #'string=)))))
-            (name (file-name-base (directory-file-name default-directory)))
+     (let* ((p (my-x-project--pick))
+            (default-directory (plist-get p :root))
             (display-buffer-overriding-action
              `(display-buffer-in-tab
-               (tab-name . ,name))))
+               (tab-name . ,(plist-get p :name)))))
        ,@forms)))
 
 (defun my-x-project-workspace-execute-command ()
@@ -59,14 +66,31 @@
   (my-x-project--with-select-workspace
    (call-interactively #'execute-extended-command)))
 
+(defun my-x-project-workspace-execute-command-by-keyseq ()
+  "Choose a project and input a key sequence to run a command."
+  (interactive)
+  (my-x-project--with-select-workspace
+   (let* ((keys (read-key-sequence "Key sequence: "))
+          (cmd (key-binding keys)))
+     (if cmd
+         (call-interactively cmd)
+       (user-error "%s is undefined" (key-description keys))))))
+
 (defun my-x-project-workspace-vterm ()
   "Choose a project and switch to a vterm buffer in it."
   (interactive)
-  (my-x-project--with-select-workspace
-   (let* ((buf (or (seq-find (lambda (b) (with-current-buffer b (eq major-mode #'vterm-mode)))
-                             (project-buffers (project-current)))
-                   (save-window-excursion (vterm)))))
-     (pop-to-buffer buf))))
+  (let* ((p (my-x-project--pick))
+         (b (seq-find (lambda (b)
+                        (with-current-buffer b
+                          (and (eq major-mode #'vterm-mode)
+                               (project-current)
+                               (string= (expand-file-name (nth 2 (project-current)))
+                                        (plist-get p :root)))))
+                      (buffer-list)))
+         (default-directory (plist-get p :root))
+         (display-buffer-overriding-action
+          `(display-buffer-in-tab (tab-name . ,(plist-get p :name)))))
+    (pop-to-buffer (or b (vterm)))))
 
 (defun my-x-project-workspace-find-regexp ()
   "Choose a project and execute an extended command."

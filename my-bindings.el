@@ -538,6 +538,7 @@
   "i" #'my-x-window-other-backward-window
   "j" #'bookmark-jump
   "k" #'my-x-simple-kill-current-buffer-dwim
+  "K" #'my-x-project-workspace-execute-command-by-keyseq
   "l" #'my-x-tab-line-switch-to-buffer-tab
   "m" #'link-hint-open-link
   "n" #'my-x-tab-line-switch-to-next-tab
