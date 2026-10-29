@@ -407,6 +407,9 @@
 (define-keys-after-load dired-x dired-mode-map
   "F" #'my-x-dired-do-find-all-files)
 
+(define-keys-after-load elfeed-show elfeed-show-mode-map
+  "j" #'link-hint-open-link)
+
 (define-keys-after-load eww eww-mode-map
   "j" #'link-hint-open-link
   "-" #'text-scale-adjust

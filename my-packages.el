@@ -49,6 +49,7 @@
    dired-subtree
    direnv
    dotenv-mode
+   elfeed
    embark
    git-gutter
    highlight-indent-guides
