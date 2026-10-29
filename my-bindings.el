@@ -149,6 +149,7 @@
 (setq org-agenda-sticky t)
 (setq org-agenda-tags-column 0)
 (setq org-agenda-time-leading-zero t)
+(setq org-agenda-tags-todo-honor-ignore-options t)
 (setq org-agenda-todo-ignore-scheduled 'future)
 (setq org-agenda-todo-keyword-format "%s")
 (setq org-agenda-use-time-grid t)
@@ -454,10 +455,12 @@
   "/" #'undo
   ":" #'comment-dwim
   "<" #'beginning-of-buffer
-  "<f8>" #'modal-global-mode
+  "<f8>" #'modal-mode
   ">" #'end-of-buffer
   "?" #'vundo
   "M-SPC" #'my-x-rect-string-rectangle
+  "DEL" #'modal-global-mode
+  "<backspace>" #'modal-global-mode
   "RET" #'modal-mode
   "SPC" #'execute-extended-command
   "T" #'transpose-regions
@@ -504,8 +507,10 @@
   "&" (command (tab-bar-select-tab 7))
   "*" (command (tab-bar-select-tab 8))
   "?" #'dictionary-search
+  "DEL" #'modal-global-mode
+  "<backspace>" #'modal-global-mode
   "RET" (command (modal-global-mode -1) (modal-mode -1))
-  "<f8>" #'modal-global-mode
+  "<f8>" (command (modal-global-mode -1) (modal-mode -1))
   "," #'tab-bar-history-back
   "-" #'text-scale-adjust
   "." #'tab-bar-history-forward
