@@ -6,5 +6,4 @@
 (push '(menu-bar-lines . 0) default-frame-alist)
 (push '(vertical-scroll-bars . nil) default-frame-alist)
 (push '(horizontal-scroll-bars . nil) default-frame-alist)
-(push '(undecorated . t) default-frame-alist)
 (push '(name . "emacs") initial-frame-alist)

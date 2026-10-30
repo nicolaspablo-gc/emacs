@@ -52,27 +52,15 @@ If no project is found the vterm is created at `default-directory'."
      ((= n 1)
       (pop-to-buffer (nth 0 vterms)))
      (t
+      ;; TODO
       ()))))
 
 (defun my-x-vterm-dwim (&optional new)
-  "Switch to a vterm buffer, or create a new one in a dir."
+  "Switch to a vterm buffer in the current project, or create a new one in a dir."
   (interactive "P")
   (if new
       (my-x-vterm-in-dir (read-directory-name "Vterm in dir: "))
-    (switch-to-buffer
-     (completing-read
-      "Vterm Buffer: "
-      (completion-table-with-metadata
-       (let (buffers
-             (exclude (and (eq major-mode #'vterm-mode) (current-buffer))))
-         (dolist (buffer (buffer-list))
-           (when (and (with-current-buffer buffer (eq major-mode #'vterm-mode))
-                      (not (eq buffer exclude)))
-             (push (buffer-name buffer) buffers)))
-         buffers)
-       '((category . buffer)))
-      nil
-      :require-match))))
+    (my-x-vterm-in-project)))
 
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."

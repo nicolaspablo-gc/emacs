@@ -539,11 +539,12 @@
   "g" #'keyboard-quit
   "h" help-map
   "i" #'my-x-window-other-backward-window
-  "j" #'bookmark-jump
+  "j" #'link-hint-open-link
+  "J" #'bookmark-jump
   "k" #'my-x-simple-kill-current-buffer-dwim
   "K" #'my-x-project-workspace-execute-command-by-keyseq
   "l" #'my-x-tab-line-switch-to-buffer-tab
-  "m" #'link-hint-open-link
+  "m" #'magit
   "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
   "p" #'my-x-tab-line-switch-to-prev-tab
@@ -635,7 +636,6 @@
   "<f4>" nil
   "<f8>" nil
   "C-q" #'vterm-send-next-key
-  "<remap> <my-x-rect-string-rectangle>" #'vterm-copy-mode
   "<remap> <kill-line>" (command (vterm-send "C-k"))
   "<remap> <kill-visual-line>" (command (vterm-send "C-k"))
   "<remap> <kill-sexp>" (command (vterm-send "M-d"))
@@ -650,6 +650,10 @@
   "<remap> <keyboard-quit>" (command (vterm-send "C-c"))
   "<remap> <recenter-top-bottom>" (command (vterm-send "C-l"))
   "M-:" nil)
+
+(define-keys-after-load vterm vterm-copy-mode-map
+  "<remap> <backward-paragraph>" #'vterm-previous-prompt
+  "<remap> <forward-paragraph>" #'vterm-next-prompt)
 
 (define-keys-after-load wdired wdired-mode-map
   "M-SPC" #'wdired-finish-edit)
@@ -760,6 +764,8 @@
 
 
 ;;;; Lists
+
+(add-to-list 'default-frame-alist '(undecorated . t))
 
 (add-to-list 'global-mode-string
              '(telega-mode-line-mode telega-mode-line-format))
