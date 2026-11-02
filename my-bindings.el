@@ -553,6 +553,7 @@
   "R" #'my-x-project-workspace-find-regexp
   "s" #'save-buffer
   "SPC" #'execute-extended-command
+  "M-SPC" #'my-x-tab-bar-mode
   "t" tab-prefix-map
   "u" #'universal-argument
   "v" #'scroll-other-window
@@ -636,6 +637,7 @@
   "<f4>" nil
   "<f8>" nil
   "C-q" #'vterm-send-next-key
+  "<remap> <my-x-rect-string-rectangle>" #'vterm-copy-mode
   "<remap> <kill-line>" (command (vterm-send "C-k"))
   "<remap> <kill-visual-line>" (command (vterm-send "C-k"))
   "<remap> <kill-sexp>" (command (vterm-send "M-d"))
