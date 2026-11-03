@@ -26,14 +26,15 @@
 
 ;;;; Requirements
 
+(require 'eglot)
 (require 'modal)
 (require 'modal-variant)
 (require 'my-init-helpers)
 (require 'my-faces)
+(require 'my-vars)
+(require 'rx)
 (require 'ui-simple-theme)
 (require 'tab-bar-icons)
-(require 'eglot)
-(require 'rx)
 
 ;;;; Variables
 
@@ -449,6 +450,16 @@
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
 (define-keymap :keymap modal-mode-map
+  "1" my-1st-map
+  "2" my-2nd-map
+  "3" my-3rd-map
+  "4" my-4th-map
+  "5" my-5th-map
+  "6" my-6th-map
+  "7" my-7th-map
+  "8" my-8th-map
+  "9" my-9th-map
+  "0" my-10th-map
   "!" #'shell-command
   "'" #'pop-to-mark-command
   "(" #'backward-paragraph
@@ -497,10 +508,19 @@
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
-  "|" #'shell-command-on-region
-  )
+  "|" #'shell-command-on-region)
 
 (define-keymap :keymap modal-global-mode-map
+  "1" my-11th-map
+  "2" my-12th-map
+  "3" my-13th-map
+  "4" my-14th-map
+  "5" my-15th-map
+  "6" my-16th-map
+  "7" my-17th-map
+  "8" my-18th-map
+  "9" my-19th-map
+  "0" my-20th-map
   "!" (command (tab-bar-select-tab 1))
   "@" (command (tab-bar-select-tab 2))
   "#" (command (tab-bar-select-tab 3))
@@ -517,13 +537,6 @@
   "," #'tab-bar-history-back
   "-" #'text-scale-adjust
   "." #'tab-bar-history-forward
-  "0" #'delete-window
-  "1" window-prefix-map
-  "2" #'my-x-window-move-buffer-below
-  "3" #'my-x-window-move-buffer-right
-  "4" ctl-x-4-map
-  "5" ctl-x-5-map
-  "6" #'enlarge-window
   "=" #'text-scale-adjust
   "(" #'shrink-window-horizontally
   ")" #'enlarge-window-horizontally
@@ -565,6 +578,9 @@
   "z" #'repeat
   "TAB" #'tab-bar-switch-to-recent-tab
   "<tab>" #'tab-bar-switch-to-recent-tab)
+
+(define-keymap :keymap my-11th-map
+  "b" #'bookmark-set)
 
 (define-keys-after-load multiple-cursors-core mc/keymap
   "<return>" nil
@@ -620,6 +636,9 @@
   "C-TAB" nil
   "C-<tab>" nil
   "C-S-<iso-lefttab>" nil)
+
+(define-keys-after-load telega-chat telega-chat-mode-map
+  "<remap> <isearch-backward>" #'my-x-telega-isearch-backward-dwim)
 
 (define-keys-after-load text-mode text-mode-map
   "<remap> <end-of-line>" #'mwim-end
