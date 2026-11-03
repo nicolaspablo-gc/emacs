@@ -66,7 +66,6 @@
 (setopt flymake-error-bitmap '(flymake-double-exclamation-mark error))
 (setopt flymake-warning-bitmap '(exclamation-mark warning))
 (setopt flymake-note-bitmap '(exclamation-mark success))
-(setq highlight-indent-guides-responsive t)
 (setq highlight-indent-guides-auto-enabled nil)
 (setq highlight-indent-guides-bitmap-function #'highlight-indent-guides--bitmap-line)
 (setq highlight-indent-guides-method 'bitmap)
@@ -557,7 +556,7 @@
   "k" #'my-x-simple-kill-current-buffer-dwim
   "K" #'my-x-project-workspace-execute-command-by-keyseq
   "l" #'my-x-tab-line-switch-to-buffer-tab
-  "m" #'magit
+  "m" (command (modal-global-mode-disable) (magit))
   "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
   "p" #'my-x-tab-line-switch-to-prev-tab
@@ -579,13 +578,18 @@
   "TAB" #'tab-bar-switch-to-recent-tab
   "<tab>" #'tab-bar-switch-to-recent-tab)
 
-(define-keymap :keymap my-11th-map
-  "b" #'bookmark-set)
-
 (define-keys-after-load multiple-cursors-core mc/keymap
   "<return>" nil
   "RET" nil
   "<remap> <keyboard-quit>" #'mc/keyboard-quit)
+
+(define-keymap :keymap my-11th-map
+  "b" #'bookmark-set
+  "2" #'my-x-window-move-buffer-below
+  "3" #'my-x-window-move-buffer-right
+  "1" #'delete-other-windows
+  "=" #'balance-windows
+  "-" #'fit-window-to-buffer)
 
 (define-keys-after-load nov nov-mode-map
   "j" #'link-hint-open-link
@@ -936,6 +940,9 @@
  ;; Highlight Indent Guides
  ;;
  `(highlight-indent-guides-character-face
+   ((((background dark)) :foreground ,ui-simple-dark-border-fg)
+    (((background light)) :foreground "gray95")))
+ `(highlight-indent-guides-top-character-face
    ((((background dark)) :foreground ,ui-simple-dark-border-fg)
     (((background light)) :foreground "gray95")))
 
