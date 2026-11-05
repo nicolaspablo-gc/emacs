@@ -3,7 +3,7 @@
 ;; Copyright (C) 2026  Nicolas Pablo Gonzalez Carrasco
 
 ;; Author: Nicolas Pablo Gonzalez Carrasco <nico@laptop-nico>
-;; Keywords: 
+;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;;; Code:
 
@@ -35,6 +35,24 @@
   (interactive)
   (call-interactively
    (if isearch-forward #'isearch-repeat-forward #'isearch-repeat-backward)))
+
+(defun my-x-isearch-with-active-mark (&optional search-backward)
+  "Activate mark and do isearch."
+  (interactive "P")
+  (when (not (region-active-p))
+    (push-mark)
+    (activate-mark))
+  (funcall (if search-backward #'isearch-backward #'isearch-forward))
+  (unless isearch-success (deactivate-mark)))
+
+(defun my-x-isearch-copy-as-kill (&optional search-backward do-kill)
+  "Copy region between isearch start and end position."
+  (interactive "P")
+  (my-x-isearch-with-active-mark search-backward)
+  (when isearch-success
+    (copy-region-as-kill (region-beginning) (region-end))))
+
+(defun my-x-isearch-kill ())
 
 (provide 'my-x-isearch)
 ;;; my-x-isearch.el ends here

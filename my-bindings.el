@@ -583,6 +583,9 @@
   "RET" nil
   "<remap> <keyboard-quit>" #'mc/keyboard-quit)
 
+(define-keymap :keymap my-9th-map
+  "s" #'my-x-isearch-with-active-mark)
+
 (define-keymap :keymap my-11th-map
   "b" #'bookmark-set
   "2" #'my-x-window-move-buffer-below
