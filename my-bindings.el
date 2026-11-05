@@ -477,7 +477,7 @@
   "RET" #'modal-mode
   "SPC" #'execute-extended-command
   "T" #'transpose-regions
-  "V" #'scroll-down-command
+  "V" #'my-x-window-scroll-up
   "\"" #'my-x-simple-unpop-to-mark-command
   "\\" #'cycle-spacing
   "a" #'beginning-of-line
@@ -503,7 +503,7 @@
   "s" #'isearch-forward
   "t" #'transpose-sexps
   "u" #'universal-argument
-  "v" #'scroll-up-command
+  "v" #'my-x-window-scroll-down
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
@@ -684,6 +684,7 @@
   "<remap> <forward-paragraph>" #'vterm-next-prompt)
 
 (define-keys-after-load wdired wdired-mode-map
+  "<remap> <save-buffer>" #'wdired-finish-edit
   "M-SPC" #'wdired-finish-edit)
 
 (define-keymap :keymap window-prefix-map
@@ -710,7 +711,8 @@
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
-(add-hook 'occur-mode-hook #'buffer-wrap-mode)
+(add-hook 'occur-hook #'buffer-wrap-mode)
+(add-hook 'occur-hook #'my-x-emacs-truncate-lines)
 (add-hook 'org-agenda-mode-hook #'hl-line-mode)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
 (add-hook 'org-mode-hook #'corfu-mode)
@@ -748,6 +750,13 @@
    display-buffer-overriding-action
    '((display-buffer-in-direction)
      (direction . right))))
+
+(hook-defun ediff-keymap-setup-hook setup-ediff-map
+  (define-keymap :keymap ediff-mode-map
+    "d" #'my-x-ediff-scroll-down
+    "u" #'my-x-ediff-scroll-up
+    "," #'my-x-ediff-scroll-left
+    "." #'my-x-ediff-scroll-right))
 
 (hook-defun eglot-managed-mode-hook disable-inlay-hints
   (eglot-inlay-hints-mode -1))

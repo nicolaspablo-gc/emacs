@@ -97,5 +97,13 @@ to display the current buffer."
   (set-window-prev-buffers window nil)
   (set-window-next-buffers window nil))
 
+(defun my-x-window-scroll-down (n)
+  (interactive "p")
+  (scroll-up-command n))
+
+(defun my-x-window-scroll-up (n)
+  (interactive "p")
+  (scroll-down-command n))
+
 (provide 'my-x-window)
 ;;; my-x-window.el ends here
