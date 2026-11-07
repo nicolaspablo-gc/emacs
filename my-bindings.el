@@ -696,7 +696,6 @@
 (add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
 (add-hook 'before-save-hook #'whitespace-cleanup)
-(add-hook 'dired-mode-hook #'dired-omit-mode)
 (add-hook 'dired-mode-hook #'buffer-wrap-mode)
 (add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
 (add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
@@ -744,6 +743,10 @@
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))
+
+(hook-defun dired-mode-hook setup-omit-mode
+  (unless (file-remote-p default-directory)
+    (dired-omit-mode)))
 
 (hook-defun dired-side-window-setup-hook set-display-buffer-action
   (setq-local
