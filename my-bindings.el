@@ -449,16 +449,6 @@
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
 (define-keymap :keymap modal-mode-map
-  "1" my-1st-map
-  "2" my-2nd-map
-  "3" my-3rd-map
-  "4" my-4th-map
-  "5" my-5th-map
-  "6" my-6th-map
-  "7" my-7th-map
-  "8" my-8th-map
-  "9" my-9th-map
-  "0" my-10th-map
   "!" #'shell-command
   "'" #'pop-to-mark-command
   "(" #'backward-paragraph
@@ -510,24 +500,12 @@
   "|" #'shell-command-on-region)
 
 (define-keymap :keymap modal-global-mode-map
-  "1" my-11th-map
-  "2" my-12th-map
-  "3" my-13th-map
-  "4" my-14th-map
-  "5" my-15th-map
-  "6" my-16th-map
-  "7" my-17th-map
-  "8" my-18th-map
-  "9" my-19th-map
-  "0" my-20th-map
-  "!" (command (tab-bar-select-tab 1))
-  "@" (command (tab-bar-select-tab 2))
-  "#" (command (tab-bar-select-tab 3))
-  "$" (command (tab-bar-select-tab 4))
-  "%" (command (tab-bar-select-tab 5))
-  "^" (command (tab-bar-select-tab 6))
-  "&" (command (tab-bar-select-tab 7))
-  "*" (command (tab-bar-select-tab 8))
+  "1" window-prefix-map
+  "2" #'my-x-window-move-buffer-below
+  "3" #'my-x-window-move-buffer-right
+  "4" ctl-x-4-map
+  "5" ctl-x-5-map
+  "0" #'delete-window
   "?" #'dictionary-search
   "DEL" #'modal-global-mode
   "<backspace>" #'modal-global-mode
@@ -570,7 +548,7 @@
   "u" #'universal-argument
   "v" #'scroll-other-window
   "V" #'my-x-project-workspace-vterm
-  "w" #'agent-shell
+  "w" #'my-x-agent-shell-dwim
   "W" #'my-x-emacs-copy-current-file-name
   "x" #'my-x-vterm-dwim
   "X" #'my-x-project-workspace-execute-command
