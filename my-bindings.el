@@ -253,14 +253,19 @@
    (eglot--managed-mode (" [" eglot--mode-line-format "] "))
    (tab-bar-mode nil global-mode-string)
    " "
-   (tab-bar-mode nil
-                 (:eval
-                  (let ((name (my-x-tab-bar-current-tab-name)))
-                    (format "%-3.2s%-10.10s"
-                            (if (display-graphic-p)
-                                (alist-get name tab-bar-icons-alist tab-bar-icons-default nil #'string-match-p)
-                              "/")
-                            name))))
+   (tab-bar-mode
+    nil
+    (""
+     (:eval
+      (let ((name (my-x-tab-bar-current-tab-name)))
+        (format "%-3.2s%-10.10s"
+                (if (display-graphic-p)
+                    (alist-get name tab-bar-icons-alist
+                               tab-bar-icons-default
+                               nil
+                               #'string-match-p)
+                  "/")
+                name)))))
    "%5l:"     ; up to 99 999 lines
    (3 "%c")   ; up to 999 columns
    " "

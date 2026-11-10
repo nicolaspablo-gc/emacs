@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+(require 'my-x-window)
+
 (defun my-x-tab-line-switch-to-buffer-tab (buffer-tab)
   "Switch to buffer tab `buffer-tab'."
   (interactive (list (get-buffer
@@ -67,6 +69,29 @@ Assumes tab-line is a flat list of buffers."
   "Switch to previous tab, wrapping over from first to last."
   (interactive (list last-nonmenu-event))
   (my-x-tab-line-switch-to-sibling-tab 'left event))
+
+(defun my-x-tab-line--maybe-toggle-on-buffer-change (window)
+  "Toggle current buffer's `tab-line-mode' based on buffer changes."
+  (when (windowp window)
+    (with-selected-window window
+      (tab-line-mode
+       (if (my-x-window-has-sibling-buffers-p) 1 -1)))))
+
+(define-minor-mode my-x-tab-line-conditional-mode
+  "Conditionally enable tab line mode based on window buffers."
+  :lighter nil
+  (if my-x-tab-line-conditional-mode
+      (add-hook 'window-buffer-change-functions
+                #'my-x-tab-line--maybe-toggle-on-buffer-change
+                nil
+                t)
+    (remove-hook 'window-buffer-change-functions
+                 #'my-x-tab-line--maybe-toggle-on-buffer-change
+                 t)))
+
+(define-globalized-minor-mode my-x-tab-line-global-conditional-mode
+  my-x-tab-line-conditional-mode
+  (lambda () (my-x-tab-line-conditional-mode 1)))
 
 (provide 'my-x-tab-line)
 ;;; my-x-tab-line.el ends here
