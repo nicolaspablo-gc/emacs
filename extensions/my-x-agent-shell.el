@@ -27,7 +27,8 @@
 (defun my-x-agent-shell-dwim ()
   (interactive)
   (call-interactively ; pass prefix arguments
-   (if (derived-mode-p #'agent-shell-mode)
+   (if (and (derived-mode-p #'agent-shell-mode)
+            (not current-prefix-arg))
        #'agent-shell-quote-region
      #'agent-shell)))
 

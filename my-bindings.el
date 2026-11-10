@@ -473,7 +473,7 @@
   "RET" #'modal-mode
   "SPC" #'execute-extended-command
   "T" #'transpose-regions
-  "V" #'my-x-window-scroll-up
+  "V" #'scroll-down-command
   "\"" #'my-x-simple-unpop-to-mark-command
   "\\" #'cycle-spacing
   "a" #'beginning-of-line
@@ -499,7 +499,7 @@
   "s" #'isearch-forward
   "t" #'transpose-sexps
   "u" #'universal-argument
-  "v" #'my-x-window-scroll-down
+  "v" #'scroll-up-command
   "w" #'my-x-simple-kill-dwim
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim

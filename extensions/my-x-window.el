@@ -27,19 +27,17 @@
 (defun my-x-window-has-sibling-buffers-p (&optional window)
   "Non-nil if WINDOW has next or previous buffers."
   (with-selected-window (or window (selected-window))
-    (> (let (seen)
-         (seq-reduce
-          (lambda (acc elt)
-            (setq elt (car elt)
-                  elt (if (listp elt) (car elt) elt))
-            (when (and elt (not (memq elt seen)))
-              (push elt seen)
-              (setq acc (1+ acc)))
-            acc)
-          (list (list (current-buffer))
-                (window-prev-buffers)
-                (window-next-buffers))
-          0))
+    (> (length
+        (delete-dups
+         (seq-filter
+          #'bufferp
+          (flatten-tree
+           (list
+            ;; count the current buffer as `window-prev-buffers'
+            ;; doesn't always include it.
+            (current-buffer)
+            (window-prev-buffers)
+            (window-next-buffers))))))
        1)))
 
 (defun my-x-window-other-backward-window (count &optional all-frames interactive)
