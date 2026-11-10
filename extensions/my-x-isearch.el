@@ -42,7 +42,8 @@
   (when (not (region-active-p))
     (push-mark)
     (activate-mark))
-  (funcall (if search-backward #'isearch-backward #'isearch-forward))
+  (let (this-command) ;; Don't let the call to isearch mutate `this-command'.
+    (funcall (if search-backward #'isearch-backward #'isearch-forward)))
   (unless isearch-success (deactivate-mark)))
 
 (defun my-x-isearch-copy-as-kill (&optional search-backward do-kill)
@@ -52,7 +53,12 @@
   (when isearch-success
     (copy-region-as-kill (region-beginning) (region-end))))
 
-(defun my-x-isearch-kill ())
+(defun my-x-isearch-delete-region (&optional search-backward)
+  "Use isearch to delete the selected region."
+  (interactive "P")
+  (my-x-isearch-with-active-mark search-backward)
+  (when isearch-success
+    (delete-region (region-beginning) (region-end))))()
 
 (provide 'my-x-isearch)
 ;;; my-x-isearch.el ends here

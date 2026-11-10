@@ -80,6 +80,7 @@
 (setq olivetti-style 'fancy)
 (setq org-gcal-remove-api-cancelled-events t)
 (setq plstore-cache-passphrase-for-symmetric-encryption t)
+(setq project-buffers-viewer #'project-list-buffers-buffer-menu)
 (setq recenter-positions '(top middle bottom))
 (setq ring-bell-function #'ignore)
 (setq shr-max-width 80)
@@ -459,7 +460,7 @@
   ":" #'comment-dwim
   "<" #'beginning-of-buffer
   "<f8>" #'modal-mode
-  ">" #'end-of-buffer
+  ">" #'my-x-isearch-with-active-mark
   "?" #'vundo
   "M-SPC" #'my-x-rect-string-rectangle
   "DEL" #'modal-global-mode
@@ -494,6 +495,7 @@
   "t" #'transpose-sexps
   "u" #'universal-argument
   "v" #'my-x-window-scroll-down
+  "w" #'my-x-simple-kill-dwim
   "x" #'exchange-point-and-mark
   "y" #'my-x-simple-yank-dwim
   "z" #'repeat
@@ -946,7 +948,20 @@
  '(info-title-3 ((t :height 1.1 :underline (:position 0))))
  '(info-title-4 ((t :height 1.1 :underline (:position 0))))
 
+ ;; Magit
+ ;;
+ '(magit-diff-added ((((type tty)) :background reset :foreground "green")))
+ '(magit-diff-added-highlight ((((type tty)) :background reset :foreground "green" :weight bold)))
+ '(magit-diff-context ((((type tty)) :background reset :foreground "black" :weight bold)))
+ '(magit-diff-context-highlight ((((type tty)) :background reset :foreground reset)))
+ '(magit-diff-hunk-heading ((((type tty)) :background "blue" :foreground "white")))
+ '(magit-diff-hunk-heading-highlight ((((type tty)) :background "blue" :foreground "green")))
+ '(magit-diff-hunk-region ((((type tty)) :weight bold)))
+ '(magit-diff-removed ((((type tty)) :background reset :foreground "red")))
+ '(magit-diff-removed-highlight ((((type tty)) :background reset :foreground "red" :weight bold)))
+
  ;; Modus Themes
+ ;;
  '(modus-themes-completion-selected ((t :weight reset)))
 
  ;; Org

@@ -25,6 +25,32 @@
 ;;; Code:
 
 (require 'my-x-window)
+(require 'my-x-isearch)
+
+(defun my-x-simple-kill-dwim (&optional delete-region)
+  "Copy, kill or delete regions easily.
+
+If the region is inactive, use isearch to select a region and
+copy it to the kill ring.  If the region is active, copy the
+active region into the kill ring.
+
+If called twice, also delete the region, making the overall
+behaviour (copy + delete) act as a `kill-region' command.
+
+With a prefix argument, delete regions instead of copying to
+`kill-ring'."
+  (interactive "P")
+  (cond
+   ((eq last-command #'my-x-simple-kill-dwim)
+    ;; don't `kill-region' as the region is already copied to
+    ;; `kill-ring' at this point.
+    (delete-region (region-beginning) (region-end)))
+   ((region-active-p)
+    (funcall (if delete-region #'delete-region #'copy-region-as-kill)
+             (region-beginning)
+             (region-end)))
+   (t
+    (if delete-region (my-x-isearch-delete-region) (my-x-isearch-copy-as-kill)))))
 
 (defun my-x-simple-yank-dwim (&optional yank-from-kill-ring)
   "DWIM between `yank', `yank-pop' and `yank-from-kill-ring'.
@@ -88,4 +114,3 @@ to avoid replacing the buffer contents."
 
 (provide 'my-x-simple)
 ;;; my-x-simple.el ends here
-
