@@ -89,6 +89,7 @@
 (setq tab-line-new-button-show nil)
 (setq tab-line-tabs-function #'tab-line-tabs-window-buffers)
 (setq tab-line-tab-name-function #'tab-line-tab-name-truncated-buffer)
+(setq telega-chat-show-avatars nil)
 (setq telega-notifications-msg-body-limit 0)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
@@ -557,7 +558,7 @@
   "V" #'my-x-project-workspace-vterm
   "w" #'my-x-agent-shell-dwim
   "W" #'my-x-emacs-copy-current-file-name
-  "x" #'my-x-vterm-dwim
+  "x" (command (modal-global-mode-disable) (my-x-vterm-dwim))
   "X" #'my-x-project-workspace-execute-command
   "z" #'repeat
   "TAB" #'tab-bar-switch-to-recent-tab
