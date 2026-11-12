@@ -542,6 +542,7 @@
   "k" #'my-x-simple-kill-current-buffer-dwim
   "K" #'my-x-project-workspace-execute-command-by-keyseq
   "l" #'my-x-tab-line-switch-to-buffer-tab
+  "L" #'my-x-bookmark-url
   "m" (command (modal-global-mode-disable) (magit))
   "n" #'my-x-tab-line-switch-to-next-tab
   "o" #'other-window
@@ -742,6 +743,8 @@
 
 (hook-defun ediff-keymap-setup-hook setup-ediff-map
   (define-keymap :keymap ediff-mode-map
+    "DEL" (command (my-x-ediff-scroll-up nil))
+    "SPC" (command (my-x-ediff-scroll-down nil))
     "d" #'my-x-ediff-scroll-down
     "u" #'my-x-ediff-scroll-up
     "," #'my-x-ediff-scroll-left
