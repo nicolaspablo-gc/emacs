@@ -485,6 +485,7 @@
   "f" #'forward-char
   "F" #'my-x-emacs-copy-current-file-name
   "g" #'keyboard-quit
+  "G" #'my-x-project-git-browse-remote-url
   "h" help-map
   "i" #'recenter-top-bottom
   "j" #'my-x-simple-forward-delete-indentation

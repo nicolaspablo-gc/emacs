@@ -32,7 +32,7 @@
   (project-find-regexp (string-replace " " ".*" regexp)))
 
 (defun my-x-project--dir-to-name (dir)
-  (file-name-base (directory-file-name dir)))
+  (file-name-nondirectory (directory-file-name dir)))
 
 (defun my-x-project--pick ()
   "Pick a project."
@@ -103,6 +103,16 @@
   (interactive)
   (my-x-project--with-select-workspace
    (call-interactively #'project-find-file)))
+
+(defun my-x-project-git-browse-remote-url ()
+  "Browse the origin remote url of the current project."
+  (interactive)
+  (unless (project-current)
+    (user-error "Not currently in a project."))
+  (unless (eq 'Git (nth 1 (project-current)))
+    (user-error "Only works with git."))
+  (let ((default-directory (expand-file-name (nth 2 (project-current)))))
+    (browse-url (string-chop-newline (shell-command-to-string "git remote get-url origin")))))
 
 
 (provide 'my-x-project)
