@@ -824,6 +824,7 @@
 
 (with-eval-after-load 'vterm
   (add-to-list 'vterm-eval-cmds (list "my-x-vterm-rename" #'my-x-vterm-rename))
+  (add-to-list 'vterm-eval-cmds (list "execute-extended-command" (command (execute-extended-command nil))))
   (add-to-list 'vterm-eval-cmds (list "magit" #'magit)))
 
 (with-eval-after-load 'eglot
