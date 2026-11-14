@@ -241,7 +241,9 @@
  mode-line-format
  '("%e"
    "  "
-   (:eval (propertized-buffer-identification (truncate-string-to-width (buffer-name) 30 nil ?\s t)))
+   (tab-line-mode
+    nil
+    (:eval (propertized-buffer-identification (truncate-string-to-width (buffer-name) 30 nil ?\s t))))
    " "
    my-x-emacs-mode-line-modes
    mode-line-format-right-align
@@ -683,51 +685,71 @@
 
 (add-hook 'agent-shell-mode-hook #'agent-recall-track-sessions)
 (add-hook 'agent-shell-mode-hook #'corfu-mode)
+
 (add-hook 'before-save-hook #'whitespace-cleanup)
+
 (add-hook 'dired-mode-hook #'buffer-wrap-mode)
 (add-hook 'dired-mode-hook #'my-x-nerd-icons-dired-maybe-enable)
 (add-hook 'dired-side-window-pop-up-hook #'modal-global-mode-disable)
 (add-hook 'dired-side-window-setup-hook #'dired-hide-details-mode)
 (add-hook 'dired-side-window-setup-hook #'my-x-emacs-truncate-lines)
+
 (add-hook 'echo-bar-mode-hook #'my-x-echo-bar-fill-minibuf-0)
+
 (add-hook 'ediff-before-setup-hook #'my-x-ediff-setup)
 (add-hook 'ediff-prepare-buffer-hook #'my-x-ediff-prepare-buffer)
 (add-hook 'ediff-quit-hook #'my-x-ediff-restore)
-(add-hook 'magit-ediff-quit-hook #'my-x-ediff-restore)
 (add-hook 'ediff-startup-hook #'my-x-ediff-prepare-buffer)
+
 (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
 (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
+
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
+
+(add-hook 'magit-ediff-quit-hook #'my-x-ediff-restore)
+
 (add-hook 'occur-hook #'buffer-wrap-mode)
 (add-hook 'occur-hook #'my-x-emacs-truncate-lines)
+
 (add-hook 'org-agenda-mode-hook #'hl-line-mode)
 (add-hook 'org-insert-heading-hook #'my-x-org-ensure-two-lines-before-heading)
 (add-hook 'org-mode-hook #'corfu-mode)
 (add-hook 'org-mode-hook #'abbrev-mode)
 (add-hook 'org-mode-hook #'auto-fill-mode)
+
 (add-hook 'prog-mode-hook #'breadcrumb-local-mode)
 (add-hook 'prog-mode-hook #'corfu-mode)
 (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
 (add-hook 'prog-mode-hook #'display-line-numbers-mode)
 (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+
+(add-hook 'pdf-view-mode-hook #'pdf-view-restore-mode)
+(add-hook 'pdf-view-mode-hook #'pdf-view-auto-slice-minor-mode)
+(add-hook 'pdf-view-mode-hook #'pdf-view-themed-minor-mode)
+
 (add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'python-ts-mode-hook #'highlight-indent-guides-mode)
+
 (add-hook 'shell-mode-hook #'corfu-mode)
+
 (add-hook 'sh-mode-hook #'flymake-mode)
+
 (add-hook 'tabulated-list-mode-hook #'hl-line-mode)
+
 (add-hook 'telega-chat-mode-hook #'abbrev-mode)
 (add-hook 'telega-chat-mode-hook #'my-x-input-methods-set-spanish-prefix)
 (add-hook 'telega-root-mode-hook #'telega-mode-line-mode)
 (add-hook 'telega-root-mode-hook #'telega-notifications-mode)
+
 (add-hook 'vertico-flat-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-mode-hook #'my-x-vertico-flat-setup)
 (add-hook 'vertico-multiform-mode-hook #'my-x-vertico-flat-setup)
+
 (add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
+
 (add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
 (add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
-
-(with-eval-after-load 'agent-shell
-  (global-agent-recall-transcript-mode 1))
 
 (hook-defun dired-mode-hook set-variables
   (setq-local truncate-lines t))
@@ -974,6 +996,15 @@
  ;; Modus Themes
  ;;
  '(modus-themes-completion-selected ((t :weight reset)))
+
+ ;; Num3
+ ;;
+ `(num3-face-even
+   ((t :underline nil
+       :weight reset
+       :background reset
+       :box ( :color ,(face-attribute 'default :background)
+              :line-width (4 . 1)))))
 
  ;; Org
  ;;

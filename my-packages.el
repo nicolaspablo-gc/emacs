@@ -76,6 +76,10 @@
    vundo
    web-mode))
 
+(when (package-installed-p 'pdf-tools)
+  (add-to-list 'package-selected-packages 'pdf-view-restore))
+
+
 (unless (seq-every-p #'package-installed-p package-selected-packages)
   (package-refresh-contents)
   (package-install-selected-packages :noconfirm))

@@ -106,6 +106,9 @@ custom's state) can't be loaded on next sesion.")
   (nerd-icons-completion-mode)
   (nerd-icons-tab-line-mode))
 
+(with-eval-after-load 'agent-shell
+  (global-agent-recall-transcript-mode 1))
+
 (unless (display-graphic-p)
   (corfu-terminal-mode))
 
