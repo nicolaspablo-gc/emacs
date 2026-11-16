@@ -767,6 +767,7 @@
 (hook-defun ediff-keymap-setup-hook setup-ediff-map
   (define-keymap :keymap ediff-mode-map
     "DEL" (command (my-x-ediff-scroll-up nil))
+    "<backspace>" (command (my-x-ediff-scroll-up nil))
     "SPC" (command (my-x-ediff-scroll-down nil))
     "d" #'my-x-ediff-scroll-down
     "u" #'my-x-ediff-scroll-up
