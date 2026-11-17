@@ -53,6 +53,7 @@
 (setq dictionary-server "dict.org")
 (setq display-time-format " %d %b, %H:%M")
 (setq display-time-default-load-average nil)
+(setq display-time-mail-function #'ignore)
 (setq echo-bar-format 'global-mode-string)
 (setq echo-bar-minibuffer nil)
 (setq ediff-merge-split-window-function #'split-window-horizontally)
@@ -778,7 +779,8 @@
   (eglot-inlay-hints-mode -1))
 
 (hook-defun modal-mode-hook set-state
-  (setq cursor-type (if modal-mode 'box 'bar)))
+  (when cursor-type
+    (setq cursor-type (if modal-mode 'box 'bar))))
 
 (hook-defun org-agenda-finalize-hook setup
   (cond
