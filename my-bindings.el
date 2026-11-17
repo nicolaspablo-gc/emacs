@@ -42,6 +42,7 @@
 (setq custom-file my-custom-file)
 
 (setq auto-dark-themes '((modus-vivendi ui-simple) (modus-operandi ui-simple)))
+(setq agent-shell-context-sources '(files region error))
 (setq breadcrumb-imenu-crumb-separator (propertize " > " 'face '(:height 0.5))) ;; dont ask
 (setq breadcrumb-imenu-max-length 1.0)
 (setq bookmark-save-flag 1)

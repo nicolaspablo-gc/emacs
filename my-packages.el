@@ -51,6 +51,7 @@
    dotenv-mode
    elfeed
    embark
+   forge
    git-gutter
    highlight-indent-guides
    info-rename-buffer
@@ -78,7 +79,6 @@
 
 (when (package-installed-p 'pdf-tools)
   (add-to-list 'package-selected-packages 'pdf-view-restore))
-
 
 (unless (seq-every-p #'package-installed-p package-selected-packages)
   (package-refresh-contents)
