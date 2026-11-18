@@ -57,6 +57,7 @@
    info-rename-buffer
    link-hint
    magit
+   magit-delta
    marginalia
    markdown-mode
    multiple-cursors

@@ -75,6 +75,7 @@
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
 (setq magit-bury-buffer-function #'my-x-magit-bury-buffer-function)
+(setq magit-delta-hide-plus-minus-markers nil)
 (setq magit-format-file-function (if (display-graphic-p) #'magit-format-file-nerd-icons #'magit-format-file-default))
 (setq make-backup-files nil)
 (setq modal-global-mode-cursor-color "royal blue")
@@ -710,6 +711,7 @@
 (add-hook 'marginalia-mode-hook #'my-x-nerd-icons-completion-reactivate)
 
 (add-hook 'magit-ediff-quit-hook #'my-x-ediff-restore)
+(add-hook 'magit-mode-hook #'magit-delta-mode)
 
 (add-hook 'occur-hook #'buffer-wrap-mode)
 (add-hook 'occur-hook #'my-x-emacs-truncate-lines)
@@ -962,6 +964,10 @@
  '(flymake-warning ((t :underline (:style wave :color "#f2f2b2"))))
  '(flymake-error ((t :underline (:style wave :color "#ff8888"))))
 
+ ;; Forge
+ ;;
+ '(forge-pullreq-open ((t :inherit success )))
+
  ;; Git Gutter
  ;;
  '(git-gutter:added ((t :foreground "medium aquamarine" :background reset)))
@@ -987,6 +993,7 @@
 
  ;; Magit
  ;;
+ '(magit-section-highlight ((((type graphic) (min-colors 256) (background light)) :background "gray98")))
  '(magit-diff-added ((((type tty)) :background reset :foreground "green")))
  '(magit-diff-added-highlight ((((type tty)) :background reset :foreground "green" :weight bold)))
  '(magit-diff-context ((((type tty)) :background reset :foreground "black" :weight bold)))
