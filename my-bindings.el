@@ -75,6 +75,8 @@
 (setq initial-buffer-choice #'vterm)
 (setq kill-whole-line t)
 (setq magit-bury-buffer-function #'my-x-magit-bury-buffer-function)
+(setq magit-delta-default-dark-theme "modus-vivendi")
+(setq magit-delta-default-light-theme "modus-operandi")
 (setq magit-delta-hide-plus-minus-markers nil)
 (setq magit-format-file-function (if (display-graphic-p) #'magit-format-file-nerd-icons #'magit-format-file-default))
 (setq make-backup-files nil)
@@ -868,6 +870,7 @@
 (advice-add #'dired-revert :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-dired-x-omit-mode-refresh)
+(advice-add 'magit-delta--make-delta-args :filter-return #'my/magit-delta-add-features)
 
 
 ;;;; Mode Lighters
