@@ -870,7 +870,7 @@
 (advice-add #'dired-revert :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-nerd-icons-dired--resfresh-advice)
 (advice-add #'dired-subtree-toggle :after #'my-x-dired-x-omit-mode-refresh)
-(advice-add 'magit-delta--make-delta-args :filter-return #'my/magit-delta-add-features)
+(advice-add 'magit-delta--make-delta-args :filter-return #'my-x-magit-delta-add-features)
 
 
 ;;;; Mode Lighters
