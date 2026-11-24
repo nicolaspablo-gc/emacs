@@ -29,12 +29,24 @@
   (interactive "nAlpha Background: ")
   (set-frame-parameter nil 'alpha-background alpha))
 
-(defun my-x-toggle-frame-undecorated (&optional frame)
+(defun my-x-frame-toggle-undecorated (&optional frame)
   "Toggle frame's \\=`undecorated' parameter."
   (interactive)
   (let* ((frame (or frame (selected-frame)))
          (status (frame-parameter frame 'undecorated)))
     (set-frame-parameter frame 'undecorated (not status))))
+
+(defun my-x-frame-toggle-background-mode ()
+  "Toggle `frame-background-mode' if set."
+  (interactive)
+  (when frame-background-mode
+    (setq frame-background-mode
+          (cond ((eq frame-background-mode 'light) 'dark)
+                ((eq frame-background-mode 'dark) 'light)
+                (t (error "Unknown frame background mode: %s"
+                          frame-background-mode))))
+    (dolist (frame (frame-list))
+      (frame-set-background-mode frame))))
 
 (provide 'my-x-frame)
 ;;; my-x-frame.el ends here
