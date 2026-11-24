@@ -49,6 +49,34 @@
   (seq-do (lambda (f) (find-file f))
           (nreverse (dired-get-marked-files))))
 
+(defmacro my-x-dired--define-filter-from-marking-command (name docstring marking-command)
+  "Define a dired filter command based on MARKING-COMMAND.
+
+NAME is the name of the command.
+DOCSTRING is the docstring of the command.
+MARKING-COMMAND is a command that should mark dired lines."
+  (declare (indent defun) (doc-string 2))
+  `(defun ,name ()
+     ,docstring
+     (interactive)
+     (call-interactively ,marking-command)
+     (dired-toggle-marks)
+     (dired-do-kill-lines)))
+
+(my-x-dired--define-filter-from-marking-command my-x-dired-filter-by-extension
+  "Filter to dired lines matching extension."
+  #'dired-mark-extension)
+
+(my-x-dired--define-filter-from-marking-command my-x-dired-filter-by-regexp
+  "Filter to dired lines matching regexp."
+  #'dired-mark-files-regexp)
+
+(defvar my-x-dired-filter-map
+  (define-keymap
+    "." #'my-x-dired-filter-by-extension
+    "/" #'my-x-dired-filter-by-regexp)
+  "Keymap for `my-x-dired' filter commands.")
+
 
 (provide 'my-x-dired)
 ;;; my-x-dired.el ends here

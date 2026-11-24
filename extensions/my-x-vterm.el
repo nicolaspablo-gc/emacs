@@ -65,7 +65,16 @@ If no project is found the vterm is created at `default-directory'."
 (defun my-x-vterm-rename (ps1-string)
   "Rename current buffer by ps1 string sent through vterm."
   (when (eq major-mode #'vterm-mode)
-    (rename-buffer (format "vt %s" ps1-string) :unique)))
+    (let ((remote (file-remote-p default-directory)))
+      (rename-buffer
+       (format "vt %s%s"
+               (if remote
+                   (format "%s@%s "
+                           (file-remote-p default-directory 'user)
+                           (file-remote-p default-directory 'host))
+                 "")
+               ps1-string)
+       :unique))))
 
 (defun my-x-vterm-suspend-ssh ()
   "Send escape sequences for suspending ssh session."

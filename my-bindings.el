@@ -408,6 +408,7 @@
   "q" #'my-x-window-quit-dwim)
 
 (define-keys-after-load dired dired-mode-map
+  "/" my-x-dired-filter-map
   "M-SPC" #'wdired-change-to-wdired-mode
   "RET" #'my-x-dired-open-dwim
   "SPC"#'dired-subtree-toggle
@@ -822,6 +823,8 @@
 (hook-defun vterm-copy-mode-hook setup-modal-mode
   (modal-mode (if vterm-copy-mode 1 -1)))
 
+(with-eval-after-load 'magit
+  (require 'forge))
 
 ;;;; Lists
 
