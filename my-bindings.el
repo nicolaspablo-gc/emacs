@@ -98,6 +98,8 @@
 (setq telega-notifications-msg-body-limit 0)
 (setq text-scale-mode-step 1.05)
 (setq theme-reload-themes '(ui-simple))
+(setq tramp-copy-size-limit nil)
+(setq tramp-default-method "ssh")
 (setq use-short-answers t)
 (setq vc-follow-symlinks t)
 (setq vterm-copy-mode-remove-fake-newlines t)
@@ -783,6 +785,9 @@
 
 (hook-defun eglot-managed-mode-hook disable-inlay-hints
   (eglot-inlay-hints-mode -1))
+
+(hook-defun magit-log-mode-hook setup
+  (setq truncate-lines t))
 
 (hook-defun modal-mode-hook set-state
   (when cursor-type
