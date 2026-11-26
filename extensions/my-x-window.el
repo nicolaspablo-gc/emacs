@@ -116,5 +116,39 @@ to display the current buffer."
   (interactive "p")
   (scroll-down-command n))
 
+(defun my-x-window-side-window-prefix (side &optional slot dedicated)
+  "Display following command buffer in a side window.
+
+SIDE is either \\+`top', \\+`bottom', \\+`left' or \\+`right'.
+
+SLOT is a number.  If 0, the window is displayed toward the
+center.  If negative, its displayed before other side windows,
+and if positive is displayed after other side windows.
+
+DEDICATED indicates this is a dedicated window to the buffer.
+
+For more info see Info node `(elisp)Side Windows'
+
+Interactively, with a prefix argument read a number for SLOT.
+Interactively, with two prefix arguments don't mark the window as dedicated."
+  (interactive
+   (list (read (completing-read "Side: " '("top" "bottom" "left" "right") nil t))
+         (if (>= (prefix-numeric-value current-prefix-arg) 4)
+             (read-number "Slot (0->at the middle, negative->before others, positive->after others): " 0)
+           0)
+         (when (< (prefix-numeric-value current-prefix-arg) 16) t)))
+  (display-buffer-override-next-command
+   `(lambda (buffer alist)
+      (cons (display-buffer-in-side-window
+             buffer
+             (append '((side . ,side)
+                       (slot . ,slot)
+                       (dedicate . ,dedicated))
+                     alist))
+            'window))
+   nil
+   "[other-side-window]")
+  (message "Display next command buffer in a %s side window..." side))
+
 (provide 'my-x-window)
 ;;; my-x-window.el ends here

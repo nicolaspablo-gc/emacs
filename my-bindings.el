@@ -83,6 +83,7 @@
 (setq modal-global-mode-cursor-color "royal blue")
 (setq nerd-icons-scale-factor 0.85)
 (setq olivetti-style 'fancy)
+(setq outline-blank-line t)
 (setq org-gcal-remove-api-cancelled-events t)
 (setq plstore-cache-passphrase-for-symmetric-encryption t)
 (setq project-buffers-viewer #'project-list-buffers-buffer-menu)
@@ -396,6 +397,7 @@
   "M-/"#'cape-dabbrev)
 
 (define-keymap :keymap ctl-x-4-map
+  "s" #'my-x-window-side-window-prefix
   "0" #'ace-delete-window
   "=" #'balance-windows
   "-" #'my-x-ace-window-fit-to-buffer
@@ -460,8 +462,11 @@
 (define-keys-after-load magit magit-mode-map
   "M-1" nil
   "M-u" #'magit-section-up
-  "M-SPC" #'magit-diff-visit-worktree-file
-  )
+  "M-SPC" #'magit-diff-visit-worktree-file)
+
+(define-keys-after-load markdown-mode markdown-mode-map
+  "<remap> <beginning-of-defun>" #'my-x-markdown-outline-previous
+  "<remap> <end-of-defun>" #'my-x-markdown-outline-next)
 
 (keymap-set minibuffer-local-map "<remap> <keyboard-quit>" #'abort-minibuffers)
 
@@ -470,6 +475,8 @@
   "'" #'pop-to-mark-command
   "(" #'backward-paragraph
   ")" #'forward-paragraph
+  "{" #'beginning-of-defun
+  "}" #'end-of-defun
   "," #'duplicate-dwim
   "." #'set-mark-command
   "/" #'undo
@@ -757,6 +764,8 @@
 
 (add-hook 'vterm-mode-hook #'my-x-emacs-set-header-line-as-buffer-name)
 
+(add-hook 'web-mode-hook #'highlight-indent-guides-mode)
+
 (add-hook 'xref--xref-buffer-mode-hook #'buffer-wrap-mode)
 (add-hook 'xref--xref-buffer-mode-hook #'outline-minor-mode)
 
@@ -786,7 +795,15 @@
 (hook-defun eglot-managed-mode-hook disable-inlay-hints
   (eglot-inlay-hints-mode -1))
 
-(hook-defun magit-log-mode-hook setup
+(hook-defun magit-post-refresh-hook setup
+  (my-x-hi-lock-highlight-regexps
+   (alistq
+    "^unmerged" warning
+    "^\\(:?modified\\|merged\\)" success
+    "^\\(:?deleted\\|removed\\)" error
+    "^changed" link-visited
+    "^new file" success
+    "^renamed" link))
   (setq truncate-lines t))
 
 (hook-defun modal-mode-hook set-state
